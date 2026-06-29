@@ -37,6 +37,8 @@ ul{list-style:none}
 .nav-links{display:flex;align-items:center;gap:2rem}
 .nav-links a{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55);transition:color .2s;white-space:nowrap}
 .nav-links a:hover{color:var(--white)}
+.nav-mi-cuenta{font-size:.75rem;letter-spacing:.06em;color:rgba(255,255,255,.6);transition:color .2s;white-space:nowrap;display:flex;align-items:center;gap:.3rem}
+.nav-mi-cuenta:hover{color:var(--cyan)}
 .btn-nav-cta{background:var(--gradient)!important;color:var(--black)!important;padding:.5rem 1.3rem;border-radius:6px;font-weight:700!important;font-size:.75rem!important;letter-spacing:.08em;transition:opacity .2s,transform .2s!important;white-space:nowrap}
 .btn-nav-cta:hover{opacity:.88;transform:translateY(-1px)!important}
 .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px}
@@ -61,7 +63,7 @@ ul{list-style:none}
 .hero-badge{display:inline-flex;align-items:center;gap:.6rem;background:rgba(94,204,74,.08);border:1px solid rgba(94,204,74,.2);padding:.4rem 1rem;border-radius:99px;margin-bottom:1.8rem;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green);opacity:0;animation:fadeUp .8s .2s both}
 .hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.hero-title{font-family:var(--ff-d);font-size:clamp(2.8rem,6vw,5.5rem);font-weight:800;line-height:1;letter-spacing:-.02em;margin-bottom:1.4rem;opacity:0;animation:fadeUp .9s .35s both}
+.hero-title{font-family:var(--ff-d);font-size:clamp(1.8rem,3.8vw,3.2rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:1.4rem;opacity:0;animation:fadeUp .9s .35s both}
 .hero-title .grad{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero-sub{font-size:clamp(1rem,1.6vw,1.15rem);color:rgba(255,255,255,.55);font-weight:300;max-width:48ch;line-height:1.85;margin-bottom:2.5rem;opacity:0;animation:fadeUp .8s .5s both}
 .hero-btns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .65s both}
@@ -405,8 +407,10 @@ body.lang-es .es-inline{display:inline}
       <button class="lang-btn active" onclick="setLang('es')">ES</button>
       <button class="lang-btn" onclick="setLang('fr')">FR</button>
     </li>
-    <li><a href="#contact" class="btn-nav-cta"><span class="es-inline">Empezar</span><span class="fr-inline">Commencer</span></a></li>
+    <li><a href="https://emineo-agency.netlify.app/emineo-portal.html" target="_blank" style="display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;letter-spacing:.06em;color:var(--cyan);border:1px solid rgba(41,196,224,.3);padding:.38rem .9rem;border-radius:99px;transition:all .2s;white-space:nowrap" onmouseover="this.style.background='rgba(41,196,224,.1)'" onmouseout="this.style.background='transparent'"><i class="fas fa-user-circle"></i><span class="es-inline">Mi cuenta</span><span class="fr-inline">Mon compte</span></a></li>
+    <li><a href="#contact" class="btn-nav-cta"><span class="es-inline">Empezar →</span><span class="fr-inline">Commencer →</span></a></li>
   </ul>
+  <a href="https://emineo-agency.netlify.app/emineo-portal.html" target="_blank" style="display:flex;align-items:center;gap:.3rem;font-size:.72rem;color:var(--cyan);border:1px solid rgba(41,196,224,.3);padding:.35rem .75rem;border-radius:99px;white-space:nowrap;margin-right:.5rem"><i class="fas fa-user-circle"></i><span class="es-inline">Mi cuenta</span><span class="fr-inline">Mon compte</span></a>
   <button class="hamburger" id="ham"><span></span><span></span><span></span></button>
 </nav>
 
@@ -500,7 +504,7 @@ body.lang-es .es-inline{display:inline}
         <div class="pf"><span class="es-inline">Panel admin simple</span><span class="fr-inline">Panneau admin simple</span></div>
         <div class="pf"><span class="es-inline">Entrega 5-7 días</span><span class="fr-inline">Livraison 5-7 jours</span></div>
       </div>
-      <button class="pack-cta" onclick="openPayPage('business')"><span class="es-inline">Elegir Business</span><span class="fr-inline">Choisir Business</span></button>
+      <button class="pack-cta" onclick="scrollToForm('Business')"><span class="es-inline">Elegir Business</span><span class="fr-inline">Choisir Business</span></button>
     </div>
 
     <div class="pack-card">
@@ -515,7 +519,7 @@ body.lang-es .es-inline{display:inline}
         <div class="pf"><span class="es-inline">Panel admin completo</span><span class="fr-inline">Panneau admin complet</span></div>
         <div class="pf"><span class="es-inline">Entrega 7-10 días</span><span class="fr-inline">Livraison 7-10 jours</span></div>
       </div>
-      <button class="pack-cta" onclick="openPayPage('premium')"><span class="es-inline">Elegir Premium</span><span class="fr-inline">Choisir Premium</span></button>
+      <button class="pack-cta" onclick="scrollToForm('Premium')"><span class="es-inline">Elegir Premium</span><span class="fr-inline">Choisir Premium</span></button>
     </div>
 
   </div>
@@ -548,7 +552,7 @@ body.lang-es .es-inline{display:inline}
         <div class="af cross"><span class="es-inline">Modificaciones por nosotros</span><span class="fr-inline">Modifications par nous</span></div>
       </div>
       <div class="abo-intervention"><strong><span class="es-inline">Intervención puntual:</span><span class="fr-inline">Intervention ponctuelle :</span></strong> <span class="es">A partir de 7$ según trabajo.</span><span class="fr">À partir de 7$ selon le travail.</span></div>
-      <div style="margin-top:1rem"><button class="pack-cta" onclick="openPayPage('autonomo')"><span class="es-inline">Elegir Autónomo</span><span class="fr-inline">Choisir Autonome</span></button></div>
+      <div style="margin-top:1rem"><button class="pack-cta" onclick="scrollToForm('Autonomo')"><span class="es-inline">Elegir Autónomo</span><span class="fr-inline">Choisir Autonome</span></button></div>
     </div>
 
     <div class="abo-card featured">
@@ -563,7 +567,7 @@ body.lang-es .es-inline{display:inline}
         <div class="af check"><span class="es-inline">Modificaciones sin costo extra</span><span class="fr-inline">Modifications sans frais sup.</span></div>
         <div class="af check"><span class="es-inline">Soporte WhatsApp</span><span class="fr-inline">Support WhatsApp</span></div>
       </div>
-      <div style="margin-top:1rem"><button class="pack-cta" onclick="openPayPage('mantenimiento')"><span class="es-inline">Elegir Mantenimiento</span><span class="fr-inline">Choisir Maintenance</span></button></div>
+      <div style="margin-top:1rem"><button class="pack-cta" onclick="scrollToForm('Mantenimiento')"><span class="es-inline">Elegir Mantenimiento</span><span class="fr-inline">Choisir Maintenance</span></button></div>
     </div>
 
     <div class="abo-card">
@@ -580,7 +584,7 @@ body.lang-es .es-inline{display:inline}
         <div class="af check"><span class="es-inline">Copias de seguridad</span><span class="fr-inline">Sauvegardes incluses</span></div>
         <div class="af check"><span class="es-inline">Consejos estratégicos</span><span class="fr-inline">Conseils stratégiques</span></div>
       </div>
-      <div style="margin-top:1rem"><button class="pack-cta" onclick="openPayPage('gerencia')"><span class="es-inline">Elegir Gerencia</span><span class="fr-inline">Choisir Gérance</span></button></div>
+      <div style="margin-top:1rem"><button class="pack-cta" onclick="scrollToForm('Gerencia')"><span class="es-inline">Elegir Gerencia</span><span class="fr-inline">Choisir Gérance</span></button></div>
     </div>
 
   </div>
@@ -598,7 +602,7 @@ body.lang-es .es-inline{display:inline}
       <p class="sup-name"><span class="es-inline">Redes Sociales</span><span class="fr-inline">Réseaux Sociaux</span></p>
       <div class="sup-price"><span class="grad">100$</span><span style="font-size:.8rem;color:var(--gray)">/mes</span></div>
       <p class="sup-desc"><span class="es">Gestión de Facebook, Instagram, TikTok. Creación de posts, stories y reels. Respuesta a comentarios.</span><span class="fr">Gestion Facebook, Instagram, TikTok. Création posts, stories et reels. Réponse aux commentaires.</span></p>
-      <button class="pack-cta" onclick="openPayPage('redes')"><span class="es-inline">Contratar</span><span class="fr-inline">Souscrire</span></button>
+      <button class="pack-cta" onclick="scrollToForm('redes')"><span class="es-inline">Contratar</span><span class="fr-inline">Souscrire</span></button>
     </div>
 
     <div class="sup-card">
@@ -606,7 +610,7 @@ body.lang-es .es-inline{display:inline}
       <p class="sup-name"><span class="es-inline">Marketing Digital</span><span class="fr-inline">Marketing Digital</span></p>
       <div class="sup-price"><span class="grad">75$</span><span style="font-size:.8rem;color:var(--gray)">/mes</span></div>
       <p class="sup-desc"><span class="es">Publicidad Facebook Ads y Google Ads. Estrategia de contenido y rapport mensual. (Budget pub no incluido)</span><span class="fr">Publicité Facebook Ads et Google Ads. Stratégie de contenu et rapport mensuel. (Budget pub non inclus)</span></p>
-      <button class="pack-cta" onclick="openPayPage('marketing')"><span class="es-inline">Contratar</span><span class="fr-inline">Souscrire</span></button>
+      <button class="pack-cta" onclick="scrollToForm('marketing')"><span class="es-inline">Contratar</span><span class="fr-inline">Souscrire</span></button>
     </div>
 
     <div class="sup-card">
@@ -614,7 +618,7 @@ body.lang-es .es-inline{display:inline}
       <p class="sup-name"><span class="es-inline">Design & Creaciones</span><span class="fr-inline">Design & Créations</span></p>
       <div class="sup-price"><span class="grad">59$</span><span style="font-size:.8rem;color:var(--gray)">/mes</span></div>
       <p class="sup-desc"><span class="es">Logo, afiches, flyers, banners para redes sociales, tarjetas de visita. Todo lo que necesitas visualmente.</span><span class="fr">Logo, affiches, flyers, bannières réseaux sociaux, cartes de visite. Tout ce dont vous avez besoin visuellement.</span></p>
-      <button class="pack-cta" onclick="openPayPage('design')"><span class="es-inline">Contratar</span><span class="fr-inline">Souscrire</span></button>
+      <button class="pack-cta" onclick="scrollToForm('design')"><span class="es-inline">Contratar</span><span class="fr-inline">Souscrire</span></button>
     </div>
 
   </div>
@@ -668,7 +672,7 @@ body.lang-es .es-inline{display:inline}
       <h3 class="affil-title"><span class="es">Recomienda EMINEO y gana <span style="background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">3$/mes</span> por cliente</span><span class="fr">Recommandez EMINEO et gagnez <span style="background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">3$/mois</span> par client</span></h3>
       <p class="affil-desc"><span class="es">Por cada cliente que recomiendes y que permanezca activo, recibes 3$ cada mes. Sin límite. Ingreso pasivo real.</span><span class="fr">Pour chaque client recommandé qui reste actif, vous recevez 3$ chaque mois. Sans limite. Revenu passif réel.</span></p>
       <div class="affil-steps">
-        <div class="affil-step"><span class="affil-step-n">1</span><span><span class="es-inline">Contáctanos para obtener tu código de afiliado</span><span class="fr-inline">Contactez-nous pour obtenir votre code d'affilié</span></span></div>
+        <div class="affil-step"><span class="affil-step-n">1</span><span><a href="https://wa.me/56994161742" target="_blank" style="color:var(--green);font-weight:600"><span class="es-inline">Contáctanos</span><span class="fr-inline">Contactez-nous</span></a><span class="es-inline"> para obtener tu código de afiliado</span><span class="fr-inline"> pour obtenir votre code d'affilié</span></span></div>
         <div class="affil-step"><span class="affil-step-n">2</span><span><span class="es-inline">Comparte tu código con clientes potenciales</span><span class="fr-inline">Partagez votre code avec des clients potentiels</span></span></div>
         <div class="affil-step"><span class="affil-step-n">3</span><span><span class="es-inline">Cobra 3$ cada mes mientras el cliente esté activo</span><span class="fr-inline">Percevez 3$ chaque mois tant que le client est actif</span></span></div>
       </div>
@@ -728,41 +732,95 @@ body.lang-es .es-inline{display:inline}
       <div id="frmWrap">
         <form class="cform" id="cForm" onsubmit="sendForm(event)">
           <div class="frow">
-            <div class="fgrp"><label><span class="es-inline">Nombre</span><span class="fr-inline">Nom</span> *</label><input type="text" name="nombre" placeholder="Tu nombre" required/></div>
-            <div class="fgrp"><label>Email *</label><input type="email" name="email" placeholder="tucorreo@gmail.com" required/></div>
+            <div class="fgrp"><label><span class="es-inline">Nombre</span><span class="fr-inline">Nom</span> *</label><input type="text" id="f-nom" placeholder="Tu nombre" required/></div>
+            <div class="fgrp"><label>Email *</label><input type="email" id="f-email" placeholder="tucorreo@gmail.com" required/></div>
           </div>
           <div class="frow">
-            <div class="fgrp"><label>WhatsApp</label><input type="tel" name="whatsapp" placeholder="+1 234 567 890"/></div>
-            <div class="fgrp"><label><span class="es-inline">País</span><span class="fr-inline">Pays</span></label><input type="text" name="pais" placeholder="Chile, Haiti..."/></div>
+            <div class="fgrp"><label>WhatsApp</label><input type="tel" id="f-wa" placeholder="+1 234 567 890"/></div>
+            <div class="fgrp"><label><span class="es-inline">País</span><span class="fr-inline">Pays</span></label><input type="text" id="f-pays" placeholder="Chile, Haiti..."/></div>
           </div>
+
+          <!-- PACK -->
           <div class="fgrp">
-            <label><span class="es-inline">Pack elegido</span><span class="fr-inline">Pack choisi</span> *</label>
-            <select name="pack" id="packSelect" required>
-              <option value="">— <span class="es-inline">Seleccionar</span><span class="fr-inline">Sélectionner</span> —</option>
+            <label><span class="es-inline">Pack de sitio web</span><span class="fr-inline">Pack site web</span> <span style="color:rgba(255,255,255,.3);font-size:.7rem">(<span class="es-inline">opcional si solo quieres servicios+</span><span class="fr-inline">optionnel si services+ seulement</span>)</span></label>
+            <select id="f-pack" onchange="checkFormLogic()">
+              <option value="">— <span class="es-inline">Sin pack</span><span class="fr-inline">Sans pack</span> —</option>
               <option value="Starter">Starter — Gratis</option>
               <option value="Business">Business — 49$</option>
               <option value="Premium">Premium — 99$</option>
-              <option value="Sur Medida">Sur Medida — Cotización</option>
+              <option value="Sur Medida"><span class="es-inline">Sur Medida — Cotización</span><span class="fr-inline">Sur Mesure — Devis</span></option>
             </select>
           </div>
+
+          <!-- ABONNEMENT -->
           <div class="fgrp">
-            <label><span class="es-inline">Plan de suscripción</span><span class="fr-inline">Plan d'abonnement</span></label>
-            <select name="suscripcion">
-              <option value="">— <span class="es-inline">Seleccionar</span><span class="fr-inline">Sélectionner</span> —</option>
-              <option>Autónomo — 20$/mes</option>
-              <option>Mantenimiento — 35$/mes</option>
-              <option>Gerencia — 75$/mes</option>
+            <label id="f-abo-label"><span class="es-inline">Plan de suscripción</span><span class="fr-inline">Plan d'abonnement</span> <span style="color:rgba(255,255,255,.3);font-size:.7rem">(<span class="es-inline">opcional</span><span class="fr-inline">optionnel</span>)</span></label>
+            <select id="f-abo" onchange="checkFormLogic()">
+              <option value="">— <span class="es-inline">Sin abonnement</span><span class="fr-inline">Sans abonnement</span> —</option>
+              <option value="Autonomo">Autónomo — 20$/mes</option>
+              <option value="Mantenimiento">Mantenimiento — 35$/mes</option>
+              <option value="Gerencia">Gerencia — 75$/mes</option>
             </select>
           </div>
-          <div class="fgrp"><label><span class="es-inline">Descripción del proyecto</span><span class="fr-inline">Description du projet</span> *</label><textarea name="descripcion" placeholder="Cuéntanos tu proyecto..." required></textarea></div>
-          <button type="submit" class="f-submit"><span class="es-inline">Enviar solicitud</span><span class="fr-inline">Envoyer la demande</span></button>
+
+          <!-- SERVICES+ -->
+          <div class="fgrp">
+            <label><span class="es-inline">Servicios adicionales</span><span class="fr-inline">Services supplémentaires</span> <span style="color:rgba(255,255,255,.3);font-size:.7rem">(<span class="es-inline">opcional, varios posibles</span><span class="fr-inline">optionnel, plusieurs possibles</span>)</span></label>
+            <div style="display:flex;flex-direction:column;gap:.4rem;margin-top:.3rem">
+              <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:rgba(255,255,255,.55);cursor:pointer;text-transform:none;letter-spacing:0">
+                <input type="checkbox" id="f-redes" style="width:auto;padding:0;border-radius:3px"/>
+                <span class="es-inline">📱 Redes Sociales — 100$/mes</span><span class="fr-inline">📱 Réseaux Sociaux — 100$/mois</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:rgba(255,255,255,.55);cursor:pointer;text-transform:none;letter-spacing:0">
+                <input type="checkbox" id="f-marketing" style="width:auto;padding:0;border-radius:3px"/>
+                <span class="es-inline">📣 Marketing Digital — 75$/mes</span><span class="fr-inline">📣 Marketing Digital — 75$/mois</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:rgba(255,255,255,.55);cursor:pointer;text-transform:none;letter-spacing:0">
+                <input type="checkbox" id="f-design" style="width:auto;padding:0;border-radius:3px"/>
+                <span class="es-inline">🎨 Design & Creaciones — 59$/mes</span><span class="fr-inline">🎨 Design & Créations — 59$/mois</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- CODE AFFILIÉ -->
+          <div class="fgrp">
+            <label><span class="es-inline">Código afiliado</span><span class="fr-inline">Code affilié</span> <span style="color:rgba(255,255,255,.3);font-size:.7rem">(<span class="es-inline">opcional — 1er mes gratis</span><span class="fr-inline">optionnel — 1er mois gratuit</span>)</span></label>
+            <input type="text" id="f-code" placeholder="CODIGO123" style="text-transform:uppercase"/>
+          </div>
+
+          <!-- DESCRIPTION -->
+          <div class="fgrp">
+            <label><span class="es-inline">Descripción de tu proyecto</span><span class="fr-inline">Description de votre projet</span></label>
+            <textarea id="f-desc" placeholder="Cuéntanos tu proyecto..."></textarea>
+          </div>
+
+          <div id="f-error" style="color:#e05252;font-size:.78rem;margin-bottom:.5rem;display:none"></div>
+          <button type="submit" class="f-submit"><span class="es-inline">Continuar al pago →</span><span class="fr-inline">Continuer au paiement →</span></button>
         </form>
       </div>
-      <div class="form-ok" id="fOk">
-        <span class="ok-ico">✅</span>
-        <p><span class="es-inline">¡Solicitud recibida!</span><span class="fr-inline">Demande reçue !</span></p>
-        <small><span class="es-inline">Te contactaremos en menos de 24 horas por WhatsApp o email. Mientras tanto, puedes crear tu cuenta en el portal cliente.</span><span class="fr-inline">Nous vous contacterons en moins de 24 heures. En attendant, vous pouvez créer votre compte sur le portail client.</span></small>
+
+      <!-- PAGE RÉCAPITULATIF -->
+      <div id="fRecap" style="display:none">
+        <div style="background:var(--dark2);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1.8rem">
+          <h3 style="font-family:var(--ff-d);font-size:1.1rem;margin-bottom:1.2rem;color:var(--green)">
+            ✅ <span class="es-inline">¡Solicitud recibida! Completa tu pago</span><span class="fr-inline">Demande reçue ! Complétez votre paiement</span>
+          </h3>
+          <p style="font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:1.5rem">
+            <span class="es-inline">Realiza los pagos a continuación. Después de cada pago recibirás una confirmación de PayPal.</span>
+            <span class="fr-inline">Effectuez les paiements ci-dessous. Après chaque paiement vous recevrez une confirmation PayPal.</span>
+          </p>
+          <div id="recap-items"></div>
+          <div style="margin-top:1.5rem;padding:1rem;background:rgba(41,196,224,.06);border:1px solid rgba(41,196,224,.15);border-radius:10px;font-size:.8rem;color:rgba(255,255,255,.45)">
+            <span class="es-inline">Después de pagar crea tu cuenta en el portal:</span>
+            <span class="fr-inline">Après avoir payé créez votre compte sur le portail :</span>
+            <br/>
+            <a href="https://emineo-agency.netlify.app/emineo-portal.html" target="_blank" style="color:var(--cyan);font-weight:600;margin-top:.3rem;display:inline-block">
+              <span class="es-inline">→ Crear mi cuenta</span><span class="fr-inline">→ Créer mon compte</span>
+            </a>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -810,11 +868,8 @@ body.lang-es .es-inline{display:inline}
      PAGES DE PAIEMENT CACHÉES
 ============================================================ -->
 
-<!-- SDK PayPal pour abonnements -->
-<script src="https://www.paypal.com/sdk/js?client-id=AePduQTynsMmbyf-hSh__cGtVYr1zA2Sl-JqxL9q-qkJJdghMjwRPXXhnP7B1IC0EUMVTqOneibVCWmJ&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
-
-<!-- SDK PayPal pour paiements one-time -->
-<script src="https://www.paypal.com/sdk/js?client-id=Acn11xBzBlEhisFq7RQ54WvUkEUytpdiLJ1tBX0tvZZ5BeWCFaUdRovyePo93S24hOh2fsgvIrkwQ1jq&currency=USD" id="paypal-one-time-sdk"></script>
+<!-- SDK PayPal — subscription + one-time combiné -->
+<script src="https://www.paypal.com/sdk/js?client-id=AePduQTynsMmbyf-hSh__cGtVYr1zA2Sl-JqxL9q-qkJJdghMjwRPXXhnP7B1IC0EUMVTqOneibVCWmJ&vault=true&intent=subscription&components=buttons" data-sdk-integration-source="button-factory"></script>
 
 <!-- PAGE — AUTÓNOMO 20$/mois -->
 <div class="pay-page" id="pay-autonomo">
@@ -1024,7 +1079,15 @@ function setLang(l){
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase()===l));
   localStorage.setItem('emineo-lang',l);
 }
-(function(){const s=localStorage.getItem('emineo-lang')||'es';setLang(s);})();
+(function(){
+  const saved = localStorage.getItem('emineo-lang');
+  if(saved){
+    setLang(saved);
+  } else {
+    const browserLang = (navigator.language || navigator.userLanguage || 'es').substring(0,2).toLowerCase();
+    setLang(browserLang === 'fr' ? 'fr' : 'es');
+  }
+})();
 
 /* REVEAL */
 const revObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});},{threshold:.1});
@@ -1131,51 +1194,311 @@ function showPaySuccess(id,transId){
 
 /* APPS SCRIPT URL */
 const EMINEO_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlv14MC7iiLNuTCfZqtsLDZcVmMjLBSVwXQ8oTTK6xITKOm15MELpp3dczX1wZEzTwOQ/exec";
+const PORTAL_URL = "https://emineo-agency.netlify.app/emineo-portal.html";
 
-/* FORM — Connecté à Apps Script + Google Sheets */
+/* PAYPAL PLAN IDs */
+const PLANS = {
+  normal: {
+    autonomo:      'P-9PK70578M66394516NI4VJJQ',
+    mantenimiento: 'P-85608281P0149030VNI4WS5A',
+    gerencia:      'P-75776170C8588750PNI4W4EQ',
+    redes:         'P-1GR76528CK662511DNI4XA4Q',
+    marketing:     'P-6Y385637Y20133319NI4XFQA',
+    design:        'P-6F105958JC688941KNI4XIRY'
+  },
+  affilie: {
+    autonomo:      'P-3X5884305Y135272JNJA6B3Y',
+    mantenimiento: 'P-297565167N237190FNJA6JHQ',
+    gerencia:      'P-2DF56643YG922783LNJA6OKA'
+  }
+};
+
+const SDK_CLIENT_ID = "AePduQTynsMmbyf-hSh__cGtVYr1zA2Sl-JqxL9q-qkJJdghMjwRPXXhnP7B1IC0EUMVTqOneibVCWmJ";
+const OT_CLIENT_ID  = "Acn11xBzBlEhisFq7RQ54WvUkEUytpdiLJ1tBX0tvZZ5BeWCFaUdRovyePo93S24hOh2fsgvIrkwQ1jq";
+
+let formData = {};
+let renderedPayPal = {};
+
+/* FORM LOGIC — Pack/Abonnement interdependency */
+function checkFormLogic() {
+  var pack = document.getElementById('f-pack').value;
+  var abo  = document.getElementById('f-abo').value;
+  var aboLabel = document.getElementById('f-abo-label');
+  var packSel  = document.getElementById('f-pack');
+
+  if (pack && !abo) {
+    aboLabel.innerHTML = '<span class="es-inline">Plan de suscripcion</span><span class="fr-inline">Plan abonnement</span> <span style="color:var(--green);font-size:.7rem">(<span class="es-inline">requerido con pack</span><span class="fr-inline">requis avec pack</span>)</span>';
+  } else if (abo && !pack) {
+    packSel.setAttribute('data-req', '1');
+    aboLabel.innerHTML = '<span class="es-inline">Plan de suscripcion</span><span class="fr-inline">Plan abonnement</span>';
+  } else {
+    aboLabel.innerHTML = '<span class="es-inline">Plan de suscripcion</span><span class="fr-inline">Plan abonnement</span> <span style="color:rgba(255,255,255,.3);font-size:.7rem">(<span class="es-inline">opcional</span><span class="fr-inline">optionnel</span>)</span>';
+    packSel.removeAttribute('data-req');
+  }
+}
+
+/* FORM SUBMIT */
 async function sendForm(e) {
   e.preventDefault();
-  
+
+  const nom     = document.getElementById('f-nom').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const wa      = document.getElementById('f-wa').value.trim();
+  const pays    = document.getElementById('f-pays').value.trim();
+  const pack    = document.getElementById('f-pack').value;
+  const abo     = document.getElementById('f-abo').value;
+  const redes   = document.getElementById('f-redes').checked;
+  const mkt     = document.getElementById('f-marketing').checked;
+  const design  = document.getElementById('f-design').checked;
+  const code    = document.getElementById('f-code').value.trim().toUpperCase();
+  const desc    = document.getElementById('f-desc').value.trim();
+  const errEl   = document.getElementById('f-error');
+
+  // VALIDATION
+  errEl.style.display = 'none';
+
+  if (!nom || !email) {
+    errEl.textContent = document.body.classList.contains('lang-fr')
+      ? 'Nom et email sont obligatoires.'
+      : 'Nombre y email son obligatorios.';
+    errEl.style.display = 'block'; return;
+  }
+
+  if (pack && !abo) {
+    errEl.textContent = document.body.classList.contains('lang-fr')
+      ? 'Choisissez un plan abonnement avec votre pack.'
+      : 'Elige un plan de suscripción con tu pack.';
+    errEl.style.display = 'block'; return;
+  }
+
+  if (abo && !pack) {
+    errEl.textContent = document.body.classList.contains('lang-fr')
+      ? 'Choisissez un pack avec votre abonnement.'
+      : 'Elige un pack con tu plan de suscripción.';
+    errEl.style.display = 'block'; return;
+  }
+
+  if (!pack && !abo && !redes && !mkt && !design) {
+    errEl.textContent = document.body.classList.contains('lang-fr')
+      ? 'Choisissez au moins un pack, abonnement ou service.'
+      : 'Elige al menos un pack, abonnement o servicio.';
+    errEl.style.display = 'block'; return;
+  }
+
+  // Store form data
+  formData = { nom, email, wa, pays, pack, abo, redes, mkt, design, code, desc };
+  const hasAffilie = code.length >= 4;
+
+  // Send to Apps Script
   const btn = document.querySelector('.f-submit');
   btn.disabled = true;
-  btn.textContent = 'Enviando...';
-  
-  const data = {
-    action: 'newCommande',
-    nom: document.querySelector('[name="nombre"]').value,
-    email: document.querySelector('[name="email"]').value,
-    whatsapp: document.querySelector('[name="whatsapp"]').value || '',
-    pays: document.querySelector('[name="pais"]').value || '',
-    pack: document.querySelector('[name="pack"]').value,
-    abonnement: document.querySelector('[name="suscripcion"]').value || '',
-    description: document.querySelector('[name="descripcion"]').value || ''
-  };
-  
+  btn.innerHTML = '<span class="es-inline">Enviando...</span><span class="fr-inline">Envoi en cours...</span>';
+
   try {
-    const res = await fetch(EMINEO_SCRIPT_URL, {
+    await fetch(EMINEO_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'newCommande',
+        nom, email, whatsapp: wa, pays, pack, abonnement: abo,
+        services: [redes?'redes':'', mkt?'marketing':'', design?'design':''].filter(Boolean).join(','),
+        code_affilie: code, description: desc
+      })
     });
-    const result = await res.json();
-    
-    btn.disabled = false;
-    btn.textContent = 'Enviar solicitud';
-    
-    if (result.ok) {
-      document.getElementById('frmWrap').style.display = 'none';
-      document.getElementById('fOk').style.display = 'block';
-    } else {
-      alert('Error: ' + (result.error || 'Inténtalo de nuevo.'));
+  } catch(err) { /* CORS ok — Apps Script still processes */ }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span class="es-inline">Continuar al pago →</span><span class="fr-inline">Continuer au paiement →</span>';
+
+  // Build recap
+  buildRecap(hasAffilie);
+}
+
+/* BUILD RECAP PAGE */
+function buildRecap(hasAffilie) {
+  document.getElementById('frmWrap').style.display = 'none';
+  document.getElementById('fRecap').style.display  = 'block';
+
+  const isFr = document.body.classList.contains('lang-fr');
+  const items = [];
+
+  // Pack one-time
+  if (formData.pack && formData.pack !== 'Sur Medida') {
+    const prices = {Starter: 0, Business: 49, Premium: 99};
+    const price = prices[formData.pack] || 0;
+    if (price > 0) {
+      items.push({
+        label: isFr ? `Pack ${formData.pack} — paiement unique` : `Pack ${formData.pack} — pago único`,
+        amount: price + '$',
+        type: 'onetime',
+        key: formData.pack.toLowerCase()
+      });
     }
-  } catch(err) {
-    btn.disabled = false;
-    btn.textContent = 'Enviar solicitud';
-    // En cas d'erreur réseau, afficher quand même le succès
-    // car Apps Script peut retourner une erreur CORS mais quand même traiter
-    document.getElementById('frmWrap').style.display = 'none';
-    document.getElementById('fOk').style.display = 'block';
   }
+
+  // Sur Medida
+  if (formData.pack === 'Sur Medida') {
+    items.push({
+      label: isFr ? 'Pack Sur Mesure — Devis personnalisé' : 'Pack Sur Medida — Cotización personalizada',
+      amount: isFr ? '50% + 50%' : '50% + 50%',
+      type: 'contact',
+      key: 'surmedida'
+    });
+  }
+
+  // Abonnement
+  if (formData.abo) {
+    const aboMap = {
+      Autonomo: {label: 'Autónomo', price: '20$/mes', key: 'autonomo'},
+      Mantenimiento: {label: 'Mantenimiento', price: '35$/mes', key: 'mantenimiento'},
+      Gerencia: {label: 'Gerencia', price: '75$/mes', key: 'gerencia'}
+    };
+    const a = aboMap[formData.abo];
+    if (a) {
+      items.push({
+        label: isFr ? `Abonnement ${a.label}${hasAffilie ? ' 🎁 1er mois gratuit' : ''}` : `Suscripción ${a.label}${hasAffilie ? ' 🎁 1er mes gratis' : ''}`,
+        amount: a.price,
+        type: 'subscription',
+        key: a.key,
+        affilie: hasAffilie
+      });
+    }
+  }
+
+  // Services+
+  if (formData.redes) items.push({label: isFr ? '📱 Réseaux Sociaux' : '📱 Redes Sociales', amount: '100$/mes', type: 'subscription', key: 'redes'});
+  if (formData.mkt)   items.push({label: '📣 Marketing Digital', amount: '75$/mes', type: 'subscription', key: 'marketing'});
+  if (formData.design) items.push({label: isFr ? '🎨 Design & Créations' : '🎨 Design & Creaciones', amount: '59$/mes', type: 'subscription', key: 'design'});
+
+  // Render items
+  const container = document.getElementById('recap-items');
+  container.innerHTML = '';
+
+  items.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.style.cssText = 'background:var(--dark3,#1e2330);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.8rem';
+    div.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem">
+        <span style="font-size:.88rem;font-weight:600">${item.label}</span>
+        <span style="font-family:var(--ff-d);color:var(--green);font-weight:700">${item.amount}</span>
+      </div>
+      <div id="paypal-recap-${idx}"></div>
+    `;
+    container.appendChild(div);
+
+    // Render PayPal button
+    setTimeout(() => renderRecapPayPal(idx, item), 300 * idx);
+  });
+}
+
+/* RENDER PAYPAL BUTTON IN RECAP */
+function renderRecapPayPal(idx, item) {
+  const containerId = 'paypal-recap-' + idx;
+  if (renderedPayPal[containerId]) return;
+  renderedPayPal[containerId] = true;
+
+  const isFr = document.body.classList.contains('lang-fr');
+
+  if (item.type === 'contact') {
+    document.getElementById(containerId).innerHTML = `
+      <a href="https://wa.me/56994161742" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;background:#25D366;color:#000;padding:.65rem 1.4rem;border-radius:7px;font-weight:700;font-size:.8rem;text-decoration:none">
+        <i class="fab fa-whatsapp"></i> ${isFr ? 'Nous contacter' : 'Contáctanos'}
+      </a>
+    `;
+    return;
+  }
+
+  // Load appropriate SDK
+  const isSubscription = item.type === 'subscription';
+  const planId = item.affilie
+    ? (PLANS.affilie[item.key] || PLANS.normal[item.key])
+    : PLANS.normal[item.key];
+
+  if (isSubscription && planId) {
+    // Use subscription SDK
+    if (typeof paypal !== 'undefined') {
+      paypal.Buttons({
+        style: {shape: 'rect', color: 'gold', layout: 'vertical', label: 'subscribe'},
+        createSubscription: function(data, actions) {
+          return actions.subscription.create({plan_id: planId});
+        },
+        onApprove: function(data, actions) {
+          showRecapSuccess(idx, isFr);
+        }
+      }).render('#' + containerId);
+    }
+  } else if (item.type === 'onetime') {
+    // Use one-time payment
+    const amounts = {business: '49.00', premium: '99.00'};
+    const amount = amounts[item.key] || '0';
+    if (typeof paypal !== 'undefined' && amount !== '0') {
+      paypal.Buttons({
+        style: {shape: 'rect', color: 'gold', layout: 'vertical'},
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{amount: {value: amount}, description: 'Pack ' + formData.pack + ' EMINEO'}]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            showRecapSuccess(idx, isFr);
+          });
+        }
+      }).render('#' + containerId);
+    }
+  }
+}
+
+function showRecapSuccess(idx, isFr) {
+  const el = document.getElementById('paypal-recap-' + idx);
+  if (el) el.innerHTML = '<div style="color:var(--green);font-weight:700;font-size:.85rem;padding:.5rem 0">✅ ' + (isFr ? 'Paiement confirmé !' : '¡Pago confirmado!') + '</div>';
+}
+
+/* SELECT PACK helper (from pack cards) */
+function scrollToContact(pack) {
+  scrollToForm(pack);
+}
+
+function scrollToForm(selection) {
+  // Pre-fill form based on selection
+  if (selection) {
+    const sel = selection.toLowerCase();
+    
+    // Pack selections
+    if (['starter','business','premium','sur medida'].includes(sel)) {
+      const packEl = document.getElementById('f-pack');
+      if (packEl) {
+        packEl.value = selection.charAt(0).toUpperCase() + selection.slice(1);
+        checkFormLogic();
+      }
+    }
+    
+    // Abonnement selections
+    else if (['autonomo','mantenimiento','gerencia'].includes(sel)) {
+      const aboEl = document.getElementById('f-abo');
+      if (aboEl) {
+        aboEl.value = selection.charAt(0).toUpperCase() + selection.slice(1);
+        checkFormLogic();
+      }
+    }
+    
+    // Services+ selections
+    else if (sel === 'redes') {
+      const el = document.getElementById('f-redes');
+      if (el) el.checked = true;
+    }
+    else if (sel === 'marketing') {
+      const el = document.getElementById('f-marketing');
+      if (el) el.checked = true;
+    }
+    else if (sel === 'design') {
+      const el = document.getElementById('f-design');
+      if (el) el.checked = true;
+    }
+  }
+  
+  // Scroll to contact/form section
+  document.getElementById('contact').scrollIntoView({behavior:'smooth'});
 }
 </script>
 </body>
