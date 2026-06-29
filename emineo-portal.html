@@ -352,6 +352,8 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
       <div class="nav-item" onclick="showPanel('site')"><span class="ni"><i class="fas fa-globe"></i></span>Mi Sitio Web</div>
       <div class="nav-item" onclick="showPanel('messages')"><span class="ni"><i class="fas fa-comments"></i></span>Mensajes <span id="msg-badge" style="background:var(--green);color:var(--black);border-radius:99px;font-size:.6rem;padding:.1rem .4rem;margin-left:.3rem;display:none"></span></div>
       <div class="nav-item" onclick="showPanel('factures')"><span class="ni"><i class="fas fa-file-invoice"></i></span>Facturas</div>
+      <p class="nav-section" id="affilie-nav-section" style="display:none">AFFILIATION</p>
+      <div class="nav-item" id="affilie-nav-item" style="display:none" onclick="showPanel('affilie')"><span class="ni"><i class="fas fa-handshake"></i></span><span>Mon Affiliation</span></div>
       <p class="nav-section" id="admin-nav-section" style="display:none">ADMINISTRACIÓN</p>
       <div class="nav-item" id="admin-nav-item" style="display:none" onclick="showPanel('admin')"><span class="ni"><i class="fas fa-users-cog"></i></span>Gestión Clientes</div>
     </nav>
@@ -464,6 +466,65 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 
   </main>
 </div>
+
+    <!-- PANEL: AFFILIÉ -->
+    <div class="panel" id="panel-affilie">
+
+      <!-- Stats affilié -->
+      <div class="stat-grid" style="margin-bottom:1.5rem">
+        <div class="stat-card"><span class="stat-icon">🔗</span><div class="stat-val" id="aff-code">—</div><div class="stat-label">Mon code affilié</div></div>
+        <div class="stat-card"><span class="stat-icon">👥</span><div class="stat-val" id="aff-clients">—</div><div class="stat-label">Clients actifs</div></div>
+        <div class="stat-card"><span class="stat-icon">💰</span><div class="stat-val" id="aff-commission">—</div><div class="stat-label">Commission due</div></div>
+      </div>
+
+      <!-- Comment ça marche -->
+      <div class="panel-card">
+        <h3><span class="icon"><i class="fas fa-info-circle"></i></span> Comment fonctionne votre affiliation</h3>
+        <div style="display:flex;flex-direction:column;gap:.8rem">
+          <div style="display:flex;gap:.7rem;align-items:flex-start;font-size:.83rem;color:rgba(255,255,255,.55)">
+            <span style="width:26px;height:26px;border-radius:50%;background:var(--gradient);color:var(--black);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.72rem;flex-shrink:0">1</span>
+            <span>Partagez votre code affilié <strong id="aff-code-inline" style="color:var(--green)">—</strong> avec vos contacts</span>
+          </div>
+          <div style="display:flex;gap:.7rem;align-items:flex-start;font-size:.83rem;color:rgba(255,255,255,.55)">
+            <span style="width:26px;height:26px;border-radius:50%;background:var(--gradient);color:var(--black);display:flex;align-items:center;justify-content:function700;font-size:.72rem;flex-shrink:0;font-weight:700">2</span>
+            <span>Ils entrent votre code dans le formulaire du site EMINEO et obtiennent <strong style="color:var(--green)">1er mois gratuit</strong></span>
+          </div>
+          <div style="display:flex;gap:.7rem;align-items:flex-start;font-size:.83rem;color:rgba(255,255,255,.55)">
+            <span style="width:26px;height:26px;border-radius:50%;background:var(--gradient);color:var(--black);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.72rem;flex-shrink:0">3</span>
+            <span>Vous recevez <strong style="color:var(--green)">3$/mois</strong> par client actif — sans limite</span>
+          </div>
+        </div>
+        <div style="margin-top:1.2rem;padding:1rem;background:rgba(94,204,74,.06);border:1px solid rgba(94,204,74,.15);border-radius:10px">
+          <p style="font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:.6rem">Lien direct à partager :</p>
+          <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+            <code id="aff-link" style="font-size:.75rem;color:var(--cyan);background:rgba(41,196,224,.08);padding:.4rem .7rem;border-radius:6px;flex:1">—</code>
+            <button onclick="copyAffLink()" style="background:var(--gradient);color:var(--black);border:none;padding:.4rem .9rem;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer">Copier</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clients amenés -->
+      <div class="panel-card">
+        <h3><span class="icon"><i class="fas fa-users"></i></span> Clients que vous avez amenés</h3>
+        <div id="aff-clients-list">
+          <div class="loading"><div class="spinner"></div>Chargement...</div>
+        </div>
+      </div>
+
+      <!-- Historique commissions -->
+      <div class="panel-card">
+        <h3><span class="icon"><i class="fas fa-money-bill-wave"></i></span> Historique des commissions</h3>
+        <div id="aff-commission-list">
+          <div class="loading"><div class="spinner"></div>Chargement...</div>
+        </div>
+        <div id="withdrawal-zone" style="margin-top:1.2rem"></div>
+        <div style="margin-top:.8rem;padding:1rem;background:rgba(224,194,82,.06);border:1px solid rgba(224,194,82,.15);border-radius:10px;font-size:.82rem;color:rgba(224,194,82,.8)">
+          💰 Minimum de retrait : <strong style="color:var(--green)">100$</strong>. Les paiements sont effectués via PayPal. Pour toute question :
+          <a href="https://wa.me/56994161742" target="_blank" style="color:var(--green);font-weight:600"> WhatsApp EMINEO</a>
+        </div>
+      </div>
+
+    </div>
 
 <!-- MODAL REPLY ADMIN -->
 <div class="modal-ov" id="reply-modal">
@@ -620,6 +681,9 @@ function loadDashboard() {
     document.getElementById('admin-nav-item').style.display = 'flex';
   }
   
+  // Check if affilié
+  checkIfAffilie();
+  
   // Load home panel
   loadHomePanel();
 }
@@ -637,7 +701,8 @@ function showPanel(name) {
     site: ['Mi Sitio Web', 'Edita el contenido de tu sitio'],
     messages: ['Mensajes', 'Comunicación con EMINEO'],
     factures: ['Facturas', 'Historial de pagos'],
-    admin: ['Gestión Clientes', 'Panel de administración EMINEO']
+    admin: ['Gestión Clientes', 'Panel de administración EMINEO'],
+    affilie: ["Mon Affiliation", "Gerez votre programme affiliation"]
   };
   
   if (titles[name]) {
@@ -649,9 +714,19 @@ function showPanel(name) {
   if (name === 'messages') loadMessages();
   if (name === 'factures') loadFactures();
   if (name === 'admin') loadAdminPanel();
+  if (name === 'affilie') loadAffiliePanel();
   
   // Close sidebar on mobile
   document.getElementById('sidebar').classList.remove('open');
+}
+
+/* ===== CHECK AFFILIÉ ===== */
+async function checkIfAffilie() {
+  const res = await api({ action: 'getAffilie', customer_id: currentUser.customer_id });
+  if (res.ok && res.affilie) {
+    document.getElementById('affilie-nav-section').style.display = 'block';
+    document.getElementById('affilie-nav-item').style.display = 'flex';
+  }
 }
 
 /* ===== HOME PANEL ===== */
@@ -670,7 +745,16 @@ function loadHomePanel() {
   } else if (u.statut === 'actif') {
     alertZone.innerHTML = '<div class="alert-banner success"><i class="fas fa-check-circle"></i><div><strong>¡Cuenta activa!</strong> Tu sitio web está en línea. Usa el menú para gestionarlo.</div></div>';
   } else if (u.statut === 'suspendu') {
-    alertZone.innerHTML = '<div class="alert-banner" style="background:rgba(224,82,82,.08);border-color:rgba(224,82,82,.2);color:var(--red)"><i class="fas fa-exclamation-triangle"></i><div><strong>Cuenta suspendida.</strong> Por favor contacta a EMINEO para regularizar tu situación.</div></div>';
+    alertZone.innerHTML = `<div class="alert-banner" style="background:rgba(224,82,82,.08);border-color:rgba(224,82,82,.2);color:var(--red)">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <strong>Cuenta suspendida / Compte suspendu.</strong><br/>
+        Tu abonnement n'est plus actif. Régularisez votre situation pour réactiver votre site.<br/>
+        <a href="https://wa.me/56994161742" target="_blank" style="color:var(--green);font-weight:600;margin-top:.4rem;display:inline-flex;align-items:center;gap:.4rem">
+          <i class="fab fa-whatsapp"></i> Contacter EMINEO
+        </a>
+      </div>
+    </div>`;
   }
   
   // Info
@@ -711,6 +795,18 @@ async function loadSitePreview() {
 
 /* ===== SITE EDITOR ===== */
 async function loadSiteEditor() {
+  // Block if suspended
+  if (currentUser.statut === 'suspendu') {
+    document.getElementById('site-editor').innerHTML = `
+      <div class="alert-banner" style="background:rgba(224,82,82,.08);border-color:rgba(224,82,82,.2);color:var(--red)">
+        <i class="fas fa-lock"></i>
+        <div>
+          <strong>Accès suspendu.</strong> Votre compte est suspendu. 
+          <a href="https://wa.me/56994161742" target="_blank" style="color:var(--green);font-weight:600">Contacter EMINEO</a>
+        </div>
+      </div>`;
+    return;
+  }
   const res = await api({ action: 'getSite', customer_id: currentUser.customer_id });
   if (!res.ok) {
     document.getElementById('site-editor').innerHTML = '<p style="color:rgba(255,255,255,.3);font-size:.82rem">No se encontraron datos del sitio.</p>';
@@ -974,6 +1070,136 @@ async function sendAdminReply() {
   } else {
     alert('Erreur: ' + res.error);
   }
+}
+
+/* ===== AFFILIÉ PANEL ===== */
+let affilieData = null;
+
+async function loadAffiliePanel() {
+  const customerId = currentUser.customer_id;
+  
+  // Get affilié data from Sheets
+  const res = await api({ action: 'getAffilie', customer_id: customerId });
+  
+  if (!res.ok || !res.affilie) {
+    // Show "not affilié yet" message
+    document.getElementById('aff-code').textContent = 'N/A';
+    document.getElementById('aff-clients').textContent = '0';
+    document.getElementById('aff-commission').textContent = '0$';
+    document.getElementById('aff-code-inline').textContent = 'Pas encore affilié';
+    document.getElementById('aff-link').textContent = 'Contactez EMINEO pour devenir affilié';
+    document.getElementById('aff-clients-list').innerHTML = '<p class="no-data">Pas encore affilié. <a href="https://wa.me/56994161742" target="_blank" style="color:var(--green)">Contactez EMINEO</a> pour votre code.</p>';
+    document.getElementById('aff-commission-list').innerHTML = '<p class="no-data">Aucune commission pour le moment.</p>';
+    return;
+  }
+  
+  affilieData = res.affilie;
+  const code = affilieData.code || '—';
+  const siteUrl = 'https://emineo-agency.netlify.app';
+  const affLink = siteUrl + '?ref=' + code;
+  
+  // Update stats
+  document.getElementById('aff-code').textContent = code;
+  document.getElementById('aff-clients').textContent = affilieData.nb_clients || '0';
+  document.getElementById('aff-commission').textContent = (affilieData.commission_due || '0') + '$';
+  document.getElementById('aff-code-inline').textContent = code;
+  document.getElementById('aff-link').textContent = affLink;
+  document.getElementById('aff-link').id = 'aff-link';
+  
+  // Clients list
+  if (!res.clients || res.clients.length === 0) {
+    document.getElementById('aff-clients-list').innerHTML = '<p class="no-data">Aucun client amené pour le moment. Partagez votre code !</p>';
+  } else {
+    document.getElementById('aff-clients-list').innerHTML = `
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Client</th><th>Pack</th><th>Statut</th><th>Date</th></tr></thead>
+          <tbody>
+            ${res.clients.map(c => `
+              <tr>
+                <td>${c.nom}</td>
+                <td>${c.pack}</td>
+                <td><span class="badge ${c.statut}">${c.statut}</span></td>
+                <td>${c.date_inscription}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+  
+  // Commission history
+  const commPaid = parseFloat(affilieData.commission_payee || 0);
+  const commDue  = parseFloat(affilieData.commission_due || 0);
+  document.getElementById('aff-commission-list').innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Montant</th><th>Statut</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Commission accumulée</td>
+            <td><strong>${commDue}$</strong></td>
+            <td><span class="badge en_attente">En attente</span></td>
+          </tr>
+          <tr>
+            <td>Total commissions payées</td>
+            <td><strong>${commPaid}$</strong></td>
+            <td><span class="badge actif">Payé</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  // Withdrawal button logic
+  const withdrawZone = document.getElementById('withdrawal-zone');
+  if (commDue >= 100) {
+    withdrawZone.innerHTML = `
+      <div style="padding:1.2rem;background:rgba(94,204,74,.08);border:1px solid rgba(94,204,74,.25);border-radius:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+        <div>
+          <p style="font-family:var(--ff-d);font-size:.95rem;font-weight:700;color:var(--green);margin-bottom:.2rem">
+            🎉 Vous pouvez demander un retrait !
+          </p>
+          <p style="font-size:.78rem;color:rgba(255,255,255,.45)">
+            Vous avez <strong style="color:var(--green)">${commDue}$</strong> disponibles. Minimum requis : 100$.
+          </p>
+        </div>
+        <a href="https://wa.me/56994161742?text=Bonjour%20EMINEO%2C%20je%20souhaite%20retirer%20mes%20commissions%20d%27affiliation%20(%24${commDue}).%20Mon%20code%20affilié%20est%20${affilieData ? affilieData.code : ''}" 
+           target="_blank"
+           style="display:inline-flex;align-items:center;gap:.5rem;background:#25D366;color:#000;padding:.7rem 1.4rem;border-radius:8px;font-weight:700;font-size:.8rem;text-decoration:none;white-space:nowrap">
+          <i class="fab fa-whatsapp"></i> Demander le retrait
+        </a>
+      </div>
+    `;
+  } else {
+    const remaining = 100 - commDue;
+    const progress = Math.min((commDue / 100) * 100, 100);
+    withdrawZone.innerHTML = `
+      <div style="padding:1.2rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px">
+        <p style="font-size:.82rem;color:rgba(255,255,255,.5);margin-bottom:.6rem">
+          Progression vers le retrait minimum (100$) :
+        </p>
+        <div style="background:rgba(255,255,255,.08);border-radius:99px;height:8px;overflow:hidden;margin-bottom:.5rem">
+          <div style="height:100%;width:${progress}%;background:var(--gradient);border-radius:99px;transition:width .5s"></div>
+        </div>
+        <p style="font-size:.75rem;color:rgba(255,255,255,.35)">
+          <strong style="color:var(--green)">${commDue}$</strong> accumulés — encore <strong style="color:var(--cyan)">${remaining}$</strong> avant de pouvoir retirer
+        </p>
+      </div>
+    `;
+  }
+}
+
+function copyAffLink() {
+  const link = document.getElementById('aff-link').textContent;
+  navigator.clipboard.writeText(link).then(() => {
+    const btn = document.querySelector('[onclick="copyAffLink()"]');
+    btn.textContent = '✅ Copié !';
+    setTimeout(() => btn.textContent = 'Copier', 2000);
+  }).catch(() => {
+    alert('Lien : ' + link);
+  });
 }
 
 /* ===== LOGOUT ===== */
