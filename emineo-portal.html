@@ -282,7 +282,12 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
       <p class="form-title">Bienvenido de vuelta</p>
       <p class="form-sub">Accede a tu dashboard y gestiona tu sitio web.</p>
       <div class="fgrp"><label>Email *</label><input type="email" id="l-email" placeholder="tucorreo@gmail.com"/></div>
-      <div class="fgrp"><label>Contraseña *</label><input type="password" id="l-pass" placeholder="Tu contraseña"/></div>
+      <div class="fgrp"><label>Contraseña *</label>
+        <div style="position:relative">
+          <input type="password" id="l-pass" placeholder="Tu contraseña" style="padding-right:2.5rem"/>
+          <button type="button" onclick="togglePwd('l-pass',this)" style="position:absolute;right:.7rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;padding:0"><i class="fas fa-eye"></i></button>
+        </div>
+      </div>
       <button class="btn-submit" onclick="doLogin()">Iniciar sesión</button>
       <div class="msg-box" id="l-msg"></div>
       <p class="login-footer">¿Eres administrador? <a onclick="showAdminLogin()">Acceso admin →</a></p>
@@ -314,7 +319,12 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
           </select>
         </div>
       </div>
-      <div class="fgrp"><label>Contraseña *</label><input type="password" id="s-pass" placeholder="Mínimo 6 caracteres"/></div>
+      <div class="fgrp"><label>Contraseña *</label>
+        <div style="position:relative">
+          <input type="password" id="s-pass" placeholder="Mínimo 6 caracteres" style="padding-right:2.5rem"/>
+          <button type="button" onclick="togglePwd('s-pass',this)" style="position:absolute;right:.7rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;padding:0"><i class="fas fa-eye"></i></button>
+        </div>
+      </div>
       <div class="fgrp"><label>Código afiliado (opcional)</label><input type="text" id="s-code" placeholder="CODIGO123"/></div>
       <button class="btn-submit" onclick="doSignup()">Crear cuenta</button>
       <div class="msg-box" id="s-msg"></div>
@@ -325,7 +335,12 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
       <p class="form-title">Acceso Administrador</p>
       <p class="form-sub">Solo para el equipo EMINEO.</p>
       <div class="fgrp"><label>Email admin *</label><input type="email" id="a-email" placeholder="emineoagency@gmail.com"/></div>
-      <div class="fgrp"><label>Contraseña admin *</label><input type="password" id="a-pass" placeholder="Contraseña admin"/></div>
+      <div class="fgrp"><label>Contraseña admin *</label>
+        <div style="position:relative">
+          <input type="password" id="a-pass" placeholder="Contraseña admin" style="padding-right:2.5rem"/>
+          <button type="button" onclick="togglePwd('a-pass',this)" style="position:absolute;right:.7rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;padding:0"><i class="fas fa-eye"></i></button>
+        </div>
+      </div>
       <button class="btn-submit" onclick="doAdminLogin()">Acceder como admin</button>
       <div class="msg-box" id="a-msg"></div>
       <p class="login-footer"><a onclick="showLoginTab('login')">← Volver al login cliente</a></p>
@@ -353,6 +368,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
       <div class="nav-item" onclick="showPanel('site')"><span class="ni"><i class="fas fa-globe"></i></span>Mi Sitio Web</div>
       <div class="nav-item" onclick="showPanel('messages')"><span class="ni"><i class="fas fa-comments"></i></span>Mensajes <span id="msg-badge" style="background:var(--green);color:var(--black);border-radius:99px;font-size:.6rem;padding:.1rem .4rem;margin-left:.3rem;display:none"></span></div>
       <div class="nav-item" onclick="showPanel('factures')"><span class="ni"><i class="fas fa-file-invoice"></i></span>Facturas</div>
+      <div class="nav-item" id="admisiones-nav-item" style="display:none" onclick="showPanel('admisiones')"><span class="ni"><i class="fas fa-graduation-cap"></i></span>Admisiones <span id="admisiones-badge" style="background:var(--green);color:var(--black);border-radius:99px;font-size:.6rem;padding:.1rem .4rem;margin-left:.3rem;display:none"></span></div>
       <p class="nav-section" id="affilie-nav-section" style="display:none">AFFILIATION</p>
       <div class="nav-item" id="affilie-nav-item" style="display:none" onclick="showPanel('affilie')"><span class="ni"><i class="fas fa-handshake"></i></span><span>Mon Affiliation</span></div>
       <p class="nav-section" id="admin-nav-section" style="display:none">ADMINISTRACIÓN</p>
@@ -467,6 +483,19 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 
   </main>
 </div>
+
+    <!-- PANEL: ADMISIONES (pour clients type université/école) -->
+    <div class="panel" id="panel-admisiones">
+      <div class="panel-card">
+        <h3><span class="icon"><i class="fas fa-graduation-cap"></i></span> Solicitudes de admisión recibidas</h3>
+        <p style="font-size:.8rem;color:rgba(255,255,255,.35);margin-bottom:1.2rem">
+          Aquí aparecen todas las solicitudes enviadas desde el formulario de admisión de tu sitio web.
+        </p>
+        <div id="admisiones-list">
+          <div class="loading"><div class="spinner"></div>Cargando solicitudes...</div>
+        </div>
+      </div>
+    </div>
 
     <!-- PANEL: AFFILIÉ -->
     <div class="panel" id="panel-affilie">
@@ -698,6 +727,9 @@ function loadDashboard() {
   // Check if affilié
   checkIfAffilie();
   
+  // Check if admisiones-type client
+  checkIfAdmisiones();
+  
   // Load home panel
   loadHomePanel();
 }
@@ -729,6 +761,7 @@ function showPanel(name) {
   if (name === 'factures') loadFactures();
   if (name === 'admin') loadAdminPanel();
   if (name === 'affilie') loadAffiliePanel();
+  if (name === 'admisiones') loadAdmisionesPanel();
   
   // Close sidebar on mobile
   document.getElementById('sidebar').classList.remove('open');
@@ -740,6 +773,66 @@ async function checkIfAffilie() {
   if (res.ok && res.affilie) {
     document.getElementById('affilie-nav-section').style.display = 'block';
     document.getElementById('affilie-nav-item').style.display = 'flex';
+  }
+}
+
+/* ===== CHECK ADMISIONES (clients type universidad/escuela) ===== */
+async function checkIfAdmisiones() {
+  const res = await api({ action: 'getSite', customer_id: currentUser.customer_id });
+  if (res.ok && res.type_site) {
+    const tipo = res.type_site.toLowerCase();
+    if (tipo.includes('universi') || tipo.includes('escuela') || tipo.includes('academia') || tipo.includes('unicsa')) {
+      document.getElementById('admisiones-nav-item').style.display = 'flex';
+      loadAdmisionesBadge();
+    }
+  }
+}
+
+async function loadAdmisionesBadge() {
+  const res = await api({ action: 'getAdmisiones', customer_id: currentUser.customer_id });
+  if (res.ok && res.admisiones) {
+    const nuevas = res.admisiones.filter(a => a.statut === 'nuevo').length;
+    if (nuevas > 0) {
+      const badge = document.getElementById('admisiones-badge');
+      badge.textContent = nuevas;
+      badge.style.display = 'inline-block';
+    }
+  }
+}
+
+async function loadAdmisionesPanel() {
+  const res = await api({ action: 'getAdmisiones', customer_id: currentUser.customer_id });
+  const container = document.getElementById('admisiones-list');
+
+  if (!res.ok || !res.admisiones || res.admisiones.length === 0) {
+    container.innerHTML = '<p class="no-data">No hay solicitudes de admisión todavía.</p>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="admin-clients-grid">
+      ${res.admisiones.map((a, idx) => `
+        <div class="client-row">
+          <div class="client-info">
+            <div class="client-name">${a.nombre} <span class="badge ${a.statut === 'nuevo' ? 'en_attente' : 'actif'}">${a.statut === 'nuevo' ? 'Nuevo' : 'Tratado'}</span></div>
+            <div class="client-details">${a.email} · ${a.whatsapp || '—'} · Programa: <strong>${a.programa || '—'}</strong></div>
+            <div class="client-details" style="margin-top:.2rem">${a.mensaje || ''}</div>
+            <div class="client-details" style="margin-top:.2rem">${a.fecha}</div>
+          </div>
+          <div class="client-actions">
+            ${a.statut === 'nuevo' ? `<button class="btn-sm activate" onclick="markAdmisionTratada(${a.row})">✅ Marcar tratada</button>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+async function markAdmisionTratada(row) {
+  const res = await api({ action: 'markAdmisionTratada', row: row });
+  if (res.ok) {
+    loadAdmisionesPanel();
+    loadAdmisionesBadge();
   }
 }
 
@@ -1227,6 +1320,19 @@ function doLogout() {
   document.getElementById('admin-nav-section').style.display = 'none';
   document.getElementById('admin-nav-item').style.display = 'none';
   showLoginTab('login');
+}
+
+/* ===== PASSWORD TOGGLE ===== */
+function togglePwd(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const icon = btn.querySelector('i');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.className = 'fas fa-eye-slash';
+  } else {
+    input.type = 'password';
+    icon.className = 'fas fa-eye';
+  }
 }
 
 /* ===== HELPERS ===== */
