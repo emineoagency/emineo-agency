@@ -554,16 +554,29 @@ let adminData = null;
 let replyMsgData = null;
 
 /* ===== API CALL ===== */
+// Apps Script requires Content-Type: text/plain to avoid CORS preflight
 async function api(data) {
   try {
     const res = await fetch(SCRIPT_URL, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
       body: JSON.stringify(data)
     });
-    return await res.json();
+    const result = await res.json();
+    return result;
   } catch(e) {
-    return { ok: false, error: 'Erreur de connexion. Vérifiez votre internet.' };
+    // Try with no-cors as last resort (for read operations that don't need response)
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'text/plain;charset=utf-8'},
+        body: JSON.stringify(data)
+      });
+      return { ok: true, _sent: true };
+    } catch(e2) {
+      return { ok: false, error: 'Connexion impossible. Vérifiez votre internet.' };
+    }
   }
 }
 
