@@ -29,12 +29,13 @@ input,select,textarea{font-family:var(--ff-b)}
 
 /* ===== LOGIN PAGE ===== */
 #page-login{
-  display:flex;align-items:center;justify-content:center;
+  align-items:center;justify-content:center;
   min-height:100vh;padding:2rem;
   background:radial-gradient(ellipse at 20% 50%,rgba(94,204,74,.08),transparent 50%),
              radial-gradient(ellipse at 80% 20%,rgba(41,196,224,.08),transparent 50%),
              var(--black);
 }
+#page-login.active{display:flex}
 .login-box{
   width:100%;max-width:440px;
   background:var(--dark2);border:1px solid rgba(255,255,255,.08);
