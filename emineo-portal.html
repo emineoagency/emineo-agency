@@ -767,7 +767,7 @@ function loadHomePanel() {
   document.getElementById('client-stats').innerHTML = `
     <div class="stat-card"><span class="stat-icon">🌐</span><div class="stat-val">${userSites.length}</div><div class="stat-label">Mis sitios</div></div>
     <div class="stat-card"><span class="stat-icon">✅</span><div class="stat-val">${sitesActifs}</div><div class="stat-label">Sitios activos</div></div>
-    <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-val" style="font-size:1.1rem">${u.date_inscription||'-'}</div><div class="stat-label">Miembro desde</div></div>
+    <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-val" style="font-size:1.1rem">${_fmtDate(u.date_inscription)||'-'}</div><div class="stat-label">Miembro desde</div></div>
     <div class="stat-card"><span class="stat-icon">${affilieData?'💰':'🤝'}</span><div class="stat-val" style="font-size:1.1rem">${affilieData?'Afiliado':'No afiliado'}</div><div class="stat-label">Programa afiliacion</div></div>
   `;
 
@@ -809,7 +809,7 @@ function loadHomePanel() {
     <div class="info-row"><span class="info-label">Email</span><span class="info-val">${u.email||'-'}</span></div>
     <div class="info-row"><span class="info-label">WhatsApp</span><span class="info-val">${u.whatsapp||'-'}</span></div>
     <div class="info-row"><span class="info-label">Pais</span><span class="info-val">${u.pays||'-'}</span></div>
-    <div class="info-row"><span class="info-label">Miembro desde</span><span class="info-val">${u.date_inscription||'-'}</span></div>
+    <div class="info-row"><span class="info-label">Miembro desde</span><span class="info-val">${_fmtDate(u.date_inscription)||'-'}</span></div>
   `;
 }
 
@@ -1023,7 +1023,7 @@ async function loadAdmisionesPanel() {
       </div>
       <div class="client-details">${a.email} · ${a.whatsapp||'-'} · Programa: <strong>${a.programa||'-'}</strong></div>
       <div class="client-details" style="margin-top:.3rem">${a.mensaje||''}</div>
-      <div class="client-details" style="margin-top:.2rem">${a.fecha}</div>
+      <div class="client-details" style="margin-top:.2rem">${_fmtDate(a.fecha)}</div>
       ${a.statut==='nuevo' ? `<button class="btn-sm activate" style="margin-top:.6rem" onclick="markAdmisionTratada(${a.row})">Marcar tratada</button>` : ''}
     </div>`).join('')}</div>`;
   document.getElementById('admisiones-badge').style.display = 'none';
@@ -1079,7 +1079,7 @@ async function loadAffiliePanel() {
     document.getElementById('aff-clients-list').innerHTML = '<p class="no-data">Aun no has traido clientes. ¡Comparte tu codigo!</p>';
   } else {
     document.getElementById('aff-clients-list').innerHTML = `<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Pack</th><th>Estado</th><th>Fecha</th></tr></thead><tbody>
-      ${res.clients.map(c => `<tr><td>${c.nom}</td><td>${c.pack}</td><td><span class="badge ${c.statut}">${_statutLabel(c.statut)}</span></td><td>${c.date_inscription}</td></tr>`).join('')}
+      ${res.clients.map(c => `<tr><td>${c.nom}</td><td>${c.pack}</td><td><span class="badge ${c.statut}">${_statutLabel(c.statut)}</span></td><td>${_fmtDate(c.date_inscription)}</td></tr>`).join('')}
     </tbody></table></div>`;
   }
 
@@ -1181,7 +1181,7 @@ async function loadAdminClientes() {
       <div class="client-row-top">
         <div>
           <div class="client-name">${c.nom} ${tags.join(' ')}</div>
-          <div class="client-details">${c.email} · ${c.whatsapp||'-'} · ${c.pays||'-'} · Desde ${c.date_inscription}</div>
+          <div class="client-details">${c.email} · ${c.whatsapp||'-'} · ${c.pays||'-'} · Desde ${_fmtDate(c.date_inscription)}</div>
         </div>
       </div>
       ${sitesHtml}
@@ -1323,6 +1323,14 @@ function doLogout() {
 
 /* ===== HELPERS ===== */
 function showMsg(el, text, type) { el.textContent = text; el.className = 'msg-box ' + type + ' show'; }
+
+function _fmtDate(d) {
+  if (!d) return '-';
+  var s = d.toString();
+  // If ISO format like 2026-06-30T04:00:00.000Z, keep only YYYY-MM-DD
+  if (s.length > 10 && s.includes('T')) return s.substring(0, 10);
+  return s;
+}
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
 document.addEventListener('click', function(e) {
