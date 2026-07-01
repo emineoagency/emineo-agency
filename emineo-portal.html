@@ -330,6 +330,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
       <!-- généré dynamiquement selon le role: admin / client / affilié -->
     </nav>
     <div class="sidebar-logout">
+      <div class="nav-item" id="nav-configuracion" data-panel="configuracion" style="margin-bottom:.5rem"><span class="ni"><i class="fas fa-cog"></i></span>Configuracion</div>
       <button class="btn-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesion</button>
     </div>
   </aside>
@@ -433,6 +434,48 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
         <div id="aff-commission-list"></div>
         <div id="withdrawal-zone" style="margin-top:1.2rem"></div>
       </div>
+    </div>
+
+    <!-- ============ PANEL CONFIGURACION (tous les comptes) ============ -->
+    <div class="panel" id="panel-configuracion">
+
+      <!-- Changer mot de passe -->
+      <div class="panel-card">
+        <h3><span class="icon"><i class="fas fa-lock"></i></span> Cambiar contrasena</h3>
+        <div style="max-width:400px">
+          <div class="editor-field"><label>Contrasena actual *</label>
+            <div class="pwd-wrap"><input type="password" id="cfg-pass-old" placeholder="Tu contrasena actual" autocomplete="new-password"/>
+            <button type="button" class="pwd-toggle" onclick="togglePwd('cfg-pass-old',this)"><i class="fas fa-eye"></i></button></div>
+          </div>
+          <div class="editor-field"><label>Nueva contrasena *</label>
+            <div class="pwd-wrap"><input type="password" id="cfg-pass-new" placeholder="Minimo 6 caracteres" autocomplete="new-password"/>
+            <button type="button" class="pwd-toggle" onclick="togglePwd('cfg-pass-new',this)"><i class="fas fa-eye"></i></button></div>
+          </div>
+          <div class="editor-field"><label>Confirmar nueva contrasena *</label>
+            <div class="pwd-wrap"><input type="password" id="cfg-pass-confirm" placeholder="Repite la nueva contrasena" autocomplete="new-password"/>
+            <button type="button" class="pwd-toggle" onclick="togglePwd('cfg-pass-confirm',this)"><i class="fas fa-eye"></i></button></div>
+          </div>
+          <button class="btn-save" onclick="changePassword()"><i class="fas fa-save"></i> Guardar contrasena</button>
+          <div class="msg-box" id="cfg-pass-msg" style="margin-top:.8rem"></div>
+        </div>
+      </div>
+
+      <!-- Changer email -->
+      <div class="panel-card">
+        <h3><span class="icon"><i class="fas fa-envelope"></i></span> Cambiar email</h3>
+        <div style="max-width:400px">
+          <div class="editor-field"><label>Nuevo email *</label>
+            <input type="email" id="cfg-email-new" placeholder="nuevo@email.com" autocomplete="off"/>
+          </div>
+          <div class="editor-field"><label>Confirmar contrasena *</label>
+            <div class="pwd-wrap"><input type="password" id="cfg-email-pass" placeholder="Tu contrasena actual" autocomplete="new-password"/>
+            <button type="button" class="pwd-toggle" onclick="togglePwd('cfg-email-pass',this)"><i class="fas fa-eye"></i></button></div>
+          </div>
+          <button class="btn-save" onclick="changeEmail()"><i class="fas fa-save"></i> Guardar email</button>
+          <div class="msg-box" id="cfg-email-msg" style="margin-top:.8rem"></div>
+        </div>
+      </div>
+
     </div>
 
     <!-- ============ PANELS ADMIN ============ -->
@@ -601,6 +644,17 @@ async function doSignup() {
   if (!nom || !email || !pass || !pack || !abo) {
     showMsg(msg, 'Los campos obligatorios (*) son requeridos.', 'err'); return;
   }
+  
+  // Vérifier si l'email est enregistré dans le système (a soumis une commande)
+  const checkRes = await api({ action: 'checkEmailAuthorized', email: email });
+  if (!checkRes.ok) {
+    // Email pas trouvé dans le système
+    const msgEl = document.getElementById('s-msg');
+    msgEl.innerHTML = 'Tu email no está registrado en nuestro sistema. Completa primero el formulario de pedido <a href="' + SITE_URL + '/#contact" target="_blank" style="color:var(--cyan);font-weight:600;text-decoration:underline">aquí</a> para comenzar.';
+    msgEl.className = 'msg-box err show';
+    btn.disabled = false; btn.textContent = 'Crear cuenta';
+    return;
+  }
   const btn = document.querySelector('#signup-form .btn-submit');
   btn.disabled = true; btn.textContent = 'Creando cuenta...';
   const res = await api({ action: 'signup', nom, email, whatsapp: wa, pays, pack, abonnement: abo, type_site: tipo, password: pass, code_affilie: code });
@@ -734,6 +788,7 @@ function showPanel(name) {
     messages: ['Mensajes', 'Comunicacion con EMINEO'],
     factures: ['Facturas', 'Historial de pagos'],
     admisiones: ['Admisiones', 'Solicitudes recibidas'],
+    configuracion: ['Configuracion', 'Gestiona tu cuenta'],
     affilie: ['Mi Afiliacion', 'Gestiona tu programa de afiliacion'],
     'admin-home': ['Resumen EMINEO', 'Vista global del sistema'],
     'admin-clientes': ['Clientes y Sitios', 'Todos los clientes registrados'],
@@ -752,6 +807,7 @@ function showPanel(name) {
   if (name === 'factures') loadFactures();
   if (name === 'admisiones') loadAdmisionesPanel();
   if (name === 'affilie') loadAffiliePanel();
+  if (name === 'configuracion') loadConfigPanel();
   if (name === 'admin-home') loadAdminHome();
   if (name === 'admin-clientes') loadAdminClientes();
   if (name === 'admin-afiliados') loadAdminAfiliados();
@@ -1120,6 +1176,18 @@ function copyAffLink() {
 }
 
 /* ===== ADMIN: HOME / RESUMEN ===== */
+function loadConfigPanel() {
+  // Juste vider les champs au chargement pour securite
+  ['cfg-pass-old','cfg-pass-new','cfg-pass-confirm','cfg-email-new','cfg-email-pass'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  ['cfg-pass-msg','cfg-email-msg'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.className = 'msg-box';
+  });
+}
+
 async function loadAdminHome() {
   // Use cache if data already loaded (refresh manually if needed)
   if (!adminData) {
@@ -1335,6 +1403,76 @@ function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 /* ===== LOGOUT ===== */
+/* ===== CONFIGURACION — Changer mot de passe et email ===== */
+async function changePassword() {
+  const oldPass    = document.getElementById('cfg-pass-old').value.trim();
+  const newPass    = document.getElementById('cfg-pass-new').value.trim();
+  const confirmPass= document.getElementById('cfg-pass-confirm').value.trim();
+  const msg        = document.getElementById('cfg-pass-msg');
+
+  if (!oldPass || !newPass || !confirmPass) {
+    showMsg(msg, 'Todos los campos son obligatorios.', 'err'); return;
+  }
+  if (newPass.length < 6) {
+    showMsg(msg, 'La nueva contrasena debe tener al menos 6 caracteres.', 'err'); return;
+  }
+  if (newPass !== confirmPass) {
+    showMsg(msg, 'Las contrasenas no coinciden.', 'err'); return;
+  }
+
+  const btn = document.querySelector('#panel-configuracion .panel-card:first-child .btn-save');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
+  const res = await api({
+    action: 'changePassword',
+    customer_id: currentUser.customer_id,
+    old_password: oldPass,
+    new_password: newPass
+  });
+
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Guardar contrasena';
+
+  if (res.ok) {
+    showMsg(msg, '¡Contrasena actualizada correctamente!', 'ok');
+    document.getElementById('cfg-pass-old').value = '';
+    document.getElementById('cfg-pass-new').value = '';
+    document.getElementById('cfg-pass-confirm').value = '';
+  } else {
+    showMsg(msg, res.error || 'Error al cambiar la contrasena.', 'err');
+  }
+}
+
+async function changeEmail() {
+  const newEmail = document.getElementById('cfg-email-new').value.trim();
+  const password = document.getElementById('cfg-email-pass').value.trim();
+  const msg      = document.getElementById('cfg-email-msg');
+
+  if (!newEmail || !password) {
+    showMsg(msg, 'Todos los campos son obligatorios.', 'err'); return;
+  }
+
+  const btn = document.querySelector('#panel-configuracion .panel-card:last-child .btn-save');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
+  const res = await api({
+    action: 'changeEmail',
+    customer_id: currentUser.customer_id,
+    new_email: newEmail,
+    password: password
+  });
+
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Guardar email';
+
+  if (res.ok) {
+    showMsg(msg, '¡Email actualizado correctamente!', 'ok');
+    currentUser.email = newEmail;
+    document.getElementById('cfg-email-new').value = '';
+    document.getElementById('cfg-email-pass').value = '';
+  } else {
+    showMsg(msg, res.error || 'Error al cambiar el email.', 'err');
+  }
+}
+
 function refreshAdminData() {
   adminData = null; // Clear cache
   const btn = document.getElementById('refresh-btn');
@@ -1343,7 +1481,8 @@ function refreshAdminData() {
   const activePanel = document.querySelector('.panel.active');
   if (activePanel) {
     const name = activePanel.id.replace('panel-', '');
-    if (name === 'admin-home') loadAdminHome();
+    if (name === 'configuracion') loadConfigPanel();
+  if (name === 'admin-home') loadAdminHome();
     else if (name === 'admin-clientes') loadAdminClientes();
     else if (name === 'admin-afiliados') loadAdminAfiliados();
     else if (name === 'admin-mensajes') loadAdminMensajes();
