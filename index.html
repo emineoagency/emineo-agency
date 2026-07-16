@@ -821,14 +821,18 @@ async function checkDomain(evt) {
   btn.disabled = true;
   resultEl.style.display = "block";
   resultEl.style.background = "rgba(255,255,255,.04)";
+  resultEl.style.border = "none";
   resultEl.style.color = "rgba(255,255,255,.6)";
   resultEl.textContent = "Verificando " + input + ext + "...";
   formEl.style.display = "none";
   try {
-    var res = await fetch("https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=at_03ATmK2MU1fNUZa8HIsnDLLx3HMwN&domainName=" + input + ext + "&outputFormat=JSON");
+    var res = await fetch("https://script.google.com/macros/s/AKfycbwlv14MC7iiLNuTCfZqtsLDZcVmMjLBSVwXQ8oTTK6xITKOm15MELpp3dczX1wZEzTwOQ/exec", {
+      method: "POST",
+      headers: {"Content-Type": "text/plain;charset=utf-8"},
+      body: JSON.stringify({ action: "checkDomain", domain: input + ext })
+    });
     var data = await res.json();
-    var available = !data.WhoisRecord || !data.WhoisRecord.registryData || !data.WhoisRecord.registryData.registrantContact;
-    if (available) {
+    if (data.ok && data.available) {
       resultEl.style.background = "rgba(94,204,74,.1)";
       resultEl.style.border = "1px solid rgba(94,204,74,.25)";
       resultEl.style.color = "#5ECC4A";
