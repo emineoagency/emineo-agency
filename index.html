@@ -825,7 +825,7 @@ async function checkDomain(evt) {
   resultEl.textContent = "Verificando " + input + ext + "...";
   formEl.style.display = "none";
   try {
-    var res = await fetch("https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=at_demo&domainName=" + input + ext + "&outputFormat=JSON");
+    var res = await fetch("https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=at_03ATmK2MU1fNUZa8HIsnDLLx3HMwN&domainName=" + input + ext + "&outputFormat=JSON");
     var data = await res.json();
     var available = !data.WhoisRecord || !data.WhoisRecord.registryData || !data.WhoisRecord.registryData.registrantContact;
     if (available) {
