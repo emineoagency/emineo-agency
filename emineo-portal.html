@@ -547,6 +547,57 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
   </div>
 </div>
 
+<!-- DOMAIN MODAL -->
+<div class="modal-ov" id="domain-modal">
+  <div class="modal-box" style="max-width:520px">
+    <p class="modal-title">🌐 Obtener nombre de dominio</p>
+    <p style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:1rem">Dominio + hasta 5 emails profesionales — <strong style="color:var(--green)">$15/año</strong></p>
+
+    <div id="domain-modal-site-name" style="font-size:.8rem;color:var(--cyan);margin-bottom:1rem;font-weight:600"></div>
+
+    <div class="editor-field">
+      <label>Nombre de dominio que quieres *</label>
+      <div style="display:flex;gap:.5rem">
+        <input type="text" id="dm-domain" placeholder="tunegocio" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#fff;padding:.7rem .9rem;border-radius:8px;font-size:.85rem;outline:none"/>
+        <select id="dm-ext" style="background:#1e2330;border:1px solid rgba(255,255,255,.15);color:#fff;padding:.7rem .6rem;border-radius:8px;font-size:.85rem;outline:none">
+          <option>.com</option><option>.net</option><option>.org</option>
+          <option>.io</option><option>.co</option><option>.ht</option><option>.cl</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="editor-field" style="margin-top:.8rem">
+      <label>Tus emails profesionales (hasta 5 gratis)</label>
+      <div id="dm-email-fields">
+        <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem">
+          <input type="text" id="dm-email-1" placeholder="contacto" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#fff;padding:.6rem .8rem;border-radius:7px;font-size:.82rem;outline:none"/>
+          <span id="dm-domain-suffix" style="font-size:.78rem;color:rgba(255,255,255,.4)">@tudominio.com</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem">
+          <input type="text" id="dm-email-2" placeholder="info" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#fff;padding:.6rem .8rem;border-radius:7px;font-size:.82rem;outline:none"/>
+          <span style="font-size:.78rem;color:rgba(255,255,255,.4)" class="dm-suffix">@tudominio.com</span>
+        </div>
+      </div>
+      <button onclick="addDmEmail()" style="font-size:.72rem;color:var(--cyan);background:none;border:none;cursor:pointer;margin-top:.2rem">+ Agregar otro email (máx 5)</button>
+    </div>
+
+    <div id="dm-paypal-zone" style="margin-top:1rem;display:none"></div>
+    <div id="dm-check-zone" style="margin-top:.8rem">
+      <button onclick="checkDomainAvailability()" id="dm-check-btn" style="width:100%;background:var(--gradient);color:var(--black);border:none;padding:.75rem;font-family:var(--ff-d);font-weight:700;font-size:.85rem;border-radius:8px;cursor:pointer">
+        <i class="fas fa-search"></i> Verificar disponibilidad
+      </button>
+    </div>
+
+    <div id="dm-result" style="display:none;margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.82rem"></div>
+    <div id="dm-paypal-zone" style="display:none;margin-top:1rem"></div>
+    <div class="msg-box" id="dm-msg" style="margin-top:.6rem"></div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('domain-modal')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-ov" id="new-site-modal">
   <div class="modal-box">
     <p class="modal-title">Solicitar un nuevo sitio</p>
@@ -908,6 +959,7 @@ async function loadSitesPanel() {
           </div>
           <div class="site-card-actions">
             <button class="btn-sm activate" onclick="openSiteEditor('${s.site_id}')" ${s.statut==='suspendu'?'disabled style="opacity:.4;cursor:not-allowed"':''}><i class="fas fa-edit"></i> Editar</button>
+            ${!s.url_site || s.url_site.includes('netlify') ? `<button class="btn-sm" onclick="openDomainModal('${s.site_id}','${s.nom_site}')" style="background:rgba(94,204,74,.08);color:var(--green);border:1px solid rgba(94,204,74,.2)"><i class="fas fa-globe"></i> Obtener dominio</button>` : `<a href="${s.url_site}" target="_blank" class="btn-sm" style="background:rgba(41,196,224,.08);color:var(--cyan);border:1px solid rgba(41,196,224,.2)"><i class="fas fa-external-link-alt"></i> Ver sitio</a>`}
           </div>
         </div>`;
     });
@@ -1493,6 +1545,120 @@ function refreshAdminData() {
   }, 2000);
 }
 
+/* ===== DOMAIN MODAL ===== */
+var currentDomainSiteId = '';
+var domainEmailCount = 2;
+
+function openDomainModal(siteId, siteName) {
+  currentDomainSiteId = siteId;
+  domainEmailCount = 2;
+  document.getElementById('domain-modal-site-name').textContent = 'Sitio: ' + siteName;
+  document.getElementById('dm-domain').value = '';
+  document.getElementById('dm-email-1').value = '';
+  document.getElementById('dm-email-2').value = '';
+  document.getElementById('dm-domain-suffix').textContent = '@tudominio.com';
+  document.querySelectorAll('.dm-suffix').forEach(function(el){ el.textContent = '@tudominio.com'; });
+  document.getElementById('dm-paypal-zone').style.display = 'none';
+  document.getElementById('dm-paypal-zone').innerHTML = '';
+  document.getElementById('dm-msg').className = 'msg-box';
+  openModal('domain-modal');
+
+  // Update suffix when domain input changes
+  document.getElementById('dm-domain').oninput = function() {
+    var d = this.value.trim() || 'tudominio';
+    var ext = document.getElementById('dm-ext').value;
+    var suffix = '@' + d + ext;
+    document.getElementById('dm-domain-suffix').textContent = suffix;
+    document.querySelectorAll('.dm-suffix').forEach(function(el){ el.textContent = suffix; });
+  };
+  document.getElementById('dm-ext').onchange = function() {
+    var d = document.getElementById('dm-domain').value.trim() || 'tudominio';
+    var suffix = '@' + d + this.value;
+    document.getElementById('dm-domain-suffix').textContent = suffix;
+    document.querySelectorAll('.dm-suffix').forEach(function(el){ el.textContent = suffix; });
+  };
+}
+
+function addDmEmail() {
+  if (domainEmailCount >= 5) { return; }
+  domainEmailCount++;
+  var d = document.getElementById('dm-domain').value.trim() || 'tudominio';
+  var ext = document.getElementById('dm-ext').value;
+  var suffix = '@' + d + ext;
+  var div = document.createElement('div');
+  div.style.cssText = 'display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem';
+  div.innerHTML = '<input type="text" placeholder="usuario" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#fff;padding:.6rem .8rem;border-radius:7px;font-size:.82rem;outline:none"/><span class="dm-suffix" style="font-size:.78rem;color:rgba(255,255,255,.4)">' + suffix + '</span>';
+  document.getElementById('dm-email-fields').appendChild(div);
+}
+
+async function checkDomainAvailability() {
+  var domain = document.getElementById('dm-domain').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
+  var ext = document.getElementById('dm-ext').value;
+  var msg = document.getElementById('dm-msg');
+  var resultEl = document.getElementById('dm-result');
+  var paypalZone = document.getElementById('dm-paypal-zone');
+
+  if (!domain) { showMsg(msg, 'Por favor ingresa el nombre de dominio.', 'err'); return; }
+
+  var btn = document.getElementById('dm-check-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+  resultEl.style.display = 'block';
+  resultEl.style.background = 'rgba(255,255,255,.04)';
+  resultEl.style.border = '1px solid rgba(255,255,255,.08)';
+  resultEl.style.color = 'rgba(255,255,255,.5)';
+  resultEl.textContent = 'Verificando ' + domain + ext + '...';
+  paypalZone.style.display = 'none';
+
+  const res = await api({ action: 'checkDomain', domain: domain + ext });
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-search"></i> Verificar disponibilidad';
+
+  if (res.ok && res.available) {
+    resultEl.style.background = 'rgba(94,204,74,.1)';
+    resultEl.style.border = '1px solid rgba(94,204,74,.25)';
+    resultEl.style.color = '#5ECC4A';
+    resultEl.innerHTML = '✅ <strong>' + domain + ext + '</strong> está disponible! Procede al pago.';
+    prepareDomainPayment(domain + ext);
+  } else if (res.ok && !res.available) {
+    resultEl.style.background = 'rgba(224,82,82,.1)';
+    resultEl.style.border = '1px solid rgba(224,82,82,.25)';
+    resultEl.style.color = '#e05252';
+    resultEl.innerHTML = '❌ <strong>' + domain + ext + '</strong> ya está tomado. Prueba otro nombre.';
+  } else {
+    resultEl.style.background = 'rgba(224,194,82,.1)';
+    resultEl.style.border = '1px solid rgba(224,194,82,.25)';
+    resultEl.style.color = 'var(--yellow)';
+    resultEl.innerHTML = '⚠️ No pudimos verificar. <a href="https://wa.me/56994161742" target="_blank" style="color:#25D366;font-weight:600">Contáctanos por WhatsApp</a>.';
+  }
+}
+
+function prepareDomainPayment(fullDomain) {
+  var emails = [];
+  document.querySelectorAll('#dm-email-fields input').forEach(function(inp) {
+    if (inp.value.trim()) emails.push(inp.value.trim() + '@' + fullDomain);
+  });
+
+  var paypalZone = document.getElementById('dm-paypal-zone');
+  paypalZone.style.display = 'block';
+  paypalZone.innerHTML = '<p style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:.8rem">Dominio: <strong style="color:var(--green)">' + fullDomain + '</strong> · Emails: <strong style="color:var(--cyan)">' + (emails.length || 0) + '</strong></p><div id="dm-paypal-btn"></div>';
+
+  if (typeof paypal !== 'undefined') {
+    paypal.Buttons({
+      style: { shape: 'rect', color: 'gold', layout: 'vertical', label: 'subscribe' },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({ plan_id: 'P-6T230341JL4280340NJL6WLY' });
+      },
+      onApprove: function(data) {
+        api({ action: 'newDomainRequest', customer_id: currentUser.customer_id, site_id: currentDomainSiteId, domain: fullDomain, emails: emails.join(', '), subscription_id: data.subscriptionID });
+        paypalZone.innerHTML = '<div style="text-align:center;padding:1.2rem;background:rgba(94,204,74,.08);border:1px solid rgba(94,204,74,.2);border-radius:10px"><p style="color:var(--green);font-weight:700;margin-bottom:.4rem">✅ ¡Pago confirmado!</p><p style="font-size:.78rem;color:rgba(255,255,255,.5)">Configuraremos <strong>' + fullDomain + '</strong> en menos de 24h. Te avisamos por WhatsApp.</p></div>';
+      }
+    }).render('#dm-paypal-btn');
+  }
+}
+
+
 function doLogout() {
   currentUser = null; isAdmin = false; adminData = null; affilieData = null; userSites = [];
   // Vider tous les champs de connexion
@@ -1543,5 +1709,6 @@ showPanel = function(name) {
 };
 
 </script>
+<script src="https://www.paypal.com/sdk/js?client-id=AePduQTynsMmbyf-hSh__cGtVYr1zA2Sl-JqxL9q-qkJJdghMjwRPXXhnP7B1IC0EUMVTqOneibVCWmJ&vault=true&intent=subscription&components=buttons"></script>
 </body>
 </html>
