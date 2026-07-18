@@ -344,10 +344,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
           <div class="topbar-sub" id="panel-sub">Bienvenido</div>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:.8rem">
-      <button onclick="refreshAdminData()" id="refresh-btn" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);padding:.4rem .8rem;border-radius:7px;font-size:.72rem;cursor:pointer;transition:all .2s" title="Actualizar datos"><i class="fas fa-sync-alt"></i></button>
-      <a href="https://wa.me/56994161742" target="_blank" style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:rgba(255,255,255,.4)"><i class="fab fa-whatsapp"></i> Soporte</a>
-    </div>
+      
     </div>
 
     <!-- ============ PANELS CLIENT ============ -->
@@ -676,7 +673,11 @@ async function doLogin() {
   const res = await api({ action: 'login', email, password: pass });
   btn.disabled = false; btn.textContent = 'Iniciar sesion';
 
-  if (res.ok) { currentUser = res; isAdmin = false; await loadDashboard(); }
+  if (res.ok) {
+    currentUser = res; isAdmin = false;
+    localStorage.setItem('emineo_session', JSON.stringify({ user: res, isAdmin: false }));
+    await loadDashboard();
+  }
   else showMsg(msg, res.error || 'Error de conexion.', 'err');
 }
 
@@ -729,6 +730,7 @@ async function doAdminLogin() {
   if (res.ok) {
     isAdmin = true;
     currentUser = { nom: 'Administrador', email: email };
+    localStorage.setItem('emineo_session', JSON.stringify({ user: currentUser, isAdmin: true }));
     await loadDashboard();
   } else showMsg(msg, res.error || 'Identifiants incorrects.', 'err');
 }
@@ -754,8 +756,8 @@ async function loadDashboard() {
     ]);
 
     userSites = (sitesRes.ok && sitesRes.sites) ? sitesRes.sites : [];
-    const hasAffilie = affRes.ok && affRes.affilie;
-    affilieData = hasAffilie ? affRes.affilie : null;
+    const hasAffilie = affRes.ok && affRes.affilie && affRes.affilie.statut === 'actif';
+    affilieData = (affRes.ok && affRes.affilie) ? affRes.affilie : null;
 
     const badges = [];
     if (userSites.length > 0) badges.push('<span class="sb-badge cliente">CLIENTE</span>');
@@ -764,6 +766,10 @@ async function loadDashboard() {
     document.getElementById('sb-role').textContent = userSites.length > 0 ? 'Cuenta EMINEO' : 'Cuenta EMINEO';
 
     buildClientNav(userSites.length > 0, hasAffilie);
+    // Also fix promo — don't show if pending
+    if (affilieData && affilieData.statut === 'en_attente') {
+      affilieData = null; // treat as not affiliate for display purposes
+    }
 
     // Charger badges de notifications (messages non lus, admisiones nuevas)
     loadMessagesBadge();
@@ -833,7 +839,7 @@ function showPanel(name) {
   if (navEl) navEl.classList.add('active');
 
   const titles = {
-    home: ['Dashboard', 'Resumen de tu cuenta EMINEO'],
+    home: ['Dashboard', 'Resumen de tu cuenta'],
     sites: ['Mis Sitios Web', 'Gestiona todos tus sitios'],
     'site-editor': ['Editar sitio', ''],
     messages: ['Mensajes', 'Comunicacion con EMINEO'],
@@ -893,7 +899,7 @@ function loadHomePanel() {
       alertZone.innerHTML += `<div class="alert-banner danger"><i class="fas fa-exclamation-triangle"></i><div>Tienes ${suspendidos} sitio(s) suspendido(s). <a href="https://wa.me/56994161742" target="_blank" style="color:var(--green);font-weight:600">Contactar EMINEO</a></div></div>`;
     }
     if (pendientes === 0 && suspendidos === 0) {
-      alertZone.innerHTML = `<div class="alert-banner success"><i class="fas fa-check-circle"></i><div>¡Todo en orden! Tus sitios estan activos.</div></div>`;
+      alertZone.innerHTML = `<div class="alert-banner success"><i class="fas fa-check-circle"></i><div>¡Todo en orden!</div></div>`;
     }
   } else {
     alertZone.innerHTML = `<div class="alert-banner info"><i class="fas fa-info-circle"></i><div>Aun no tienes ningun sitio web activo.</div></div>`;
@@ -954,11 +960,11 @@ async function loadSitesPanel() {
             <div>
               <div class="site-card-name">${_siteIcon(s.type_site)} ${s.nom_site} <span class="badge ${s.statut}">${_statutLabel(s.statut)}</span></div>
               <div class="site-card-meta">${s.type_site||'-'} · Pack ${s.pack||'-'} · ${s.abonnement||'Sin abonnement'}</div>
-              ${s.url_site ? `<a href="${s.url_site}" target="_blank" class="site-card-url">${s.url_site} <i class="fas fa-external-link-alt" style="font-size:.65rem"></i></a>` : '<div class="site-card-meta" style="color:rgba(255,255,255,.3);margin-top:.4rem">En preparacion...</div>'}
+              ${!s.url_site ? '<div class="site-card-meta" style="color:rgba(255,255,255,.3);margin-top:.4rem">En preparacion...</div>' : ''}
             </div>
           </div>
           <div class="site-card-actions">
-            <button class="btn-sm activate" onclick="openSiteEditor('${s.site_id}')" ${s.statut==='suspendu'?'disabled style="opacity:.4;cursor:not-allowed"':''}><i class="fas fa-edit"></i> Editar</button>
+            <button class="btn-sm activate" onclick="openSiteEditor('${s.site_id}')" ${s.statut==='suspendu'?'disabled':''} ><i class="fas fa-edit"></i> Editar</button>
             <button class="btn-sm" onclick="openDomainModal('${s.site_id}','${s.nom_site}')" style="background:rgba(94,204,74,.08);color:var(--green);border:1px solid rgba(94,204,74,.2)"><i class="fas fa-globe"></i> Obtener dominio</button>
             ${s.url_site ? `<a href="${s.url_site}" target="_blank" class="btn-sm" style="background:rgba(41,196,224,.08);color:var(--cyan);border:1px solid rgba(41,196,224,.2)"><i class="fas fa-external-link-alt"></i> Ver sitio</a>` : ''}
           </div>
@@ -1662,6 +1668,7 @@ function prepareDomainPayment(fullDomain) {
 
 function doLogout() {
   currentUser = null; isAdmin = false; adminData = null; affilieData = null; userSites = [];
+  localStorage.removeItem('emineo_session');
   // Vider tous les champs de connexion
   ['l-email','l-pass','a-email','a-pass','s-email','s-pass'].forEach(function(id) {
     var el = document.getElementById(id);
@@ -1684,6 +1691,22 @@ function _fmtDate(d) {
   return s;
 }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+// Restore session on page load/refresh
+(function restoreSession() {
+  var saved = localStorage.getItem('emineo_session');
+  if (!saved) return;
+  try {
+    var data = JSON.parse(saved);
+    if (data && data.user) {
+      currentUser = data.user;
+      isAdmin = data.isAdmin || false;
+      loadDashboard();
+    }
+  } catch(e) {
+    localStorage.removeItem('emineo_session');
+  }
+})();
 
 document.addEventListener('click', function(e) {
   const sidebar = document.getElementById('sidebar');
