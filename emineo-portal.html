@@ -1327,19 +1327,13 @@ async function sendAiMsg() {
   }) : "{}";
 
   try {
-    var res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 800,
-        system: "Eres un asistente que ayuda clientes a modificar su sitio web EMINEO. Datos: " + ctx + ". Solo modifica: nom_site, texte_accueil, texte_about, whatsapp_client, email_client. Responde en JSON: puede(bool), desc(str), cambios(obj), msg(str)",
-        messages: aiHistory
-      })
+    var res = await api({
+      action: "askAI",
+      messages: aiHistory,
+      ctx: ctx
     });
 
-    var data = await res.json();
-    var raw = data.content && data.content[0] ? data.content[0].text : "";
+    var raw = res.ok ? res.text : "";
     var parsed;
     try {
       var match = raw.match(/\{[\s\S]*\}/);
