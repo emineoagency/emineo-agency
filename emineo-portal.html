@@ -373,6 +373,30 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
       </div>
     </div>
 
+    <!-- PANEL AI -->
+    <div class="panel" id="panel-ai">
+      <div class="panel-card">
+        <span class="btn-back-link" onclick="showPanel('sites')"><i class="fas fa-arrow-left"></i> Volver a mis sitios</span>
+        <h3><span class="icon">🤖</span> Asistente IA &mdash; <span id="ai-site-name">Mi sitio</span></h3>
+        <p style="font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:1rem">Describe en lenguaje natural lo que quieres cambiar. El asistente te muestra una vista previa antes de aplicar.</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem">
+          <button onclick="setAiInput('Cambia el texto de bienvenida')" class="btn-sm" style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);font-size:.7rem">Cambiar texto bienvenida</button>
+          <button onclick="setAiInput('Actualiza mi numero de WhatsApp')" class="btn-sm" style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);font-size:.7rem">Actualizar WhatsApp</button>
+          <button onclick="setAiInput('Cambia el texto sobre nosotros')" class="btn-sm" style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);font-size:.7rem">Cambiar texto sobre nosotros</button>
+        </div>
+        <div id="ai-chat" style="max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:.8rem;margin-bottom:1rem;padding:.8rem;background:rgba(0,0,0,.2);border-radius:10px;min-height:80px">
+          <div id="ai-welcome" style="text-align:center;color:rgba(255,255,255,.25);font-size:.78rem;padding:1rem">&#128075; Hola! Que quieres cambiar en tu sitio hoy?</div>
+        </div>
+        <div style="display:flex;gap:.6rem">
+          <textarea id="ai-input" placeholder="Ej: Cambia mi numero de WhatsApp a +56912345678" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#fff;padding:.7rem .9rem;border-radius:8px;font-size:.82rem;resize:none;height:60px;outline:none"></textarea>
+          <button onclick="sendAiMsg()" id="ai-btn" class="btn-send"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div style="margin-top:.8rem;padding:.6rem .8rem;background:rgba(224,194,82,.06);border:1px solid rgba(224,194,82,.15);border-radius:8px;font-size:.7rem;color:rgba(224,194,82,.7)">
+          El asistente puede modificar: nombre del sitio, textos, WhatsApp, email. No puede modificar pagos ni estructura del sitio.
+        </div>
+      </div>
+    </div>
+
     <div class="panel" id="panel-messages">
       <div class="panel-card">
         <h3><span class="icon"><i class="fas fa-comments"></i></span> Mis mensajes</h3>
@@ -846,6 +870,7 @@ function showPanel(name) {
     factures: ['Facturas', 'Historial de pagos'],
     admisiones: ['Admisiones', 'Solicitudes recibidas'],
     configuracion: ['Configuracion', 'Gestiona tu cuenta'],
+    ai: ['Asistente IA', 'Modifica tu sitio con inteligencia artificial'],
     affilie: ['Mi Afiliacion', 'Gestiona tu programa de afiliacion'],
     'admin-home': ['Resumen EMINEO', 'Vista global del sistema'],
     'admin-clientes': ['Clientes y Sitios', 'Todos los clientes registrados'],
@@ -865,6 +890,7 @@ function showPanel(name) {
   if (name === 'admisiones') loadAdmisionesPanel();
   if (name === 'affilie') loadAffiliePanel();
   if (name === 'configuracion') loadConfigPanel();
+  if (name === 'ai') loadAiPanel();
   if (name === 'admin-home') loadAdminHome();
   if (name === 'admin-clientes') loadAdminClientes();
   if (name === 'admin-afiliados') loadAdminAfiliados();
@@ -912,7 +938,7 @@ function loadHomePanel() {
       <div class="promo-card">
         <div class="promo-card-text">
           <h4>💰 Programa de Afiliacion</h4>
-          <p>¿Conoces emprendedores que necesitan un sitio web? Gana 3$/mes por cada cliente activo que recomiendes — sin limite.</p>
+          <p>¿Conoces emprendedores que necesitan un sitio web? Gana 3$/mes por cada cliente activo que recomiendes — y 5$/mes si superas los 50 clientes activos. Sin límite.</p>
         </div>
         <a href="#" class="btn-promo" onclick="requestAffiliation(event)"><i class="fab fa-whatsapp"></i> Postular para ser afiliado</a>
       </div>`;
@@ -966,6 +992,7 @@ async function loadSitesPanel() {
           <div class="site-card-actions">
             <button class="btn-sm activate" onclick="openSiteEditor('${s.site_id}')" ${s.statut==='suspendu'?'disabled':''} ><i class="fas fa-edit"></i> Editar</button>
             <button class="btn-sm" onclick="openDomainModal('${s.site_id}','${s.nom_site}')" style="background:rgba(94,204,74,.08);color:var(--green);border:1px solid rgba(94,204,74,.2)"><i class="fas fa-globe"></i> Obtener dominio</button>
+            <button class="btn-sm" onclick="openAiForSite('${s.site_id}','${s.nom_site}')" ${s.statut==='suspendu'?'disabled':''} style="background:rgba(94,204,74,.06);color:var(--green);border:1px solid rgba(94,204,74,.15)"><i class="fas fa-robot"></i> IA</button>
             ${s.url_site ? `<a href="${s.url_site}" target="_blank" class="btn-sm" style="background:rgba(41,196,224,.08);color:var(--cyan);border:1px solid rgba(41,196,224,.2)"><i class="fas fa-external-link-alt"></i> Ver sitio</a>` : ''}
           </div>
         </div>`;
@@ -1235,6 +1262,143 @@ function copyAffLink() {
 }
 
 /* ===== ADMIN: HOME / RESUMEN ===== */
+/* ===== AI SITE MODIFIER ===== */
+var aiSiteId = "";
+var aiSiteName = "";
+var aiHistory = [];
+
+function loadAiPanel() {
+  if (!aiSiteId && userSites.length > 0) {
+    aiSiteId = userSites[0].site_id;
+    aiSiteName = userSites[0].nom_site;
+    document.getElementById("ai-site-name").textContent = aiSiteName;
+  }
+}
+
+function setAiInput(text) {
+  document.getElementById("ai-input").value = text;
+}
+
+function openAiForSite(siteId, siteName) {
+  aiSiteId = siteId;
+  aiSiteName = siteName;
+  aiHistory = [];
+  var chat = document.getElementById("ai-chat");
+  chat.innerHTML = "<div style='text-align:center;color:rgba(255,255,255,.25);font-size:.78rem;padding:1rem'>Que quieres cambiar en <strong style='color:var(--cyan)'>" + siteName + "</strong>?</div>";
+  document.getElementById("ai-site-name").textContent = siteName;
+  showPanel("ai");
+}
+
+function addAiMsg(text, role) {
+  var chat = document.getElementById("ai-chat");
+  var div = document.createElement("div");
+  if (role === "user") {
+    div.style.cssText = "align-self:flex-end;max-width:85%;background:rgba(94,204,74,.08);border:1px solid rgba(94,204,74,.15);padding:.7rem 1rem;border-radius:10px;font-size:.82rem";
+  } else {
+    div.style.cssText = "align-self:flex-start;max-width:90%;background:rgba(41,196,224,.06);border:1px solid rgba(41,196,224,.12);padding:.7rem 1rem;border-radius:10px;font-size:.82rem";
+  }
+  div.innerHTML = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+async function sendAiMsg() {
+  var input = document.getElementById("ai-input");
+  var text = input.value.trim();
+  if (!text) return;
+
+  var btn = document.getElementById("ai-btn");
+  btn.disabled = true;
+  input.value = "";
+
+  addAiMsg(text, "user");
+  aiHistory.push({role: "user", content: text});
+
+  var thinking = addAiMsg("<i class='fas fa-spinner fa-spin'></i> Analizando...", "ai");
+
+  var site = userSites.find(function(s) { return s.site_id === aiSiteId; });
+  var ctx = site ? JSON.stringify({
+    nom_site: site.nom_site,
+    texte_accueil: site.texte_accueil,
+    texte_about: site.texte_about,
+    whatsapp_client: site.whatsapp_client,
+    email_client: site.email_client
+  }) : "{}";
+
+  try {
+    var res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 800,
+        system: "Eres un asistente que ayuda clientes a modificar su sitio web EMINEO. Datos: " + ctx + ". Solo modifica: nom_site, texte_accueil, texte_about, whatsapp_client, email_client. Responde en JSON: puede(bool), desc(str), cambios(obj), msg(str)",
+        messages: aiHistory
+      })
+    });
+
+    var data = await res.json();
+    var raw = data.content && data.content[0] ? data.content[0].text : "";
+    var parsed;
+    try {
+      var match = raw.match(/\{[\s\S]*\}/);
+      parsed = JSON.parse(match ? match[0] : raw);
+    } catch(e) {
+      parsed = {puede: false, msg: raw};
+    }
+
+    thinking.remove();
+    aiHistory.push({role: "assistant", content: raw});
+
+    if (parsed.puede && parsed.cambios) {
+      var preview = "<strong style='color:var(--green)'>Vista previa:</strong><br>";
+      preview += "<div style='background:rgba(0,0,0,.2);padding:.6rem;border-radius:6px;font-size:.75rem;margin:.5rem 0'>";
+      Object.keys(parsed.cambios).forEach(function(k) {
+        preview += "<div><span style='color:rgba(255,255,255,.4)'>" + k + ":</span> <strong>" + parsed.cambios[k] + "</strong></div>";
+      });
+      preview += "</div>";
+      preview += parsed.msg + "<br><br>";
+      preview += "<div style='display:flex;gap:.5rem;margin-top:.4rem'>";
+      preview += "<button id='ai-confirm-btn' style='background:var(--gradient);color:var(--black);border:none;padding:.45rem .9rem;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer'>Aplicar cambio</button>";
+      preview += "<button id='ai-cancel-btn' style='background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);padding:.45rem .9rem;border-radius:6px;font-size:.75rem;cursor:pointer'>Cancelar</button>";
+      preview += "</div>";
+
+      var msgDiv = addAiMsg(preview, "ai");
+
+      var cambios = parsed.cambios;
+      msgDiv.querySelector("#ai-confirm-btn").onclick = function() {
+        applyAiChange(cambios, msgDiv);
+      };
+      msgDiv.querySelector("#ai-cancel-btn").onclick = function() {
+        msgDiv.innerHTML = "<span style='color:rgba(255,255,255,.4);font-size:.75rem'>Cambio cancelado.</span>";
+      };
+    } else {
+      addAiMsg(parsed.msg || "No pude procesar esa solicitud.", "ai");
+    }
+  } catch(e) {
+    thinking.remove();
+    addAiMsg("Error de conexion. Intenta de nuevo.", "ai");
+  }
+
+  btn.disabled = false;
+}
+
+async function applyAiChange(cambios, msgDiv) {
+  var payload = Object.assign({}, cambios, {
+    action: "updateSite",
+    site_id: aiSiteId
+  });
+  var res = await api(payload);
+  if (res.ok) {
+    var site = userSites.find(function(s) { return s.site_id === aiSiteId; });
+    if (site) Object.assign(site, cambios);
+    msgDiv.innerHTML = "<span style='color:var(--green);font-weight:600'>Cambio aplicado con exito!</span>";
+  } else {
+    msgDiv.innerHTML = "<span style='color:var(--red)'>Error al aplicar: " + (res.error || "Intenta de nuevo") + "</span>";
+  }
+}
+
 function loadConfigPanel() {
   // Juste vider les champs au chargement pour securite
   ['cfg-pass-old','cfg-pass-new','cfg-pass-confirm','cfg-email-new','cfg-email-pass'].forEach(function(id) {
@@ -1541,6 +1705,7 @@ function refreshAdminData() {
   if (activePanel) {
     const name = activePanel.id.replace('panel-', '');
     if (name === 'configuracion') loadConfigPanel();
+  if (name === 'ai') loadAiPanel();
   if (name === 'admin-home') loadAdminHome();
     else if (name === 'admin-clientes') loadAdminClientes();
     else if (name === 'admin-afiliados') loadAdminAfiliados();
