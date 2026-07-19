@@ -365,13 +365,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
       </div>
     </div>
 
-    <div class="panel" id="panel-site-editor">
-      <div class="panel-card">
-        <span class="btn-back-link" onclick="showPanel('sites')"><i class="fas fa-arrow-left"></i> Volver a mis sitios</span>
-        <h3><span class="icon"><i class="fas fa-edit"></i></span> <span id="editor-site-name">Editar sitio</span></h3>
-        <div id="site-editor-content"><div class="loading"><div class="spinner"></div>Cargando...</div></div>
-      </div>
-    </div>
+
 
     <div class="panel" id="panel-messages">
       <div class="panel-card">
@@ -546,7 +540,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 
 <!-- DOMAIN MODAL -->
 <div class="modal-ov" id="domain-modal">
-  <div class="modal-box" style="max-width:520px">
+  <div class="modal-box" style="max-width:520px;max-height:90vh;overflow-y:auto">
     <p class="modal-title">🌐 Obtener nombre de dominio</p>
     <p style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:1rem">Dominio + hasta 5 emails profesionales — <strong style="color:var(--green)">$15/año</strong></p>
 
@@ -588,7 +582,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
     <div id="dm-paypal-zone" style="display:none;margin-top:1rem"></div>
     <div class="msg-box" id="dm-msg" style="margin-top:.6rem"></div>
 
-    <div class="modal-actions">
+    <div class="modal-actions" style="position:sticky;bottom:0;background:var(--dark2);padding:.5rem 0;margin-top:.5rem">
       <button class="btn-cancel" onclick="closeModal('domain-modal')">Cancelar</button>
     </div>
   </div>
@@ -949,6 +943,7 @@ function showPanel(name) {
   const titles = {
     home: ['Dashboard', 'Resumen de tu cuenta'],
     sites: ['Mis Sitios Web', 'Gestiona todos tus sitios'],
+    editor: ['Editar sitio', 'Modifica la informacion de tu sitio'],
     'site-editor': ['Editar sitio', ''],
     messages: ['Mensajes', 'Comunicacion con EMINEO'],
     factures: ['Facturas', 'Historial de pagos'],
