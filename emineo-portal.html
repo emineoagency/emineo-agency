@@ -373,30 +373,6 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
       </div>
     </div>
 
-    <!-- PANEL AI -->
-    <div class="panel" id="panel-ai">
-      <div class="panel-card">
-        <span class="btn-back-link" onclick="showPanel('sites')"><i class="fas fa-arrow-left"></i> Volver a mis sitios</span>
-        <h3><span class="icon">🤖</span> Asistente IA &mdash; <span id="ai-site-name">Mi sitio</span></h3>
-        <p style="font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:1rem">Describe en lenguaje natural lo que quieres cambiar. El asistente te muestra una vista previa antes de aplicar.</p>
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem">
-          <button onclick="setAiInput('Cambia el texto de bienvenida')" class="btn-sm" style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);font-size:.7rem">Cambiar texto bienvenida</button>
-          <button onclick="setAiInput('Actualiza mi numero de WhatsApp')" class="btn-sm" style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);font-size:.7rem">Actualizar WhatsApp</button>
-          <button onclick="setAiInput('Cambia el texto sobre nosotros')" class="btn-sm" style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);font-size:.7rem">Cambiar texto sobre nosotros</button>
-        </div>
-        <div id="ai-chat" style="max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:.8rem;margin-bottom:1rem;padding:.8rem;background:rgba(0,0,0,.2);border-radius:10px;min-height:80px">
-          <div id="ai-welcome" style="text-align:center;color:rgba(255,255,255,.25);font-size:.78rem;padding:1rem">&#128075; Hola! Que quieres cambiar en tu sitio hoy?</div>
-        </div>
-        <div style="display:flex;gap:.6rem">
-          <textarea id="ai-input" placeholder="Ej: Cambia mi numero de WhatsApp a +56912345678" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#fff;padding:.7rem .9rem;border-radius:8px;font-size:.82rem;resize:none;height:60px;outline:none"></textarea>
-          <button onclick="sendAiMsg()" id="ai-btn" class="btn-send"><i class="fas fa-paper-plane"></i></button>
-        </div>
-        <div style="margin-top:.8rem;padding:.6rem .8rem;background:rgba(224,194,82,.06);border:1px solid rgba(224,194,82,.15);border-radius:8px;font-size:.7rem;color:rgba(224,194,82,.7)">
-          El asistente puede modificar: nombre del sitio, textos, WhatsApp, email. No puede modificar pagos ni estructura del sitio.
-        </div>
-      </div>
-    </div>
-
     <div class="panel" id="panel-messages">
       <div class="panel-card">
         <h3><span class="icon"><i class="fas fa-comments"></i></span> Mis mensajes</h3>
@@ -578,13 +554,13 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 
     <div class="editor-field">
       <label>Nombre de dominio que quieres *</label>
-      <div style="display:flex;gap:.5rem">
-        <input type="text" id="dm-domain" placeholder="tunegocio" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#fff;padding:.7rem .9rem;border-radius:8px;font-size:.85rem;outline:none"/>
-        <select id="dm-ext" style="background:#1e2330;border:1px solid rgba(255,255,255,.15);color:#fff;padding:.7rem .6rem;border-radius:8px;font-size:.85rem;outline:none">
-          <option>.com</option><option>.net</option><option>.org</option>
-          <option>.io</option><option>.co</option><option>.ht</option><option>.cl</option>
-        </select>
+      <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
+        <input type="text" id="dm-domain" placeholder="tunegocio" style="flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);color:#fff;padding:.85rem 1rem;border-radius:8px;font-size:1rem;outline:none;width:100%"/>
       </div>
+      <select id="dm-ext" style="width:100%;background:#1e2330;border:1px solid rgba(255,255,255,.2);color:#fff;padding:.75rem .9rem;border-radius:8px;font-size:.9rem;outline:none;margin-top:.3rem">
+        <option>.com</option><option>.net</option><option>.org</option>
+        <option>.io</option><option>.co</option><option>.ht</option><option>.cl</option>
+      </select>
     </div>
 
     <div class="editor-field" style="margin-top:.8rem">
@@ -603,13 +579,12 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
     </div>
 
     <div id="dm-paypal-zone" style="margin-top:1rem;display:none"></div>
-    <div id="dm-check-zone" style="margin-top:.8rem">
-      <button onclick="checkDomainAvailability()" id="dm-check-btn" style="width:100%;background:var(--gradient);color:var(--black);border:none;padding:.75rem;font-family:var(--ff-d);font-weight:700;font-size:.85rem;border-radius:8px;cursor:pointer">
-        <i class="fas fa-search"></i> Verificar disponibilidad
+    <div style="margin-top:1rem">
+      <button onclick="proceedDomainOrder()" style="width:100%;background:var(--gradient);color:var(--black);border:none;padding:.85rem;font-family:var(--ff-d);font-weight:700;font-size:.9rem;border-radius:8px;cursor:pointer;margin-bottom:.8rem">
+        <i class="fas fa-arrow-right"></i> Continuar al pago — $15/año
       </button>
     </div>
 
-    <div id="dm-result" style="display:none;margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.82rem"></div>
     <div id="dm-paypal-zone" style="display:none;margin-top:1rem"></div>
     <div class="msg-box" id="dm-msg" style="margin-top:.6rem"></div>
 
@@ -630,11 +605,120 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
   </div>
 </div>
 
-<a href="https://wa.me/56994161742" target="_blank" class="wa-float" id="wa-float" style="display:none">
+<a href="https://wa.me/56994161742?text=Hola%20EMINEO%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n." target="_blank" class="wa-float" id="wa-float" style="display:none">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
 <script>
+/* ===== i18n ===== */
+var LANG = 'es';
+var I18N = {
+  es: {
+    login_title:'Bienvenido',login_sub:'Accede a tu dashboard EMINEO',
+    login_btn:'INICIAR SESION',create_account:'Crear cuenta',
+    admin_access:'Eres administrador? Acceso admin',
+    dashboard:'Dashboard',my_sites:'Mis Sitios Web',
+    admissions:'Admisiones',messages:'Mensajes',invoices:'Facturas',
+    affiliate:'Mi Afiliacion',config:'Configuracion',logout:'Cerrar sesion',
+    account_info:'Informacion de mi cuenta',
+    member_since:'MIEMBRO DESDE',active_sites:'SITIOS ACTIVOS',
+    affiliate_prog:'PROGRAMA AFILIACION',all_good:'Todo en orden!',
+    edit_site:'Editar sitio',back_sites:'Volver a mis sitios',
+    site_name:'Nombre del sitio',
+    bienvenida_1:'Texto de bienvenida 1',bienvenida_2:'Texto de bienvenida 2',bienvenida_3:'Texto de bienvenida 3',
+    whatsapp_contact:'WhatsApp de contacto',email_contact:'Email de contacto',
+    save_changes:'Guardar cambios',cancel:'Cancelar',
+    more_changes_text:'Necesitas mas modificaciones? Escribenos y lo hacemos por ti.',
+    contact_whatsapp:'Contactar por WhatsApp',
+    get_domain:'Obtener dominio',buy_domain:'Comprar dominio - $15/ano',
+    request_site:'Solicitar un nuevo sitio',
+    edit_btn:'Editar',view_site:'Ver sitio',
+    domain_title:'Obtener nombre de dominio',
+    domain_sub:'Dominio + hasta 5 emails profesionales',
+    domain_input_label:'Nombre de dominio que quieres *',
+    emails_label:'Tus emails profesionales (hasta 5 gratis)',
+    add_email:'+ Agregar otro email (max 5)',
+    proceed_payment:'Continuar al pago - $15/ano',
+    resumen:'Resumen de tu cuenta',no_sites:'Aun no tienes ningun sitio web activo.',
+    nombre:'Nombre',pais:'Pais',whatsapp:'WhatsApp'
+  },
+  fr: {
+    login_title:'Bienvenue',login_sub:'Accedez a votre tableau de bord EMINEO',
+    login_btn:'SE CONNECTER',create_account:'Creer un compte',
+    admin_access:'Vous etes administrateur? Acces admin',
+    dashboard:'Tableau de bord',my_sites:'Mes Sites Web',
+    admissions:'Admissions',messages:'Messages',invoices:'Factures',
+    affiliate:'Mon Affiliation',config:'Configuration',logout:'Se deconnecter',
+    account_info:'Informations de mon compte',
+    member_since:'MEMBRE DEPUIS',active_sites:'SITES ACTIFS',
+    affiliate_prog:'PROGRAMME AFFILIATION',all_good:'Tout est en ordre!',
+    edit_site:'Modifier le site',back_sites:'Retour a mes sites',
+    site_name:'Nom du site',
+    bienvenida_1:'Texte de bienvenue 1',bienvenida_2:'Texte de bienvenue 2',bienvenida_3:'Texte de bienvenue 3',
+    whatsapp_contact:'WhatsApp de contact',email_contact:'Email de contact',
+    save_changes:'Enregistrer les modifications',cancel:'Annuler',
+    more_changes_text:'Besoin de plus de modifications? Ecrivez-nous.',
+    contact_whatsapp:'Contacter par WhatsApp',
+    get_domain:'Obtenir un domaine',buy_domain:'Acheter un domaine - 15$/an',
+    request_site:'Demander un nouveau site',
+    edit_btn:'Modifier',view_site:'Voir le site',
+    domain_title:'Obtenir un nom de domaine',
+    domain_sub:'Domaine + jusqu a 5 emails professionnels',
+    domain_input_label:'Nom de domaine souhaite *',
+    emails_label:'Vos emails professionnels (jusqu a 5 gratuits)',
+    add_email:'+ Ajouter un email (max 5)',
+    proceed_payment:'Continuer au paiement - 15$/an',
+    resumen:'Resume de votre compte',no_sites:'Vous n avez pas encore de site actif.',
+    nombre:'Nom',pais:'Pays',whatsapp:'WhatsApp'
+  },
+  en: {
+    login_title:'Welcome',login_sub:'Access your EMINEO dashboard',
+    login_btn:'LOG IN',create_account:'Create account',
+    admin_access:'Are you an admin? Admin access',
+    dashboard:'Dashboard',my_sites:'My Websites',
+    admissions:'Admissions',messages:'Messages',invoices:'Invoices',
+    affiliate:'My Affiliate',config:'Settings',logout:'Log out',
+    account_info:'My account information',
+    member_since:'MEMBER SINCE',active_sites:'ACTIVE SITES',
+    affiliate_prog:'AFFILIATE PROGRAM',all_good:'All good!',
+    edit_site:'Edit site',back_sites:'Back to my sites',
+    site_name:'Site name',
+    bienvenida_1:'Welcome text 1',bienvenida_2:'Welcome text 2',bienvenida_3:'Welcome text 3',
+    whatsapp_contact:'Contact WhatsApp',email_contact:'Contact email',
+    save_changes:'Save changes',cancel:'Cancel',
+    more_changes_text:'Need more changes? Write to us and we will do it for you.',
+    contact_whatsapp:'Contact via WhatsApp',
+    get_domain:'Get a domain',buy_domain:'Buy domain - $15/year',
+    request_site:'Request a new site',
+    edit_btn:'Edit',view_site:'View site',
+    domain_title:'Get a domain name',
+    domain_sub:'Domain + up to 5 professional emails',
+    domain_input_label:'Domain name you want *',
+    emails_label:'Your professional emails (up to 5 free)',
+    add_email:'+ Add another email (max 5)',
+    proceed_payment:'Continue to payment - $15/year',
+    resumen:'Account summary',no_sites:'You don t have any active website yet.',
+    nombre:'Name',pais:'Country',whatsapp:'WhatsApp'
+  }
+};
+
+function t(key){ return (I18N[LANG]&&I18N[LANG][key])||(I18N.es[key])||key; }
+
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.getAttribute('data-i18n');
+    var v=t(k);
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=v;
+    else el.textContent=v;
+  });
+}
+
+function detectLang(){
+  var n=(navigator.language||navigator.userLanguage||'es').toLowerCase().substring(0,2);
+  LANG=n==='fr'?'fr':n==='en'?'en':'es';
+}
+
+
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlv14MC7iiLNuTCfZqtsLDZcVmMjLBSVwXQ8oTTK6xITKOm15MELpp3dczX1wZEzTwOQ/exec";
 const SITE_URL = "https://emineoagency.github.io/emineo-agency";
@@ -870,7 +954,6 @@ function showPanel(name) {
     factures: ['Facturas', 'Historial de pagos'],
     admisiones: ['Admisiones', 'Solicitudes recibidas'],
     configuracion: ['Configuracion', 'Gestiona tu cuenta'],
-    ai: ['Asistente IA', 'Modifica tu sitio con inteligencia artificial'],
     affilie: ['Mi Afiliacion', 'Gestiona tu programa de afiliacion'],
     'admin-home': ['Resumen EMINEO', 'Vista global del sistema'],
     'admin-clientes': ['Clientes y Sitios', 'Todos los clientes registrados'],
@@ -890,7 +973,6 @@ function showPanel(name) {
   if (name === 'admisiones') loadAdmisionesPanel();
   if (name === 'affilie') loadAffiliePanel();
   if (name === 'configuracion') loadConfigPanel();
-  if (name === 'ai') loadAiPanel();
   if (name === 'admin-home') loadAdminHome();
   if (name === 'admin-clientes') loadAdminClientes();
   if (name === 'admin-afiliados') loadAdminAfiliados();
@@ -922,7 +1004,7 @@ function loadHomePanel() {
       alertZone.innerHTML += `<div class="alert-banner warning"><i class="fas fa-clock"></i><div>Tienes ${pendientes} sitio(s) en espera de activacion.</div></div>`;
     }
     if (suspendidos > 0) {
-      alertZone.innerHTML += `<div class="alert-banner danger"><i class="fas fa-exclamation-triangle"></i><div>Tienes ${suspendidos} sitio(s) suspendido(s). <a href="https://wa.me/56994161742" target="_blank" style="color:var(--green);font-weight:600">Contactar EMINEO</a></div></div>`;
+      alertZone.innerHTML += `<div class="alert-banner danger"><i class="fas fa-exclamation-triangle"></i><div>Tienes ${suspendidos} sitio(s) suspendido(s). <a href="https://wa.me/56994161742?text=Hola%20EMINEO%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n." target="_blank" style="color:var(--green);font-weight:600">Contactar EMINEO</a></div></div>`;
     }
     if (pendientes === 0 && suspendidos === 0) {
       alertZone.innerHTML = `<div class="alert-banner success"><i class="fas fa-check-circle"></i><div>¡Todo en orden!</div></div>`;
@@ -992,7 +1074,6 @@ async function loadSitesPanel() {
           <div class="site-card-actions">
             <button class="btn-sm activate" onclick="openSiteEditor('${s.site_id}')" ${s.statut==='suspendu'?'disabled':''} ><i class="fas fa-edit"></i> Editar</button>
             <button class="btn-sm" onclick="openDomainModal('${s.site_id}','${s.nom_site}')" style="background:rgba(94,204,74,.08);color:var(--green);border:1px solid rgba(94,204,74,.2)"><i class="fas fa-globe"></i> Obtener dominio</button>
-            <button class="btn-sm" onclick="openAiForSite('${s.site_id}','${s.nom_site}')" ${s.statut==='suspendu'?'disabled':''} style="background:rgba(94,204,74,.06);color:var(--green);border:1px solid rgba(94,204,74,.15)"><i class="fas fa-robot"></i> IA</button>
             ${s.url_site ? `<a href="${s.url_site}" target="_blank" class="btn-sm" style="background:rgba(41,196,224,.08);color:var(--cyan);border:1px solid rgba(41,196,224,.2)"><i class="fas fa-external-link-alt"></i> Ver sitio</a>` : ''}
           </div>
         </div>`;
@@ -1024,233 +1105,26 @@ function goToNewSiteForm() {
 
 /* ===== CLIENT: SITE EDITOR (un site précis) ===== */
 async function openSiteEditor(siteId) {
-  currentEditingSiteId = siteId;
-  showPanel('site-editor');
+  var site = userSites.find(function(s){ return s.site_id === siteId; });
+  if (!site) return;
+  document.getElementById('editor-site-name').textContent = site.nom_site || 'Editar sitio';
+  document.getElementById('e-nom').value = site.nom_site || '';
+  document.getElementById('e-bienvenida1').value = site.texte_accueil || '';
+  document.getElementById('e-bienvenida2').value = site.texte_accueil2 || '';
+  document.getElementById('e-bienvenida3').value = site.texte_accueil3 || '';
+  document.getElementById('e-wa').value = site.whatsapp_client || '';
+  document.getElementById('e-email').value = site.email_client || '';
+
+  // Set WhatsApp button with context
+  var siteName = site.nom_site || 'mi sitio';
+  var waMsg = encodeURIComponent('Hola EMINEO, soy cliente con el sitio "' + siteName + '" y necesito modificaciones adicionales.');
+  document.getElementById('editor-whatsapp-btn').href = 'https://wa.me/56994161742?text=' + waMsg;
+
+  currentEditSiteId = siteId;
+  document.getElementById('editor-msg').className = 'msg-box';
+  showPanel('editor');
 }
 
-async function loadSiteEditorPanel() {
-  const site = userSites.find(s => s.site_id === currentEditingSiteId);
-  if (!site) {
-    document.getElementById('site-editor-content').innerHTML = '<p class="no-data">Sitio no encontrado.</p>';
-    return;
-  }
-  if (site.statut === 'suspendu') {
-    document.getElementById('editor-site-name').textContent = site.nom_site;
-    document.getElementById('site-editor-content').innerHTML = `
-      <div class="alert-banner danger"><i class="fas fa-lock"></i><div>Acceso suspendido para este sitio.
-        <a href="https://wa.me/56994161742" target="_blank" style="color:var(--green);font-weight:600">Contactar EMINEO</a></div></div>`;
-    return;
-  }
-
-  document.getElementById('editor-site-name').textContent = site.nom_site;
-  document.getElementById('site-editor-content').innerHTML = `
-    <div class="editor-grid">
-      <div>
-        <div class="editor-field"><label>Nombre del sitio</label><input type="text" id="e-nom" value="${site.nom_site||''}"/></div>
-        <div class="editor-field"><label>Email de contacto</label><input type="email" id="e-email" value="${site.email_client||''}"/></div>
-        <div class="editor-field"><label>WhatsApp del sitio</label><input type="tel" id="e-wa" value="${site.whatsapp_client||''}"/></div>
-        <div class="editor-field"><label>URL del logo</label><input type="url" id="e-logo" value="${site.logo_url||''}"/></div>
-      </div>
-      <div>
-        <div class="editor-field"><label>Texto de bienvenida</label><textarea id="e-accueil">${site.texte_accueil||''}</textarea></div>
-        <div class="editor-field"><label>Texto "Sobre nosotros"</label><textarea id="e-about">${site.texte_about||''}</textarea></div>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">
-      <button class="btn-save" onclick="saveSite()"><i class="fas fa-save"></i> Guardar cambios</button>
-      <span class="save-msg" id="save-result"></span>
-    </div>
-    <div class="alert-banner info" style="margin-top:1.2rem"><i class="fas fa-info-circle"></i><div>Los cambios se aplicaran en las proximas horas.</div></div>
-  `;
-}
-
-async function saveSite() {
-  const btn = document.querySelector('#panel-site-editor .btn-save');
-  const result = document.getElementById('save-result');
-  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
-
-  const res = await api({
-    action: 'updateSite', site_id: currentEditingSiteId,
-    nom_site: document.getElementById('e-nom').value,
-    texte_accueil: document.getElementById('e-accueil').value,
-    texte_about: document.getElementById('e-about').value,
-    logo_url: document.getElementById('e-logo').value,
-    whatsapp_client: document.getElementById('e-wa').value,
-    email_client: document.getElementById('e-email').value
-  });
-
-  btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Guardar cambios';
-  result.textContent = res.ok ? '¡Cambios guardados!' : (res.error || 'Error');
-  result.className = 'save-msg show ' + (res.ok ? 'ok' : 'err');
-  setTimeout(() => result.classList.remove('show'), 3000);
-}
-
-/* ===== MESSAGES (client + affilié, identique) ===== */
-async function loadMessages() {
-  const res = await api({ action: 'getMessages', customer_id: currentUser.customer_id });
-  const container = document.getElementById('msg-thread-container');
-  if (!res.ok || !res.messages || res.messages.length === 0) {
-    container.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,.25);font-size:.8rem;padding:1rem">No tienes mensajes aun.</p>';
-  } else {
-    container.innerHTML = res.messages.map(m => `
-      <div class="msg-bubble client">
-        <div class="msg-text">${m.message}</div>
-        <div class="msg-date">${m.date}</div>
-        ${m.reponse ? `<div class="msg-reponse"><strong style="color:var(--cyan)">EMINEO:</strong> ${m.reponse}</div>` : ''}
-      </div>`).join('');
-    container.scrollTop = container.scrollHeight;
-  }
-  // Marquer comme lu visuellement (le badge se recalculera au prochain login)
-  document.getElementById('msg-badge').style.display = 'none';
-}
-
-async function sendMsg() {
-  const text = document.getElementById('new-msg-text').value.trim();
-  const result = document.getElementById('msg-send-result');
-  if (!text) return;
-  const res = await api({ action: 'sendMessage', customer_id: currentUser.customer_id, nom: currentUser.nom, message: text });
-  if (res.ok) {
-    document.getElementById('new-msg-text').value = '';
-    showMsg(result, 'Mensaje enviado. Te responderemos pronto.', 'ok');
-    loadMessages();
-  } else showMsg(result, res.error || 'Error al enviar.', 'err');
-}
-
-async function loadMessagesBadge() {
-  const res = await api({ action: 'getMessages', customer_id: currentUser.customer_id });
-  if (res.ok && res.messages) {
-    const sinResp = res.messages.filter(m => !m.reponse).length;
-    const badge = document.getElementById('msg-badge');
-    if (badge && sinResp > 0) { badge.textContent = sinResp; badge.style.display = 'inline-block'; }
-  }
-}
-
-/* ===== FACTURES ===== */
-async function loadFactures() {
-  const res = await api({ action: 'getFactures', customer_id: currentUser.customer_id });
-  const container = document.getElementById('factures-content');
-  if (!res.ok || !res.factures || res.factures.length === 0) {
-    container.innerHTML = '<p class="no-data">No hay facturas registradas aun.</p>'; return;
-  }
-  container.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Descripcion</th><th>Monto</th><th>Estado</th></tr></thead><tbody>
-    ${res.factures.map(f => `<tr><td>${f.date}</td><td>${f.description}</td><td><strong>${f.montant}</strong></td><td><span class="badge ${f.statut==='pagado'?'paye':'impaye'}">${f.statut}</span></td></tr>`).join('')}
-  </tbody></table></div>`;
-}
-
-/* ===== ADMISIONES (client) ===== */
-async function checkAdmisionesBadge() {
-  if (userSites.length === 0) return;
-  const isUniv = userSites.some(s => {
-    const t = (s.type_site||'').toLowerCase();
-    return t.includes('universi') || t.includes('escuela') || t.includes('academia');
-  });
-  const navEl = document.getElementById('nav-admisiones');
-  if (!isUniv) { if (navEl) navEl.style.display = 'none'; return; }
-
-  const res = await api({ action: 'getAdmisiones', customer_id: currentUser.customer_id });
-  if (res.ok && res.admisiones) {
-    const nuevas = res.admisiones.filter(a => a.statut === 'nuevo').length;
-    const badge = document.getElementById('admisiones-badge');
-    if (badge && nuevas > 0) { badge.textContent = nuevas; badge.style.display = 'inline-block'; }
-  }
-}
-
-async function loadAdmisionesPanel() {
-  const res = await api({ action: 'getAdmisiones', customer_id: currentUser.customer_id });
-  const container = document.getElementById('admisiones-list');
-  if (!res.ok || !res.admisiones || res.admisiones.length === 0) {
-    container.innerHTML = '<p class="no-data">No hay solicitudes todavia.</p>'; return;
-  }
-  container.innerHTML = `<div class="site-cards">${res.admisiones.map(a => `
-    <div class="client-row">
-      <div class="client-row-top">
-        <div class="client-name">${a.nombre} <span class="badge ${a.statut}">${a.statut==='nuevo'?'Nuevo':'Tratado'}</span></div>
-      </div>
-      <div class="client-details">${a.email} · ${a.whatsapp||'-'} · Programa: <strong>${a.programa||'-'}</strong></div>
-      <div class="client-details" style="margin-top:.3rem">${a.mensaje||''}</div>
-      <div class="client-details" style="margin-top:.2rem">${_fmtDate(a.fecha)}</div>
-      ${a.statut==='nuevo' ? `<button class="btn-sm activate" style="margin-top:.6rem" onclick="markAdmisionTratada(${a.row})">Marcar tratada</button>` : ''}
-    </div>`).join('')}</div>`;
-  document.getElementById('admisiones-badge').style.display = 'none';
-}
-
-async function markAdmisionTratada(row) {
-  const res = await api({ action: 'markAdmisionTratada', row });
-  if (res.ok) loadAdmisionesPanel();
-}
-
-/* ===== AFFILIÉ PANEL (client ou compte affilié pur) ===== */
-async function loadAffiliePanel() {
-  const res = await api({ action: 'getAffilie', customer_id: currentUser.customer_id });
-  const pendingZone = document.getElementById('aff-pending-zone');
-
-  if (!res.ok) {
-    pendingZone.innerHTML = `<div class="alert-banner info"><i class="fas fa-info-circle"></i><div>No tienes una cuenta de afiliado todavia. Vuelve al Dashboard para postular.</div></div>`;
-    document.getElementById('aff-stats').innerHTML = '';
-    document.getElementById('aff-clients-list').innerHTML = '';
-    document.getElementById('aff-commission-list').innerHTML = '';
-    return;
-  }
-
-  if (res.pending) {
-    pendingZone.innerHTML = `<div class="alert-banner warning"><i class="fas fa-clock"></i><div>Tu solicitud de afiliacion esta en revision. Te notificaremos pronto.</div></div>`;
-    document.getElementById('aff-stats').innerHTML = '';
-    document.getElementById('aff-clients-list').innerHTML = '<p class="no-data">Disponible una vez aprobada tu solicitud.</p>';
-    document.getElementById('aff-commission-list').innerHTML = '';
-    return;
-  }
-
-  pendingZone.innerHTML = '';
-  affilieData = res.affilie;
-  const code = affilieData.code || '-';
-  const affLink = SITE_URL + '?ref=' + code;
-
-  document.getElementById('aff-stats').innerHTML = `
-    <div class="stat-card"><span class="stat-icon">🔗</span><div class="stat-val" style="font-size:1.3rem">${code}</div><div class="stat-label">Mi codigo</div></div>
-    <div class="stat-card"><span class="stat-icon">👥</span><div class="stat-val">${affilieData.nb_clients||0}</div><div class="stat-label">Clientes activos</div></div>
-    <div class="stat-card"><span class="stat-icon">💰</span><div class="stat-val">${affilieData.commission_due||0}$</div><div class="stat-label">Comision pendiente</div></div>
-  `;
-  document.getElementById('aff-code-inline').textContent = code;
-  document.getElementById('aff-link-zone').innerHTML = `
-    <div style="padding:1rem;background:rgba(94,204,74,.06);border:1px solid rgba(94,204,74,.15);border-radius:10px">
-      <p style="font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:.6rem">Link directo para compartir:</p>
-      <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-        <code id="aff-link-text" style="font-size:.75rem;color:var(--cyan);background:rgba(41,196,224,.08);padding:.4rem .7rem;border-radius:6px;flex:1">${affLink}</code>
-        <button onclick="copyAffLink()" style="background:var(--gradient);color:var(--black);border:none;padding:.4rem .9rem;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer">Copiar</button>
-      </div>
-    </div>`;
-
-  if (!res.clients || res.clients.length === 0) {
-    document.getElementById('aff-clients-list').innerHTML = '<p class="no-data">Aun no has traido clientes. ¡Comparte tu codigo!</p>';
-  } else {
-    document.getElementById('aff-clients-list').innerHTML = `<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Pack</th><th>Estado</th><th>Fecha</th></tr></thead><tbody>
-      ${res.clients.map(c => `<tr><td>${c.nom}</td><td>${c.pack}</td><td><span class="badge ${c.statut}">${_statutLabel(c.statut)}</span></td><td>${_fmtDate(c.date_inscription)}</td></tr>`).join('')}
-    </tbody></table></div>`;
-  }
-
-  const commDue = parseFloat(affilieData.commission_due || 0);
-  const commPaid = parseFloat(affilieData.commission_payee || 0);
-  document.getElementById('aff-commission-list').innerHTML = `<div class="table-wrap"><table><thead><tr><th>Tipo</th><th>Monto</th></tr></thead><tbody>
-    <tr><td>Comision acumulada</td><td><strong>${commDue}$</strong></td></tr>
-    <tr><td>Total comisiones pagadas</td><td><strong>${commPaid}$</strong></td></tr>
-  </tbody></table></div>`;
-
-  const withdrawZone = document.getElementById('withdrawal-zone');
-  if (commDue >= 100) {
-    withdrawZone.innerHTML = `<div style="padding:1.2rem;background:rgba(94,204,74,.08);border:1px solid rgba(94,204,74,.25);border-radius:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
-      <div><p style="font-family:var(--ff-d);font-weight:700;color:var(--green)">🎉 Puedes solicitar un retiro</p><p style="font-size:.78rem;color:rgba(255,255,255,.45)">${commDue}$ disponibles. Minimo: 100$.</p></div>
-      <a href="https://wa.me/56994161742?text=Hola%20EMINEO%2C%20quiero%20retirar%20mi%20comision%20(${commDue}%24).%20Codigo%3A%20${code}" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;background:#25D366;color:#000;padding:.7rem 1.4rem;border-radius:8px;font-weight:700;font-size:.8rem;text-decoration:none"><i class="fab fa-whatsapp"></i> Solicitar retiro</a>
-    </div>`;
-  } else {
-    const remaining = 100 - commDue;
-    const progress = Math.min((commDue / 100) * 100, 100);
-    withdrawZone.innerHTML = `<div style="padding:1.2rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px">
-      <p style="font-size:.82rem;color:rgba(255,255,255,.5);margin-bottom:.6rem">Progreso hacia el retiro minimo (100$):</p>
-      <div style="background:rgba(255,255,255,.08);border-radius:99px;height:8px;overflow:hidden;margin-bottom:.5rem"><div style="height:100%;width:${progress}%;background:var(--gradient);border-radius:99px"></div></div>
-      <p style="font-size:.75rem;color:rgba(255,255,255,.35)"><strong style="color:var(--green)">${commDue}$</strong> acumulados — faltan <strong style="color:var(--cyan)">${remaining}$</strong></p>
-    </div>`;
-  }
-}
 
 function copyAffLink() {
   const link = document.getElementById('aff-link-text').textContent;
@@ -1262,134 +1136,26 @@ function copyAffLink() {
 }
 
 /* ===== ADMIN: HOME / RESUMEN ===== */
-/* ===== AI SITE MODIFIER ===== */
-var aiSiteId = "";
-var aiSiteName = "";
-var aiHistory = [];
-
-function loadAiPanel() {
-  if (!aiSiteId && userSites.length > 0) {
-    aiSiteId = userSites[0].site_id;
-    aiSiteName = userSites[0].nom_site;
-    document.getElementById("ai-site-name").textContent = aiSiteName;
-  }
-}
-
-function setAiInput(text) {
-  document.getElementById("ai-input").value = text;
-}
-
-function openAiForSite(siteId, siteName) {
-  aiSiteId = siteId;
-  aiSiteName = siteName;
-  aiHistory = [];
-  var chat = document.getElementById("ai-chat");
-  chat.innerHTML = "<div style='text-align:center;color:rgba(255,255,255,.25);font-size:.78rem;padding:1rem'>Que quieres cambiar en <strong style='color:var(--cyan)'>" + siteName + "</strong>?</div>";
-  document.getElementById("ai-site-name").textContent = siteName;
-  showPanel("ai");
-}
-
-function addAiMsg(text, role) {
-  var chat = document.getElementById("ai-chat");
-  var div = document.createElement("div");
-  if (role === "user") {
-    div.style.cssText = "align-self:flex-end;max-width:85%;background:rgba(94,204,74,.08);border:1px solid rgba(94,204,74,.15);padding:.7rem 1rem;border-radius:10px;font-size:.82rem";
-  } else {
-    div.style.cssText = "align-self:flex-start;max-width:90%;background:rgba(41,196,224,.06);border:1px solid rgba(41,196,224,.12);padding:.7rem 1rem;border-radius:10px;font-size:.82rem";
-  }
-  div.innerHTML = text;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-  return div;
-}
-
-async function sendAiMsg() {
-  var input = document.getElementById("ai-input");
-  var text = input.value.trim();
-  if (!text) return;
-
-  var btn = document.getElementById("ai-btn");
-  btn.disabled = true;
-  input.value = "";
-
-  addAiMsg(text, "user");
-  aiHistory.push({role: "user", content: text});
-
-  var thinking = addAiMsg("<i class='fas fa-spinner fa-spin'></i> Analizando...", "ai");
-
-  var site = userSites.find(function(s) { return s.site_id === aiSiteId; });
-  var ctx = site ? JSON.stringify({
-    nom_site: site.nom_site,
-    texte_accueil: site.texte_accueil,
-    texte_about: site.texte_about,
-    whatsapp_client: site.whatsapp_client,
-    email_client: site.email_client
-  }) : "{}";
-
-  try {
-    var res = await api({
-      action: "askAI",
-      messages: aiHistory,
-      ctx: ctx
-    });
-
-    var raw = res.ok ? res.text : "";
-    var parsed;
-    try {
-      var match = raw.match(/\{[\s\S]*\}/);
-      parsed = JSON.parse(match ? match[0] : raw);
-    } catch(e) {
-      parsed = {puede: false, msg: raw};
-    }
-
-    thinking.remove();
-    aiHistory.push({role: "assistant", content: raw});
-
-    if (parsed.puede && parsed.cambios) {
-      var preview = "<strong style='color:var(--green)'>Vista previa:</strong><br>";
-      preview += "<div style='background:rgba(0,0,0,.2);padding:.6rem;border-radius:6px;font-size:.75rem;margin:.5rem 0'>";
-      Object.keys(parsed.cambios).forEach(function(k) {
-        preview += "<div><span style='color:rgba(255,255,255,.4)'>" + k + ":</span> <strong>" + parsed.cambios[k] + "</strong></div>";
-      });
-      preview += "</div>";
-      preview += parsed.msg + "<br><br>";
-      preview += "<div style='display:flex;gap:.5rem;margin-top:.4rem'>";
-      preview += "<button id='ai-confirm-btn' style='background:var(--gradient);color:var(--black);border:none;padding:.45rem .9rem;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer'>Aplicar cambio</button>";
-      preview += "<button id='ai-cancel-btn' style='background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);padding:.45rem .9rem;border-radius:6px;font-size:.75rem;cursor:pointer'>Cancelar</button>";
-      preview += "</div>";
-
-      var msgDiv = addAiMsg(preview, "ai");
-
-      var cambios = parsed.cambios;
-      msgDiv.querySelector("#ai-confirm-btn").onclick = function() {
-        applyAiChange(cambios, msgDiv);
-      };
-      msgDiv.querySelector("#ai-cancel-btn").onclick = function() {
-        msgDiv.innerHTML = "<span style='color:rgba(255,255,255,.4);font-size:.75rem'>Cambio cancelado.</span>";
-      };
-    } else {
-      addAiMsg(parsed.msg || "No pude procesar esa solicitud.", "ai");
-    }
-  } catch(e) {
-    thinking.remove();
-    addAiMsg("Error de conexion. Intenta de nuevo.", "ai");
-  }
-
-  btn.disabled = false;
-}
-
-async function applyAiChange(cambios, msgDiv) {
-  var payload = Object.assign({}, cambios, {
-    action: "updateSite",
-    site_id: aiSiteId
-  });
+async function saveEditor() {
+  var msg = document.getElementById('editor-msg');
+  var payload = {
+    action: 'updateSite',
+    site_id: currentEditSiteId,
+    nom_site: document.getElementById('e-nom').value.trim(),
+    texte_accueil: document.getElementById('e-bienvenida1').value.trim(),
+    texte_accueil2: document.getElementById('e-bienvenida2').value.trim(),
+    texte_accueil3: document.getElementById('e-bienvenida3').value.trim(),
+    whatsapp_client: document.getElementById('e-wa').value.trim(),
+    email_client: document.getElementById('e-email').value.trim()
+  };
+  showMsg(msg, '...', 'info');
   var res = await api(payload);
   if (res.ok) {
-    var site = userSites.find(function(s) { return s.site_id === aiSiteId; });
-    if (site) Object.assign(site, cambios);
-    msgDiv.innerHTML = "<span style='color:var(--green);font-weight:600'>Cambio aplicado con exito!</span>";
+    var site = userSites.find(function(s){ return s.site_id === currentEditSiteId; });
+    if (site) Object.assign(site, payload);
+    showMsg(msg, '✅ Cambios guardados.', 'ok');
   } else {
-    msgDiv.innerHTML = "<span style='color:var(--red)'>Error al aplicar: " + (res.error || "Intenta de nuevo") + "</span>";
+    showMsg(msg, '❌ ' + (res.error || 'Error. Intenta de nuevo.'), 'err');
   }
 }
 
@@ -1699,7 +1465,6 @@ function refreshAdminData() {
   if (activePanel) {
     const name = activePanel.id.replace('panel-', '');
     if (name === 'configuracion') loadConfigPanel();
-  if (name === 'ai') loadAiPanel();
   if (name === 'admin-home') loadAdminHome();
     else if (name === 'admin-clientes') loadAdminClientes();
     else if (name === 'admin-afiliados') loadAdminAfiliados();
@@ -1734,13 +1499,13 @@ function openDomainModal(siteId, siteName) {
     var d = this.value.trim() || 'tudominio';
     var ext = document.getElementById('dm-ext').value;
     var suffix = '@' + d + ext;
-    document.getElementById('dm-domain-suffix').textContent = suffix;
+    var sfx = document.getElementById('dm-domain-suffix'); if(sfx) sfx.textContent = suffix;
     document.querySelectorAll('.dm-suffix').forEach(function(el){ el.textContent = suffix; });
   };
   document.getElementById('dm-ext').onchange = function() {
     var d = document.getElementById('dm-domain').value.trim() || 'tudominio';
     var suffix = '@' + d + this.value;
-    document.getElementById('dm-domain-suffix').textContent = suffix;
+    var sfx = document.getElementById('dm-domain-suffix'); if(sfx) sfx.textContent = suffix;
     document.querySelectorAll('.dm-suffix').forEach(function(el){ el.textContent = suffix; });
   };
 }
@@ -1755,6 +1520,14 @@ function addDmEmail() {
   div.style.cssText = 'display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem';
   div.innerHTML = '<input type="text" placeholder="usuario" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#fff;padding:.6rem .8rem;border-radius:7px;font-size:.82rem;outline:none"/><span class="dm-suffix" style="font-size:.78rem;color:rgba(255,255,255,.4)">' + suffix + '</span>';
   document.getElementById('dm-email-fields').appendChild(div);
+}
+
+function proceedDomainOrder() {
+  var domain = document.getElementById('dm-domain').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
+  var ext = document.getElementById('dm-ext').value;
+  var msg = document.getElementById('dm-msg');
+  if (!domain) { showMsg(msg, 'Por favor ingresa el nombre de dominio.', 'err'); return; }
+  prepareDomainPayment(domain + ext);
 }
 
 async function checkDomainAvailability() {
@@ -1796,7 +1569,7 @@ async function checkDomainAvailability() {
     resultEl.style.background = 'rgba(224,194,82,.1)';
     resultEl.style.border = '1px solid rgba(224,194,82,.25)';
     resultEl.style.color = 'var(--yellow)';
-    resultEl.innerHTML = '⚠️ No pudimos verificar. <a href="https://wa.me/56994161742" target="_blank" style="color:#25D366;font-weight:600">Contáctanos por WhatsApp</a>.';
+    resultEl.innerHTML = '⚠️ No pudimos verificar. <a href="https://wa.me/56994161742?text=Hola%20EMINEO%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n." target="_blank" style="color:#25D366;font-weight:600">Contáctanos por WhatsApp</a>.';
   }
 }
 
@@ -1852,6 +1625,9 @@ function _fmtDate(d) {
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
 // Restore session on page load/refresh
+// Init language detection
+detectLang();
+
 (function restoreSession() {
   var saved = localStorage.getItem('emineo_session');
   if (!saved) return;
@@ -1893,5 +1669,56 @@ showPanel = function(name) {
 
 </script>
 <script src="https://www.paypal.com/sdk/js?client-id=AePduQTynsMmbyf-hSh__cGtVYr1zA2Sl-JqxL9q-qkJJdghMjwRPXXhnP7B1IC0EUMVTqOneibVCWmJ&vault=true&intent=subscription&components=buttons"></script>
-</body>
-</html>
+</<div class="panel" id="panel-editor">
+      <div class="panel-card">
+        <span class="btn-back-link" onclick="showPanel('sites')"><i class="fas fa-arrow-left"></i> <span data-i18n="back_sites">Volver a mis sitios</span></span>
+        <h3><span class="icon"><i class="fas fa-edit"></i></span> <span id="editor-site-name" data-i18n="edit_site">Editar sitio</span></h3>
+
+        <div class="editor-field">
+          <label data-i18n="site_name">Nombre del sitio</label>
+          <input type="text" id="e-nom" placeholder="Nombre del sitio"/>
+        </div>
+
+        <div class="editor-field">
+          <label data-i18n="bienvenida_1">Texto de bienvenida 1</label>
+          <textarea id="e-bienvenida1" rows="2" placeholder="Texto principal de bienvenida..."></textarea>
+        </div>
+
+        <div class="editor-field">
+          <label data-i18n="bienvenida_2">Texto de bienvenida 2 <span style="color:rgba(255,255,255,.3);font-size:.72rem">(opcional)</span></label>
+          <textarea id="e-bienvenida2" rows="2" placeholder="Segundo texto de bienvenida..."></textarea>
+        </div>
+
+        <div class="editor-field">
+          <label data-i18n="bienvenida_3">Texto de bienvenida 3 <span style="color:rgba(255,255,255,.3);font-size:.72rem">(opcional)</span></label>
+          <textarea id="e-bienvenida3" rows="2" placeholder="Tercer texto de bienvenida..."></textarea>
+        </div>
+
+        <div class="editor-field">
+          <label data-i18n="whatsapp_contact">WhatsApp de contacto</label>
+          <input type="text" id="e-wa" placeholder="+1 234 567 890"/>
+        </div>
+
+        <div class="editor-field">
+          <label data-i18n="email_contact">Email de contacto</label>
+          <input type="text" id="e-email" placeholder="contacto@tudominio.com"/>
+        </div>
+
+        <div class="msg-box" id="editor-msg"></div>
+
+        <div class="modal-actions" style="margin-top:1.2rem">
+          <button class="btn-cancel" onclick="showPanel('sites')" data-i18n="cancel">Cancelar</button>
+          <button class="btn-save" onclick="saveEditor()" data-i18n="save_changes"><i class="fas fa-save"></i> Guardar cambios</button>
+        </div>
+
+        <div style="margin-top:1.5rem;padding:1rem;background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.15);border-radius:10px">
+          <p style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:.7rem" data-i18n="more_changes_text">¿Necesitas más modificaciones en tu sitio? Escríbenos y lo hacemos por ti.</p>
+          <a id="editor-whatsapp-btn" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;background:#25D366;color:#000;padding:.6rem 1.2rem;border-radius:8px;font-weight:700;font-size:.82rem;text-decoration:none">
+            <i class="fab fa-whatsapp"></i> <span data-i18n="contact_whatsapp">Contactar por WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    
+>
