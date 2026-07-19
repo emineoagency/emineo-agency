@@ -538,7 +538,59 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
   </div>
 </div>
 
-<!-- DOMAIN MODAL -->
+
+    <div class="panel" id="panel-editor">
+      <div class="panel-card">
+        <span class="btn-back-link" onclick="showPanel('sites')"><i class="fas fa-arrow-left"></i> <span data-i18n="back_sites">Volver a mis sitios</span></span>
+        <h3><span class="icon"><i class="fas fa-edit"></i></span> <span id="editor-site-name" data-i18n="edit_site">Editar sitio</span></h3>
+
+        <div class="editor-field">
+          <label data-i18n="site_name">Nombre del sitio</label>
+          <input type="text" id="e-nom" placeholder="Nombre del sitio"/>
+        </div>
+
+        <div class="editor-field">
+          <label data-i18n="bienvenida_1">Texto de bienvenida 1</label>
+          <textarea id="e-bienvenida1" rows="2" placeholder="Texto principal de bienvenida..."></textarea>
+        </div>
+
+        <div class="editor-field">
+          <label data-i18n="bienvenida_2">Texto de bienvenida 2 <span style="color:rgba(255,255,255,.3);font-size:.72rem">(opcional)</span></label>
+          <textarea id="e-bienvenida2" rows="2" placeholder="Segundo texto de bienvenida..."></textarea>
+        </div>
+
+        <div class="editor-field">
+          <label data-i18n="bienvenida_3">Texto de bienvenida 3 <span style="color:rgba(255,255,255,.3);font-size:.72rem">(opcional)</span></label>
+          <textarea id="e-bienvenida3" rows="2" placeholder="Tercer texto de bienvenida..."></textarea>
+        </div>
+
+        <div class="editor-field">
+          <label data-i18n="whatsapp_contact">WhatsApp de contacto</label>
+          <input type="text" id="e-wa" placeholder="+1 234 567 890"/>
+        </div>
+
+        <div class="editor-field">
+          <label data-i18n="email_contact">Email de contacto</label>
+          <input type="text" id="e-email" placeholder="contacto@tudominio.com"/>
+        </div>
+
+        <div class="msg-box" id="editor-msg"></div>
+
+        <div class="modal-actions" style="margin-top:1.2rem">
+          <button class="btn-cancel" onclick="showPanel('sites')" data-i18n="cancel">Cancelar</button>
+          <button class="btn-save" onclick="saveEditor()" data-i18n="save_changes"><i class="fas fa-save"></i> Guardar cambios</button>
+        </div>
+
+        <div style="margin-top:1.5rem;padding:1rem;background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.15);border-radius:10px">
+          <p style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:.7rem" data-i18n="more_changes_text">¿Necesitas más modificaciones en tu sitio? Escríbenos y lo hacemos por ti.</p>
+          <a id="editor-whatsapp-btn" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;background:#25D366;color:#000;padding:.6rem 1.2rem;border-radius:8px;font-weight:700;font-size:.82rem;text-decoration:none">
+            <i class="fab fa-whatsapp"></i> <span data-i18n="contact_whatsapp">Contactar por WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOMAIN MODAL -->
 <div class="modal-ov" id="domain-modal">
   <div class="modal-box" style="max-width:520px;max-height:90vh;overflow-y:auto">
     <p class="modal-title">🌐 Obtener nombre de dominio</p>
@@ -1664,56 +1716,7 @@ showPanel = function(name) {
 
 </script>
 <script src="https://www.paypal.com/sdk/js?client-id=AePduQTynsMmbyf-hSh__cGtVYr1zA2Sl-JqxL9q-qkJJdghMjwRPXXhnP7B1IC0EUMVTqOneibVCWmJ&vault=true&intent=subscription&components=buttons"></script>
-</<div class="panel" id="panel-editor">
-      <div class="panel-card">
-        <span class="btn-back-link" onclick="showPanel('sites')"><i class="fas fa-arrow-left"></i> <span data-i18n="back_sites">Volver a mis sitios</span></span>
-        <h3><span class="icon"><i class="fas fa-edit"></i></span> <span id="editor-site-name" data-i18n="edit_site">Editar sitio</span></h3>
 
-        <div class="editor-field">
-          <label data-i18n="site_name">Nombre del sitio</label>
-          <input type="text" id="e-nom" placeholder="Nombre del sitio"/>
-        </div>
-
-        <div class="editor-field">
-          <label data-i18n="bienvenida_1">Texto de bienvenida 1</label>
-          <textarea id="e-bienvenida1" rows="2" placeholder="Texto principal de bienvenida..."></textarea>
-        </div>
-
-        <div class="editor-field">
-          <label data-i18n="bienvenida_2">Texto de bienvenida 2 <span style="color:rgba(255,255,255,.3);font-size:.72rem">(opcional)</span></label>
-          <textarea id="e-bienvenida2" rows="2" placeholder="Segundo texto de bienvenida..."></textarea>
-        </div>
-
-        <div class="editor-field">
-          <label data-i18n="bienvenida_3">Texto de bienvenida 3 <span style="color:rgba(255,255,255,.3);font-size:.72rem">(opcional)</span></label>
-          <textarea id="e-bienvenida3" rows="2" placeholder="Tercer texto de bienvenida..."></textarea>
-        </div>
-
-        <div class="editor-field">
-          <label data-i18n="whatsapp_contact">WhatsApp de contacto</label>
-          <input type="text" id="e-wa" placeholder="+1 234 567 890"/>
-        </div>
-
-        <div class="editor-field">
-          <label data-i18n="email_contact">Email de contacto</label>
-          <input type="text" id="e-email" placeholder="contacto@tudominio.com"/>
-        </div>
-
-        <div class="msg-box" id="editor-msg"></div>
-
-        <div class="modal-actions" style="margin-top:1.2rem">
-          <button class="btn-cancel" onclick="showPanel('sites')" data-i18n="cancel">Cancelar</button>
-          <button class="btn-save" onclick="saveEditor()" data-i18n="save_changes"><i class="fas fa-save"></i> Guardar cambios</button>
-        </div>
-
-        <div style="margin-top:1.5rem;padding:1rem;background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.15);border-radius:10px">
-          <p style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:.7rem" data-i18n="more_changes_text">¿Necesitas más modificaciones en tu sitio? Escríbenos y lo hacemos por ti.</p>
-          <a id="editor-whatsapp-btn" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;background:#25D366;color:#000;padding:.6rem 1.2rem;border-radius:8px;font-weight:700;font-size:.82rem;text-decoration:none">
-            <i class="fab fa-whatsapp"></i> <span data-i18n="contact_whatsapp">Contactar por WhatsApp</span>
-          </a>
-        </div>
-      </div>
-    </div>
 
     
 >
