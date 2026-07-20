@@ -205,9 +205,9 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 .btn-sm.reply{background:rgba(41,196,224,.1);color:var(--cyan);border:1px solid rgba(41,196,224,.2)}
 .btn-sm.reply:hover{background:rgba(41,196,224,.2)}
 
-.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:2000;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(5px);overflow-y:auto}
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:2000;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(5px)}
 .modal-ov.open{display:flex}
-.modal-box{background:var(--dark2);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:2rem;max-width:500px;width:100%;border-top:3px solid var(--green);max-height:90vh;overflow-y:auto}
+.modal-box{background:var(--dark2);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:2rem;max-width:500px;width:100%;border-top:3px solid var(--green);max-height:85vh;overflow-y:auto}
 .modal-title{font-family:var(--ff-d);font-size:1.1rem;font-weight:700;margin-bottom:1rem}
 .modal-msg-preview{background:var(--dark3);border-radius:8px;padding:.8rem;font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1rem;line-height:1.6}
 .modal-textarea,.modal-input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--white);padding:.7rem .9rem;font-size:.85rem;border-radius:8px;outline:none;resize:vertical;min-height:100px;transition:border-color .2s;font-family:var(--ff-b)}
@@ -364,8 +364,6 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
         <div id="sites-list"><div class="loading"><div class="spinner"></div>Cargando...</div></div>
       </div>
     </div>
-
-
 
     <div class="panel" id="panel-messages">
       <div class="panel-card">
@@ -538,59 +536,52 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
   </div>
 </div>
 
+    
 
+        <!-- PANEL EDITOR -->
     <div class="panel" id="panel-editor">
       <div class="panel-card">
-        <span class="btn-back-link" onclick="showPanel('sites')"><i class="fas fa-arrow-left"></i> <span data-i18n="back_sites">Volver a mis sitios</span></span>
-        <h3><span class="icon"><i class="fas fa-edit"></i></span> <span id="editor-site-name" data-i18n="edit_site">Editar sitio</span></h3>
-
+        <span class="btn-back-link" onclick="showPanel('sites')"><i class="fas fa-arrow-left"></i> Volver a mis sitios</span>
+        <h3><span class="icon"><i class="fas fa-edit"></i></span> <span id="editor-site-name">Editar sitio</span></h3>
         <div class="editor-field">
-          <label data-i18n="site_name">Nombre del sitio</label>
+          <label>Nombre del sitio</label>
           <input type="text" id="e-nom" placeholder="Nombre del sitio"/>
         </div>
-
         <div class="editor-field">
-          <label data-i18n="bienvenida_1">Texto de bienvenida 1</label>
-          <textarea id="e-bienvenida1" rows="2" placeholder="Texto principal de bienvenida..."></textarea>
+          <label>Texto de bienvenida 1</label>
+          <textarea id="e-bienvenida1" rows="2" placeholder="Texto principal..."></textarea>
         </div>
-
         <div class="editor-field">
-          <label data-i18n="bienvenida_2">Texto de bienvenida 2 <span style="color:rgba(255,255,255,.3);font-size:.72rem">(opcional)</span></label>
-          <textarea id="e-bienvenida2" rows="2" placeholder="Segundo texto de bienvenida..."></textarea>
+          <label>Texto de bienvenida 2 <span style="font-size:.7rem;color:rgba(255,255,255,.3)">(opcional)</span></label>
+          <textarea id="e-bienvenida2" rows="2" placeholder="Segundo texto..."></textarea>
         </div>
-
         <div class="editor-field">
-          <label data-i18n="bienvenida_3">Texto de bienvenida 3 <span style="color:rgba(255,255,255,.3);font-size:.72rem">(opcional)</span></label>
-          <textarea id="e-bienvenida3" rows="2" placeholder="Tercer texto de bienvenida..."></textarea>
+          <label>Texto de bienvenida 3 <span style="font-size:.7rem;color:rgba(255,255,255,.3)">(opcional)</span></label>
+          <textarea id="e-bienvenida3" rows="2" placeholder="Tercer texto..."></textarea>
         </div>
-
         <div class="editor-field">
-          <label data-i18n="whatsapp_contact">WhatsApp de contacto</label>
+          <label>WhatsApp de contacto</label>
           <input type="text" id="e-wa" placeholder="+1 234 567 890"/>
         </div>
-
         <div class="editor-field">
-          <label data-i18n="email_contact">Email de contacto</label>
+          <label>Email de contacto</label>
           <input type="text" id="e-email" placeholder="contacto@tudominio.com"/>
         </div>
-
         <div class="msg-box" id="editor-msg"></div>
-
-        <div class="modal-actions" style="margin-top:1.2rem">
-          <button class="btn-cancel" onclick="showPanel('sites')" data-i18n="cancel">Cancelar</button>
-          <button class="btn-save" onclick="saveEditor()" data-i18n="save_changes"><i class="fas fa-save"></i> Guardar cambios</button>
+        <div class="modal-actions" style="margin-top:1rem">
+          <button class="btn-cancel" onclick="showPanel('sites')">Cancelar</button>
+          <button class="btn-save" onclick="saveEditor()"><i class="fas fa-save"></i> Guardar cambios</button>
         </div>
-
         <div style="margin-top:1.5rem;padding:1rem;background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.15);border-radius:10px">
-          <p style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:.7rem" data-i18n="more_changes_text">¿Necesitas más modificaciones en tu sitio? Escríbenos y lo hacemos por ti.</p>
-          <a id="editor-whatsapp-btn" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;background:#25D366;color:#000;padding:.6rem 1.2rem;border-radius:8px;font-weight:700;font-size:.82rem;text-decoration:none">
-            <i class="fab fa-whatsapp"></i> <span data-i18n="contact_whatsapp">Contactar por WhatsApp</span>
+          <p style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:.7rem">Necesitas mas modificaciones en tu sitio? Escribenos y lo hacemos por ti.</p>
+          <a id="editor-whatsapp-btn" href="https://wa.me/56994161742" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;background:#25D366;color:#000;padding:.6rem 1.2rem;border-radius:8px;font-weight:700;font-size:.82rem;text-decoration:none">
+            <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
           </a>
         </div>
       </div>
     </div>
 
-    <!-- DOMAIN MODAL -->
+<!-- DOMAIN MODAL -->
 <div class="modal-ov" id="domain-modal">
   <div class="modal-box" style="max-width:520px;max-height:90vh;overflow-y:auto">
     <p class="modal-title">🌐 Obtener nombre de dominio</p>
@@ -656,115 +647,6 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 </a>
 
 <script>
-/* ===== i18n ===== */
-var LANG = 'es';
-var I18N = {
-  es: {
-    login_title:'Bienvenido',login_sub:'Accede a tu dashboard EMINEO',
-    login_btn:'INICIAR SESION',create_account:'Crear cuenta',
-    admin_access:'Eres administrador? Acceso admin',
-    dashboard:'Dashboard',my_sites:'Mis Sitios Web',
-    admissions:'Admisiones',messages:'Mensajes',invoices:'Facturas',
-    affiliate:'Mi Afiliacion',config:'Configuracion',logout:'Cerrar sesion',
-    account_info:'Informacion de mi cuenta',
-    member_since:'MIEMBRO DESDE',active_sites:'SITIOS ACTIVOS',
-    affiliate_prog:'PROGRAMA AFILIACION',all_good:'Todo en orden!',
-    edit_site:'Editar sitio',back_sites:'Volver a mis sitios',
-    site_name:'Nombre del sitio',
-    bienvenida_1:'Texto de bienvenida 1',bienvenida_2:'Texto de bienvenida 2',bienvenida_3:'Texto de bienvenida 3',
-    whatsapp_contact:'WhatsApp de contacto',email_contact:'Email de contacto',
-    save_changes:'Guardar cambios',cancel:'Cancelar',
-    more_changes_text:'Necesitas mas modificaciones? Escribenos y lo hacemos por ti.',
-    contact_whatsapp:'Contactar por WhatsApp',
-    get_domain:'Obtener dominio',buy_domain:'Comprar dominio - $15/ano',
-    request_site:'Solicitar un nuevo sitio',
-    edit_btn:'Editar',view_site:'Ver sitio',
-    domain_title:'Obtener nombre de dominio',
-    domain_sub:'Dominio + hasta 5 emails profesionales',
-    domain_input_label:'Nombre de dominio que quieres *',
-    emails_label:'Tus emails profesionales (hasta 5 gratis)',
-    add_email:'+ Agregar otro email (max 5)',
-    proceed_payment:'Continuar al pago - $15/ano',
-    resumen:'Resumen de tu cuenta',no_sites:'Aun no tienes ningun sitio web activo.',
-    nombre:'Nombre',pais:'Pais',whatsapp:'WhatsApp'
-  },
-  fr: {
-    login_title:'Bienvenue',login_sub:'Accedez a votre tableau de bord EMINEO',
-    login_btn:'SE CONNECTER',create_account:'Creer un compte',
-    admin_access:'Vous etes administrateur? Acces admin',
-    dashboard:'Tableau de bord',my_sites:'Mes Sites Web',
-    admissions:'Admissions',messages:'Messages',invoices:'Factures',
-    affiliate:'Mon Affiliation',config:'Configuration',logout:'Se deconnecter',
-    account_info:'Informations de mon compte',
-    member_since:'MEMBRE DEPUIS',active_sites:'SITES ACTIFS',
-    affiliate_prog:'PROGRAMME AFFILIATION',all_good:'Tout est en ordre!',
-    edit_site:'Modifier le site',back_sites:'Retour a mes sites',
-    site_name:'Nom du site',
-    bienvenida_1:'Texte de bienvenue 1',bienvenida_2:'Texte de bienvenue 2',bienvenida_3:'Texte de bienvenue 3',
-    whatsapp_contact:'WhatsApp de contact',email_contact:'Email de contact',
-    save_changes:'Enregistrer les modifications',cancel:'Annuler',
-    more_changes_text:'Besoin de plus de modifications? Ecrivez-nous.',
-    contact_whatsapp:'Contacter par WhatsApp',
-    get_domain:'Obtenir un domaine',buy_domain:'Acheter un domaine - 15$/an',
-    request_site:'Demander un nouveau site',
-    edit_btn:'Modifier',view_site:'Voir le site',
-    domain_title:'Obtenir un nom de domaine',
-    domain_sub:'Domaine + jusqu a 5 emails professionnels',
-    domain_input_label:'Nom de domaine souhaite *',
-    emails_label:'Vos emails professionnels (jusqu a 5 gratuits)',
-    add_email:'+ Ajouter un email (max 5)',
-    proceed_payment:'Continuer au paiement - 15$/an',
-    resumen:'Resume de votre compte',no_sites:'Vous n avez pas encore de site actif.',
-    nombre:'Nom',pais:'Pays',whatsapp:'WhatsApp'
-  },
-  en: {
-    login_title:'Welcome',login_sub:'Access your EMINEO dashboard',
-    login_btn:'LOG IN',create_account:'Create account',
-    admin_access:'Are you an admin? Admin access',
-    dashboard:'Dashboard',my_sites:'My Websites',
-    admissions:'Admissions',messages:'Messages',invoices:'Invoices',
-    affiliate:'My Affiliate',config:'Settings',logout:'Log out',
-    account_info:'My account information',
-    member_since:'MEMBER SINCE',active_sites:'ACTIVE SITES',
-    affiliate_prog:'AFFILIATE PROGRAM',all_good:'All good!',
-    edit_site:'Edit site',back_sites:'Back to my sites',
-    site_name:'Site name',
-    bienvenida_1:'Welcome text 1',bienvenida_2:'Welcome text 2',bienvenida_3:'Welcome text 3',
-    whatsapp_contact:'Contact WhatsApp',email_contact:'Contact email',
-    save_changes:'Save changes',cancel:'Cancel',
-    more_changes_text:'Need more changes? Write to us and we will do it for you.',
-    contact_whatsapp:'Contact via WhatsApp',
-    get_domain:'Get a domain',buy_domain:'Buy domain - $15/year',
-    request_site:'Request a new site',
-    edit_btn:'Edit',view_site:'View site',
-    domain_title:'Get a domain name',
-    domain_sub:'Domain + up to 5 professional emails',
-    domain_input_label:'Domain name you want *',
-    emails_label:'Your professional emails (up to 5 free)',
-    add_email:'+ Add another email (max 5)',
-    proceed_payment:'Continue to payment - $15/year',
-    resumen:'Account summary',no_sites:'You don t have any active website yet.',
-    nombre:'Name',pais:'Country',whatsapp:'WhatsApp'
-  }
-};
-
-function t(key){ return (I18N[LANG]&&I18N[LANG][key])||(I18N.es[key])||key; }
-
-function applyI18n(){
-  document.querySelectorAll('[data-i18n]').forEach(function(el){
-    var k=el.getAttribute('data-i18n');
-    var v=t(k);
-    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=v;
-    else el.textContent=v;
-  });
-}
-
-function detectLang(){
-  var n=(navigator.language||navigator.userLanguage||'es').toLowerCase().substring(0,2);
-  LANG=n==='fr'?'fr':n==='en'?'en':'es';
-}
-
-
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlv14MC7iiLNuTCfZqtsLDZcVmMjLBSVwXQ8oTTK6xITKOm15MELpp3dczX1wZEzTwOQ/exec";
 const SITE_URL = "https://emineoagency.github.io/emineo-agency";
@@ -996,6 +878,7 @@ function showPanel(name) {
     home: ['Dashboard', 'Resumen de tu cuenta'],
     sites: ['Mis Sitios Web', 'Gestiona todos tus sitios'],
     editor: ['Editar sitio', 'Modifica la informacion de tu sitio'],
+    editor: ['Editar sitio', 'Modifica la informacion de tu sitio'],
     'site-editor': ['Editar sitio', ''],
     messages: ['Mensajes', 'Comunicacion con EMINEO'],
     factures: ['Facturas', 'Historial de pagos'],
@@ -1172,7 +1055,6 @@ async function openSiteEditor(siteId) {
   showPanel('editor');
 }
 
-
 function copyAffLink() {
   const link = document.getElementById('aff-link-text').textContent;
   navigator.clipboard.writeText(link).then(() => {
@@ -1200,9 +1082,9 @@ async function saveEditor() {
   if (res.ok) {
     var site = userSites.find(function(s){ return s.site_id === currentEditSiteId; });
     if (site) Object.assign(site, payload);
-    showMsg(msg, '✅ Cambios guardados.', 'ok');
+    showMsg(msg, 'Cambios guardados correctamente.', 'ok');
   } else {
-    showMsg(msg, '❌ ' + (res.error || 'Error. Intenta de nuevo.'), 'err');
+    showMsg(msg, 'Error: ' + (res.error || 'Intenta de nuevo.'), 'err');
   }
 }
 
@@ -1644,7 +1526,6 @@ function prepareDomainPayment(fullDomain) {
   }
 }
 
-
 function doLogout() {
   currentUser = null; isAdmin = false; adminData = null; affilieData = null; userSites = [];
   localStorage.removeItem('emineo_session');
@@ -1673,8 +1554,6 @@ function toggleSidebar() { document.getElementById('sidebar').classList.toggle('
 
 // Restore session on page load/refresh
 // Init language detection
-detectLang();
-
 (function restoreSession() {
   var saved = localStorage.getItem('emineo_session');
   if (!saved) return;
@@ -1716,7 +1595,6 @@ showPanel = function(name) {
 
 </script>
 <script src="https://www.paypal.com/sdk/js?client-id=AePduQTynsMmbyf-hSh__cGtVYr1zA2Sl-JqxL9q-qkJJdghMjwRPXXhnP7B1IC0EUMVTqOneibVCWmJ&vault=true&intent=subscription&components=buttons"></script>
-
 
     
 >
