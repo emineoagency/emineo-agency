@@ -516,6 +516,51 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
       </div>
     </div>
 
+  
+
+        <!-- PANEL EDITOR -->
+    <div class="panel" id="panel-editor">
+      <div class="panel-card">
+        <span class="btn-back-link" onclick="showPanel('sites')"><i class="fas fa-arrow-left"></i> Volver a mis sitios</span>
+        <h3><span class="icon"><i class="fas fa-edit"></i></span> <span id="editor-site-name">Editar sitio</span></h3>
+        <div class="editor-field">
+          <label>NOMBRE DEL SITIO</label>
+          <input type="text" id="e-nom" placeholder="Nombre del sitio"/>
+        </div>
+        <div class="editor-field">
+          <label>TEXTO DE BIENVENIDA 1</label>
+          <textarea id="e-bienvenida1" rows="2" placeholder="Texto principal de bienvenida..."></textarea>
+        </div>
+        <div class="editor-field">
+          <label>TEXTO DE BIENVENIDA 2 <span style="font-size:.7rem;color:rgba(255,255,255,.3)">(opcional)</span></label>
+          <textarea id="e-bienvenida2" rows="2" placeholder="Segundo texto..."></textarea>
+        </div>
+        <div class="editor-field">
+          <label>TEXTO DE BIENVENIDA 3 <span style="font-size:.7rem;color:rgba(255,255,255,.3)">(opcional)</span></label>
+          <textarea id="e-bienvenida3" rows="2" placeholder="Tercer texto..."></textarea>
+        </div>
+        <div class="editor-field">
+          <label>WHATSAPP DE CONTACTO</label>
+          <input type="text" id="e-wa" placeholder="+1 234 567 890"/>
+        </div>
+        <div class="editor-field">
+          <label>EMAIL DE CONTACTO</label>
+          <input type="text" id="e-email" placeholder="contacto@tudominio.com"/>
+        </div>
+        <div class="msg-box" id="editor-msg"></div>
+        <div class="modal-actions" style="margin-top:1rem">
+          <button class="btn-cancel" onclick="showPanel('sites')">Cancelar</button>
+          <button class="btn-save" onclick="saveEditor()"><i class="fas fa-save"></i> Guardar cambios</button>
+        </div>
+        <div style="margin-top:1.5rem;padding:1rem;background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.15);border-radius:10px">
+          <p style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:.7rem">Necesitas mas modificaciones en tu sitio? Escribenos y lo hacemos por ti.</p>
+          <a id="editor-whatsapp-btn" href="https://wa.me/56994161742" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;background:#25D366;color:#000;padding:.6rem 1.2rem;border-radius:8px;font-weight:700;font-size:.82rem;text-decoration:none">
+            <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -543,6 +588,8 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
     </div>
   </div>
 </div>
+
+
 
 <!-- DOMAIN MODAL -->
 <div class="modal-ov" id="domain-modal">
@@ -667,9 +714,9 @@ async function doLogin() {
   if (!email || !pass) { showMsg(msg, 'Email y contrasena requeridos.', 'err'); return; }
 
   const btn = document.querySelector('#login-form .btn-submit');
-  btn.disabled = true; btn.textContent = 'Conectando...';
+  if (btn) { btn.disabled = true; btn.textContent = 'Conectando...'; }
   const res = await api({ action: 'login', email, password: pass });
-  btn.disabled = false; btn.textContent = 'Iniciar sesion';
+  if (btn) { btn.disabled = false; btn.textContent = 'INICIAR SESION'; }
 
   if (res.ok) {
     currentUser = res; isAdmin = false;
@@ -774,6 +821,7 @@ async function loadDashboard() {
     checkAdmisionesBadge();
 
     showPanel('home');
+    loadHomePanel();
   }
 }
 
@@ -856,7 +904,7 @@ function showPanel(name) {
     document.getElementById('panel-sub').textContent = titles[name][1];
   }
 
-  if (name === 'home') loadHomePanel();
+  // loadHomePanel called by loadDashboard after data is ready
   if (name === 'sites') loadSitesPanel();
   if (name === 'messages') loadMessages();
   if (name === 'factures') loadFactures();
@@ -1471,6 +1519,29 @@ function proceedDomainOrder() {
   var msg = document.getElementById('dm-msg');
   if (!domain) { showMsg(msg, 'Por favor ingresa el nombre de dominio.', 'err'); return; }
   prepareDomainPayment(domain + ext);
+}
+
+async function saveEditor() {
+  var msg = document.getElementById('editor-msg');
+  var payload = {
+    action: 'updateSite',
+    site_id: currentEditSiteId,
+    nom_site: document.getElementById('e-nom').value.trim(),
+    texte_accueil: document.getElementById('e-bienvenida1').value.trim(),
+    texte_accueil2: document.getElementById('e-bienvenida2').value.trim(),
+    texte_accueil3: document.getElementById('e-bienvenida3').value.trim(),
+    whatsapp_client: document.getElementById('e-wa').value.trim(),
+    email_client: document.getElementById('e-email').value.trim()
+  };
+  showMsg(msg, '...', 'info');
+  var res = await api(payload);
+  if (res.ok) {
+    var site = userSites.find(function(s){ return s.site_id === currentEditSiteId; });
+    if (site) Object.assign(site, payload);
+    showMsg(msg, 'Cambios guardados correctamente.', 'ok');
+  } else {
+    showMsg(msg, 'Error: ' + (res.error || 'Intenta de nuevo.'), 'err');
+  }
 }
 
 function doLogout() {
