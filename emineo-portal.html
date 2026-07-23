@@ -365,6 +365,14 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
       </div>
     </div>
 
+    <div class="panel" id="panel-site-editor">
+      <div class="panel-card">
+        <span class="btn-back-link" onclick="showPanel('sites')"><i class="fas fa-arrow-left"></i> Volver a mis sitios</span>
+        <h3><span class="icon"><i class="fas fa-edit"></i></span> <span id="editor-site-name">Editar sitio</span></h3>
+        <div id="site-editor-content"><div class="loading"><div class="spinner"></div>Cargando...</div></div>
+      </div>
+    </div>
+
     <div class="panel" id="panel-messages">
       <div class="panel-card">
         <h3><span class="icon"><i class="fas fa-comments"></i></span> Mis mensajes</h3>
@@ -536,54 +544,9 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
   </div>
 </div>
 
-    
-
-        <!-- PANEL EDITOR -->
-    <div class="panel" id="panel-editor">
-      <div class="panel-card">
-        <span class="btn-back-link" onclick="showPanel('sites')"><i class="fas fa-arrow-left"></i> Volver a mis sitios</span>
-        <h3><span class="icon"><i class="fas fa-edit"></i></span> <span id="editor-site-name">Editar sitio</span></h3>
-        <div class="editor-field">
-          <label>Nombre del sitio</label>
-          <input type="text" id="e-nom" placeholder="Nombre del sitio"/>
-        </div>
-        <div class="editor-field">
-          <label>Texto de bienvenida 1</label>
-          <textarea id="e-bienvenida1" rows="2" placeholder="Texto principal..."></textarea>
-        </div>
-        <div class="editor-field">
-          <label>Texto de bienvenida 2 <span style="font-size:.7rem;color:rgba(255,255,255,.3)">(opcional)</span></label>
-          <textarea id="e-bienvenida2" rows="2" placeholder="Segundo texto..."></textarea>
-        </div>
-        <div class="editor-field">
-          <label>Texto de bienvenida 3 <span style="font-size:.7rem;color:rgba(255,255,255,.3)">(opcional)</span></label>
-          <textarea id="e-bienvenida3" rows="2" placeholder="Tercer texto..."></textarea>
-        </div>
-        <div class="editor-field">
-          <label>WhatsApp de contacto</label>
-          <input type="text" id="e-wa" placeholder="+1 234 567 890"/>
-        </div>
-        <div class="editor-field">
-          <label>Email de contacto</label>
-          <input type="text" id="e-email" placeholder="contacto@tudominio.com"/>
-        </div>
-        <div class="msg-box" id="editor-msg"></div>
-        <div class="modal-actions" style="margin-top:1rem">
-          <button class="btn-cancel" onclick="showPanel('sites')">Cancelar</button>
-          <button class="btn-save" onclick="saveEditor()"><i class="fas fa-save"></i> Guardar cambios</button>
-        </div>
-        <div style="margin-top:1.5rem;padding:1rem;background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.15);border-radius:10px">
-          <p style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:.7rem">Necesitas mas modificaciones en tu sitio? Escribenos y lo hacemos por ti.</p>
-          <a id="editor-whatsapp-btn" href="https://wa.me/56994161742" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;background:#25D366;color:#000;padding:.6rem 1.2rem;border-radius:8px;font-weight:700;font-size:.82rem;text-decoration:none">
-            <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
-          </a>
-        </div>
-      </div>
-    </div>
-
 <!-- DOMAIN MODAL -->
 <div class="modal-ov" id="domain-modal">
-  <div class="modal-box" style="max-width:520px;max-height:90vh;overflow-y:auto">
+  <div class="modal-box" style="max-width:520px">
     <p class="modal-title">🌐 Obtener nombre de dominio</p>
     <p style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:1rem">Dominio + hasta 5 emails profesionales — <strong style="color:var(--green)">$15/año</strong></p>
 
@@ -591,13 +554,13 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 
     <div class="editor-field">
       <label>Nombre de dominio que quieres *</label>
-      <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
-        <input type="text" id="dm-domain" placeholder="tunegocio" style="flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);color:#fff;padding:.85rem 1rem;border-radius:8px;font-size:1rem;outline:none;width:100%"/>
+      <div style="display:flex;gap:.5rem">
+        <input type="text" id="dm-domain" placeholder="tunegocio" style="width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#fff;padding:.85rem 1rem;border-radius:8px;font-size:1rem;outline:none;display:block;margin-bottom:.5rem"/>
+        <select id="dm-ext" style="background:#1e2330;border:1px solid rgba(255,255,255,.15);color:#fff;padding:.7rem .6rem;border-radius:8px;font-size:.85rem;outline:none">
+          <option>.com</option><option>.net</option><option>.org</option>
+          <option>.io</option><option>.co</option><option>.ht</option><option>.cl</option>
+        </select>
       </div>
-      <select id="dm-ext" style="width:100%;background:#1e2330;border:1px solid rgba(255,255,255,.2);color:#fff;padding:.75rem .9rem;border-radius:8px;font-size:.9rem;outline:none;margin-top:.3rem">
-        <option>.com</option><option>.net</option><option>.org</option>
-        <option>.io</option><option>.co</option><option>.ht</option><option>.cl</option>
-      </select>
     </div>
 
     <div class="editor-field" style="margin-top:.8rem">
@@ -616,16 +579,15 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
     </div>
 
     <div id="dm-paypal-zone" style="margin-top:1rem;display:none"></div>
-    <div style="margin-top:1rem">
-      <button onclick="proceedDomainOrder()" style="width:100%;background:var(--gradient);color:var(--black);border:none;padding:.85rem;font-family:var(--ff-d);font-weight:700;font-size:.9rem;border-radius:8px;cursor:pointer;margin-bottom:.8rem">
-        <i class="fas fa-arrow-right"></i> Continuar al pago — $15/año
-      </button>
+    <div id="dm-check-zone" style="margin-top:.8rem">
+      <button onclick="proceedDomainOrder()" style="width:100%;background:var(--gradient);color:var(--black);border:none;padding:.85rem;font-family:var(--ff-d);font-weight:700;font-size:.9rem;border-radius:8px;cursor:pointer;margin-top:.5rem"><i class="fas fa-arrow-right"></i> Continuar al pago — $15/año</button>
     </div>
 
+    <div id="dm-result" style="display:none;margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.82rem"></div>
     <div id="dm-paypal-zone" style="display:none;margin-top:1rem"></div>
     <div class="msg-box" id="dm-msg" style="margin-top:.6rem"></div>
 
-    <div class="modal-actions" style="position:sticky;bottom:0;background:var(--dark2);padding:.5rem 0;margin-top:.5rem">
+    <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal('domain-modal')">Cancelar</button>
     </div>
   </div>
@@ -642,7 +604,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
   </div>
 </div>
 
-<a href="https://wa.me/56994161742?text=Hola%20EMINEO%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n." target="_blank" class="wa-float" id="wa-float" style="display:none">
+<a href="https://wa.me/56994161742" target="_blank" class="wa-float" id="wa-float" style="display:none">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
@@ -877,8 +839,6 @@ function showPanel(name) {
   const titles = {
     home: ['Dashboard', 'Resumen de tu cuenta'],
     sites: ['Mis Sitios Web', 'Gestiona todos tus sitios'],
-    editor: ['Editar sitio', 'Modifica la informacion de tu sitio'],
-    editor: ['Editar sitio', 'Modifica la informacion de tu sitio'],
     'site-editor': ['Editar sitio', ''],
     messages: ['Mensajes', 'Comunicacion con EMINEO'],
     factures: ['Facturas', 'Historial de pagos'],
@@ -934,7 +894,7 @@ function loadHomePanel() {
       alertZone.innerHTML += `<div class="alert-banner warning"><i class="fas fa-clock"></i><div>Tienes ${pendientes} sitio(s) en espera de activacion.</div></div>`;
     }
     if (suspendidos > 0) {
-      alertZone.innerHTML += `<div class="alert-banner danger"><i class="fas fa-exclamation-triangle"></i><div>Tienes ${suspendidos} sitio(s) suspendido(s). <a href="https://wa.me/56994161742?text=Hola%20EMINEO%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n." target="_blank" style="color:var(--green);font-weight:600">Contactar EMINEO</a></div></div>`;
+      alertZone.innerHTML += `<div class="alert-banner danger"><i class="fas fa-exclamation-triangle"></i><div>Tienes ${suspendidos} sitio(s) suspendido(s). <a href="https://wa.me/56994161742" target="_blank" style="color:var(--green);font-weight:600">Contactar EMINEO</a></div></div>`;
     }
     if (pendientes === 0 && suspendidos === 0) {
       alertZone.innerHTML = `<div class="alert-banner success"><i class="fas fa-check-circle"></i><div>¡Todo en orden!</div></div>`;
@@ -950,7 +910,7 @@ function loadHomePanel() {
       <div class="promo-card">
         <div class="promo-card-text">
           <h4>💰 Programa de Afiliacion</h4>
-          <p>¿Conoces emprendedores que necesitan un sitio web? Gana 3$/mes por cada cliente activo que recomiendes — y 5$/mes si superas los 50 clientes activos. Sin límite.</p>
+          <p>¿Conoces emprendedores que necesitan un sitio web? Gana 3$/mes por cada cliente activo que recomiendes — sin limite.</p>
         </div>
         <a href="#" class="btn-promo" onclick="requestAffiliation(event)"><i class="fab fa-whatsapp"></i> Postular para ser afiliado</a>
       </div>`;
@@ -1037,21 +997,30 @@ function goToNewSiteForm() {
 async function openSiteEditor(siteId) {
   var site = userSites.find(function(s){ return s.site_id === siteId; });
   if (!site) return;
-  document.getElementById('editor-site-name').textContent = site.nom_site || 'Editar sitio';
-  document.getElementById('e-nom').value = site.nom_site || '';
-  document.getElementById('e-bienvenida1').value = site.texte_accueil || '';
-  document.getElementById('e-bienvenida2').value = site.texte_accueil2 || '';
-  document.getElementById('e-bienvenida3').value = site.texte_accueil3 || '';
-  document.getElementById('e-wa').value = site.whatsapp_client || '';
-  document.getElementById('e-email').value = site.email_client || '';
-
-  // Set WhatsApp button with context
-  var siteName = site.nom_site || 'mi sitio';
-  var waMsg = encodeURIComponent('Hola EMINEO, soy cliente con el sitio "' + siteName + '" y necesito modificaciones adicionales.');
-  document.getElementById('editor-whatsapp-btn').href = 'https://wa.me/56994161742?text=' + waMsg;
 
   currentEditSiteId = siteId;
-  document.getElementById('editor-msg').className = 'msg-box';
+  document.getElementById('editor-site-name').textContent = site.nom_site || '';
+
+  // Fill fields
+  var setVal = function(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.value = val || '';
+  };
+  setVal('e-nom',         site.nom_site);
+  setVal('e-bienvenida1', site.texte_accueil);
+  setVal('e-bienvenida2', site.texte_accueil2);
+  setVal('e-bienvenida3', site.texte_accueil3);
+  setVal('e-wa',          site.whatsapp_client);
+  setVal('e-email',       site.email_client);
+
+  // WhatsApp button context
+  var waMsg = encodeURIComponent('Hola EMINEO, soy cliente con el sitio "' + (site.nom_site||'') + '" y necesito modificaciones adicionales.');
+  var waBtn = document.getElementById('editor-whatsapp-btn');
+  if (waBtn) waBtn.href = 'https://wa.me/56994161742?text=' + waMsg;
+
+  var msg = document.getElementById('editor-msg');
+  if (msg) msg.className = 'msg-box';
+
   showPanel('editor');
 }
 
@@ -1065,29 +1034,6 @@ function copyAffLink() {
 }
 
 /* ===== ADMIN: HOME / RESUMEN ===== */
-async function saveEditor() {
-  var msg = document.getElementById('editor-msg');
-  var payload = {
-    action: 'updateSite',
-    site_id: currentEditSiteId,
-    nom_site: document.getElementById('e-nom').value.trim(),
-    texte_accueil: document.getElementById('e-bienvenida1').value.trim(),
-    texte_accueil2: document.getElementById('e-bienvenida2').value.trim(),
-    texte_accueil3: document.getElementById('e-bienvenida3').value.trim(),
-    whatsapp_client: document.getElementById('e-wa').value.trim(),
-    email_client: document.getElementById('e-email').value.trim()
-  };
-  showMsg(msg, '...', 'info');
-  var res = await api(payload);
-  if (res.ok) {
-    var site = userSites.find(function(s){ return s.site_id === currentEditSiteId; });
-    if (site) Object.assign(site, payload);
-    showMsg(msg, 'Cambios guardados correctamente.', 'ok');
-  } else {
-    showMsg(msg, 'Error: ' + (res.error || 'Intenta de nuevo.'), 'err');
-  }
-}
-
 function loadConfigPanel() {
   // Juste vider les champs au chargement pour securite
   ['cfg-pass-old','cfg-pass-new','cfg-pass-confirm','cfg-email-new','cfg-email-pass'].forEach(function(id) {
@@ -1428,13 +1374,13 @@ function openDomainModal(siteId, siteName) {
     var d = this.value.trim() || 'tudominio';
     var ext = document.getElementById('dm-ext').value;
     var suffix = '@' + d + ext;
-    var sfx = document.getElementById('dm-domain-suffix'); if(sfx) sfx.textContent = suffix;
+    document.getElementById('dm-domain-suffix').textContent = suffix;
     document.querySelectorAll('.dm-suffix').forEach(function(el){ el.textContent = suffix; });
   };
   document.getElementById('dm-ext').onchange = function() {
     var d = document.getElementById('dm-domain').value.trim() || 'tudominio';
     var suffix = '@' + d + this.value;
-    var sfx = document.getElementById('dm-domain-suffix'); if(sfx) sfx.textContent = suffix;
+    document.getElementById('dm-domain-suffix').textContent = suffix;
     document.querySelectorAll('.dm-suffix').forEach(function(el){ el.textContent = suffix; });
   };
 }
@@ -1449,14 +1395,6 @@ function addDmEmail() {
   div.style.cssText = 'display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem';
   div.innerHTML = '<input type="text" placeholder="usuario" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#fff;padding:.6rem .8rem;border-radius:7px;font-size:.82rem;outline:none"/><span class="dm-suffix" style="font-size:.78rem;color:rgba(255,255,255,.4)">' + suffix + '</span>';
   document.getElementById('dm-email-fields').appendChild(div);
-}
-
-function proceedDomainOrder() {
-  var domain = document.getElementById('dm-domain').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
-  var ext = document.getElementById('dm-ext').value;
-  var msg = document.getElementById('dm-msg');
-  if (!domain) { showMsg(msg, 'Por favor ingresa el nombre de dominio.', 'err'); return; }
-  prepareDomainPayment(domain + ext);
 }
 
 async function checkDomainAvailability() {
@@ -1498,7 +1436,7 @@ async function checkDomainAvailability() {
     resultEl.style.background = 'rgba(224,194,82,.1)';
     resultEl.style.border = '1px solid rgba(224,194,82,.25)';
     resultEl.style.color = 'var(--yellow)';
-    resultEl.innerHTML = '⚠️ No pudimos verificar. <a href="https://wa.me/56994161742?text=Hola%20EMINEO%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n." target="_blank" style="color:#25D366;font-weight:600">Contáctanos por WhatsApp</a>.';
+    resultEl.innerHTML = '⚠️ No pudimos verificar. <a href="https://wa.me/56994161742" target="_blank" style="color:#25D366;font-weight:600">Contáctanos por WhatsApp</a>.';
   }
 }
 
@@ -1524,6 +1462,15 @@ function prepareDomainPayment(fullDomain) {
       }
     }).render('#dm-paypal-btn');
   }
+}
+
+
+function proceedDomainOrder() {
+  var domain = document.getElementById('dm-domain').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
+  var ext = document.getElementById('dm-ext').value;
+  var msg = document.getElementById('dm-msg');
+  if (!domain) { showMsg(msg, 'Por favor ingresa el nombre de dominio.', 'err'); return; }
+  prepareDomainPayment(domain + ext);
 }
 
 function doLogout() {
@@ -1553,7 +1500,6 @@ function _fmtDate(d) {
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
 // Restore session on page load/refresh
-// Init language detection
 (function restoreSession() {
   var saved = localStorage.getItem('emineo_session');
   if (!saved) return;
@@ -1595,6 +1541,5 @@ showPanel = function(name) {
 
 </script>
 <script src="https://www.paypal.com/sdk/js?client-id=AePduQTynsMmbyf-hSh__cGtVYr1zA2Sl-JqxL9q-qkJJdghMjwRPXXhnP7B1IC0EUMVTqOneibVCWmJ&vault=true&intent=subscription&components=buttons"></script>
-
-    
->
+</body>
+</html>
