@@ -349,8 +349,13 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 
     <!-- ============ PANELS CLIENT ============ -->
     <div class="panel" id="panel-home">
-      <div id="alert-zone"></div>
-      <div class="stat-grid" id="client-stats"></div>
+      <div id="alert-zone"><div class="alert-banner success"><i class="fas fa-check-circle"></i><div>Cargando...</div></div></div>
+      <div class="stat-grid" id="client-stats">
+        <div class="stat-card"><span class="stat-icon">🌐</span><div class="stat-val" id="stat-sites">-</div><div class="stat-label">Mis sitios</div></div>
+        <div class="stat-card"><span class="stat-icon">✅</span><div class="stat-val" id="stat-activos">-</div><div class="stat-label">Sitios activos</div></div>
+        <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-val" style="font-size:1.1rem" id="stat-fecha">-</div><div class="stat-label">Miembro desde</div></div>
+        <div class="stat-card"><span class="stat-icon">🤝</span><div class="stat-val" style="font-size:1.1rem" id="stat-afil">No afiliado</div><div class="stat-label">Programa afiliacion</div></div>
+      </div>
       <div id="promo-affilie-zone"></div>
       <div class="panel-card">
         <h3><span class="icon"><i class="fas fa-info-circle"></i></span> Informacion de mi cuenta</h3>
@@ -926,12 +931,14 @@ function loadHomePanel() {
   const hasSites = userSites.length > 0;
   const sitesActifs = userSites.filter(s => s.statut === 'actif').length;
 
-  document.getElementById('client-stats').innerHTML = `
-    <div class="stat-card"><span class="stat-icon">🌐</span><div class="stat-val">${userSites.length}</div><div class="stat-label">Mis sitios</div></div>
-    <div class="stat-card"><span class="stat-icon">✅</span><div class="stat-val">${sitesActifs}</div><div class="stat-label">Sitios activos</div></div>
-    <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-val" style="font-size:1.1rem">${_fmtDate(u.date_inscription)||'-'}</div><div class="stat-label">Miembro desde</div></div>
-    <div class="stat-card"><span class="stat-icon">${affilieData?'💰':'🤝'}</span><div class="stat-val" style="font-size:1.1rem">${affilieData?'Afiliado':'No afiliado'}</div><div class="stat-label">Programa afiliacion</div></div>
-  `;
+  var elSites = document.getElementById('stat-sites');
+  var elActivos = document.getElementById('stat-activos');
+  var elFecha = document.getElementById('stat-fecha');
+  var elAfil = document.getElementById('stat-afil');
+  if (elSites) elSites.textContent = userSites.length;
+  if (elActivos) elActivos.textContent = sitesActifs;
+  if (elFecha) elFecha.textContent = _fmtDate(u.date_inscription) || '-';
+  if (elAfil) { elAfil.textContent = affilieData ? 'Afiliado' : 'No afiliado'; elAfil.parentElement.querySelector('.stat-icon').textContent = affilieData ? '💰' : '🤝'; }
 
   const alertZone = document.getElementById('alert-zone');
   alertZone.innerHTML = '';
