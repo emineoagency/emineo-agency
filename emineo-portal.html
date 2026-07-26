@@ -106,7 +106,7 @@ input,select,textarea{font-family:var(--ff-b)}
 .stat-label{font-size:.7rem;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;margin-top:.25rem}
 
 .panel{display:none}
-.panel.active{display:block}
+.panel.active{display:block;min-height:400px}
 .panel-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:1.8rem;margin-bottom:1.2rem}
 .panel-card h3{font-family:var(--ff-d);font-size:1rem;font-weight:700;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
 .panel-card h3 .icon{color:var(--green)}
@@ -239,6 +239,20 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
   .stat-grid{grid-template-columns:1fr}
 }
 
+
+/* === QUICK CARDS (Gemini design) === */
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-top:1.2rem}
+.quick-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:1.5rem;cursor:pointer;transition:all .25s;text-align:center}
+.quick-card:hover{transform:translateY(-3px);border-color:var(--green)}
+.quick-card i{font-size:1.8rem;color:var(--cyan);margin-bottom:.8rem;display:block}
+.quick-card h4{font-family:var(--ff-d);font-size:1.1rem;margin-bottom:.3rem;color:#fff}
+.quick-card p{font-size:.78rem;color:rgba(255,255,255,.4)}
+
+.home-anuncio{background:linear-gradient(135deg,rgba(94,204,74,.08),rgba(41,196,224,.08));border:1px solid rgba(94,204,74,.2);border-radius:14px;padding:1.2rem 1.5rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem}
+.home-anuncio .anuncio-icon{font-size:2rem;flex-shrink:0}
+.home-anuncio h4{font-family:var(--ff-d);font-size:.95rem;font-weight:700;margin-bottom:.3rem;color:#fff}
+.home-anuncio p{font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.5}
+.home-anuncio .btn-anuncio{margin-top:.6rem;display:inline-flex;align-items:center;gap:.4rem;background:var(--gradient);color:var(--black);padding:.45rem 1rem;border-radius:7px;font-size:.78rem;font-weight:700;cursor:pointer;border:none}
 </style>
 </head>
 <body>
@@ -349,21 +363,35 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 
     <!-- ============ PANELS CLIENT ============ -->
     <div class="panel" id="panel-home">
-      <div id="alert-zone"><div class="alert-banner success"><i class="fas fa-check-circle"></i><div>Cargando...</div></div></div>
+      <div class="panel-card">
+        <h3><i class="fas fa-hand-wave" style="color:var(--cyan)"></i> ¡Hola de nuevo, <span id="home-user-name">Cliente</span>!</h3>
+        <p style="color:rgba(255,255,255,.6);font-size:.9rem;margin-top:.3rem">Accede rapidamente a cualquiera de tus secciones desde aqui:</p>
+      </div>
+
+      <!-- ANUNCIO DINAMICO -->
+      <div id="home-anuncio"></div>
+
+      <div class="grid-cards" id="home-cards">
+        <!-- Cards generadas por JS -->
+      </div>
+    </div>
+
+    <div class="panel" id="panel-dashboard">
+      <div id="alert-zone-dash"></div>
       <div class="stat-grid" id="client-stats">
         <div class="stat-card"><span class="stat-icon">🌐</span><div class="stat-val" id="stat-sites">-</div><div class="stat-label">Mis sitios</div></div>
         <div class="stat-card"><span class="stat-icon">✅</span><div class="stat-val" id="stat-activos">-</div><div class="stat-label">Sitios activos</div></div>
-        <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-val" style="font-size:1.1rem" id="stat-fecha">-</div><div class="stat-label">Miembro desde</div></div>
-        <div class="stat-card"><span class="stat-icon">🤝</span><div class="stat-val" style="font-size:1.1rem" id="stat-afil">No afiliado</div><div class="stat-label">Programa afiliacion</div></div>
+        <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-val" style="font-size:1rem" id="stat-fecha">-</div><div class="stat-label">Miembro desde</div></div>
+        <div class="stat-card"><span class="stat-icon" id="stat-afil-icon">🤝</span><div class="stat-val" style="font-size:1rem" id="stat-afil">-</div><div class="stat-label">Afiliacion</div></div>
       </div>
       <div id="promo-affilie-zone"></div>
       <div class="panel-card">
         <h3><span class="icon"><i class="fas fa-info-circle"></i></span> Informacion de mi cuenta</h3>
-        <div id="home-info"><div class="loading"><div class="spinner"></div>Cargando...</div></div>
+        <div id="home-info"></div>
       </div>
     </div>
 
-    <div class="panel" id="panel-sites">
+        <div class="panel" id="panel-sites">
       <div class="panel-card">
         <h3><span class="icon"><i class="fas fa-globe"></i></span> Mis sitios web</h3>
         <div id="sites-list"><div class="loading"><div class="spinner"></div>Cargando...</div></div>
@@ -632,7 +660,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 
     <div id="dm-paypal-zone" style="margin-top:1rem;display:none"></div>
     <div id="dm-check-zone" style="margin-top:.8rem">
-      <button onclick="proceedDomainOrder()" style="width:100%;background:var(--gradient);color:var(--black);border:none;padding:.85rem;font-family:var(--ff-d);font-weight:700;font-size:.9rem;border-radius:8px;cursor:pointer;margin-top:.5rem"><i class="fas fa-arrow-right"></i> Continuar al pago — $15/año</button>
+      <button id="dm-proceed-btn" onclick="proceedDomainOrder()" style="width:100%;background:var(--gradient);color:var(--black);border:none;padding:.85rem;font-family:var(--ff-d);font-weight:700;font-size:.9rem;border-radius:8px;cursor:pointer;margin-top:.5rem"><i class="fas fa-arrow-right"></i> Continuar al pago — $15/año</button>
     </div>
 
     <div id="dm-result" style="display:none;margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.82rem"></div>
@@ -713,6 +741,8 @@ function showAdminLogin() {
 
 /* ===== LOGIN / SIGNUP / ADMIN LOGIN ===== */
 async function doLogin() {
+  var lmsg = document.getElementById('l-msg');
+  if (lmsg) lmsg.className = 'msg-box';
   const email = document.getElementById('l-email').value.trim();
   const pass  = document.getElementById('l-pass').value.trim();
   const msg   = document.getElementById('l-msg');
@@ -791,7 +821,11 @@ async function loadDashboard() {
   document.getElementById('page-dashboard').classList.add('active');
   document.getElementById('wa-float').style.display = 'flex';
 
-  document.getElementById('sb-name').textContent = currentUser.nom || '-';
+  // Set display name
+  var prenom = (currentUser.nom || currentUser.email || 'Cliente').split(' ')[0];
+  document.getElementById('sb-name').textContent = prenom;
+  var homeUser = document.getElementById('home-user-name');
+  if (homeUser) homeUser.textContent = prenom;
 
   if (isAdmin) {
     document.getElementById('sb-role').textContent = 'ADMINISTRADOR';
@@ -799,7 +833,13 @@ async function loadDashboard() {
     buildAdminNav();
     showPanel('admin-home');
   } else {
-    // Détecter le(s) rôle(s) du compte : a-t-il des sites ? est-il affilié ?
+    // 1. Show Inicio IMMEDIATELY - no waiting
+    document.getElementById('sb-role').textContent = 'Cuenta EMINEO';
+    buildClientNav(false, false);
+    buildHomeCards(false, false);
+    showPanel('home');
+
+    // 2. Load data in background
     const [sitesRes, affRes] = await Promise.all([
       api({ action: 'getSites', customer_id: currentUser.customer_id }),
       api({ action: 'getAffilie', customer_id: currentUser.customer_id })
@@ -808,35 +848,32 @@ async function loadDashboard() {
     userSites = (sitesRes.ok && sitesRes.sites) ? sitesRes.sites : [];
     const hasAffilie = affRes.ok && affRes.affilie && affRes.affilie.statut === 'actif';
     affilieData = (affRes.ok && affRes.affilie) ? affRes.affilie : null;
+    if (affilieData && affilieData.statut === 'en_attente') affilieData = null;
 
     const badges = [];
     if (userSites.length > 0) badges.push('<span class="sb-badge cliente">CLIENTE</span>');
     if (hasAffilie) badges.push('<span class="sb-badge afiliado">AFILIADO</span>');
     document.getElementById('sb-badges').innerHTML = badges.join(' ');
-    document.getElementById('sb-role').textContent = userSites.length > 0 ? 'Cuenta EMINEO' : 'Cuenta EMINEO';
 
+    // 3. Rebuild nav with real data (sites, affilie)
     buildClientNav(userSites.length > 0, hasAffilie);
-    // Also fix promo — don't show if pending
-    if (affilieData && affilieData.statut === 'en_attente') {
-      affilieData = null; // treat as not affiliate for display purposes
-    }
-
-    // Charger badges de notifications (messages non lus, admisiones nuevas)
     loadMessagesBadge();
     checkAdmisionesBadge();
 
-    showPanel('home');
-    loadHomePanel();
+    // 4. Update home cards with real data
+    buildHomeCards(userSites.length > 0, hasAffilie);
   }
 }
+
+
 
 /* ===== BUILD SIDEBAR NAV — different selon role ===== */
 function buildClientNav(hasSites, hasAffilie) {
   let html = '<p class="nav-section">MI CUENTA</p>';
-  html += navItem('home', 'fa-home', 'Dashboard', true);
+  html += navItem('home', 'fa-home', 'Inicio', true);
+  html += navItem('dashboard', 'fa-chart-bar', 'Dashboard');
   if (hasSites) {
     html += navItem('sites', 'fa-globe', 'Mis Sitios Web');
-    html += navItem('admisiones', 'fa-graduation-cap', 'Admisiones', false, 'admisiones-badge');
   }
   html += navItem('messages', 'fa-comments', 'Mensajes', false, 'msg-badge');
   if (hasSites) html += navItem('factures', 'fa-file-invoice', 'Facturas');
@@ -890,7 +927,8 @@ function showPanel(name) {
   if (navEl) navEl.classList.add('active');
 
   const titles = {
-    home: ['Dashboard', 'Resumen de tu cuenta'],
+    home: ['Inicio', 'Portal EMINEO'],
+    dashboard: ['Dashboard', 'Resumen de tu cuenta'],
     sites: ['Mis Sitios Web', 'Gestiona todos tus sitios'],
     'site-editor': ['Editar sitio', ''],
     messages: ['Mensajes', 'Comunicacion con EMINEO'],
@@ -909,7 +947,7 @@ function showPanel(name) {
     document.getElementById('panel-sub').textContent = titles[name][1];
   }
 
-  // loadHomePanel called by loadDashboard after data is ready
+  if (name === 'dashboard') { loadHomePanel(); }
   if (name === 'sites') loadSitesPanel();
   if (name === 'messages') loadMessages();
   if (name === 'factures') loadFactures();
@@ -938,9 +976,10 @@ function loadHomePanel() {
   if (elSites) elSites.textContent = userSites.length;
   if (elActivos) elActivos.textContent = sitesActifs;
   if (elFecha) elFecha.textContent = _fmtDate(u.date_inscription) || '-';
-  if (elAfil) { elAfil.textContent = affilieData ? 'Afiliado' : 'No afiliado'; elAfil.parentElement.querySelector('.stat-icon').textContent = affilieData ? '💰' : '🤝'; }
+  if (elAfil) { elAfil.textContent = affilieData ? 'Afiliado' : 'No afiliado'; var afilIcon = document.getElementById('stat-afil-icon'); if(afilIcon) afilIcon.textContent = affilieData ? '💰' : '🤝'; }
 
-  const alertZone = document.getElementById('alert-zone');
+  const alertZone = document.getElementById('alert-zone-dash') || document.getElementById('alert-zone');
+  if (!alertZone) return;
   alertZone.innerHTML = '';
   if (hasSites) {
     const pendientes = userSites.filter(s => s.statut === 'en_attente').length;
@@ -960,6 +999,7 @@ function loadHomePanel() {
 
   // Promo devenir affilié — visible seulement si pas déjà affilié
   const promoZone = document.getElementById('promo-affilie-zone');
+  if (!promoZone) return;
   if (!affilieData) {
     promoZone.innerHTML = `
       <div class="promo-card">
@@ -973,7 +1013,9 @@ function loadHomePanel() {
     promoZone.innerHTML = '';
   }
 
-  document.getElementById('home-info').innerHTML = `
+  const homeInfo = document.getElementById('home-info');
+  if (!homeInfo) return;
+  homeInfo.innerHTML = `
     <div class="info-row"><span class="info-label">Nombre</span><span class="info-val">${u.nom||'-'}</span></div>
     <div class="info-row"><span class="info-label">Email</span><span class="info-val">${u.email||'-'}</span></div>
     <div class="info-row"><span class="info-label">WhatsApp</span><span class="info-val">${u.whatsapp||'-'}</span></div>
@@ -989,7 +1031,6 @@ async function requestAffiliation(e) {
   const res = await api({ action: 'requestAffiliation', customer_id: currentUser.customer_id });
   if (res.ok) {
     alert('¡Solicitud enviada! Te contactaremos pronto.');
-    loadHomePanel();
   } else {
     alert('Error: ' + (res.error || 'Intentalo de nuevo.'));
     btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
@@ -1089,6 +1130,130 @@ function copyAffLink() {
 }
 
 /* ===== ADMIN: HOME / RESUMEN ===== */
+async function loadMessages() {
+  const res = await api({ action: 'getMessages', customer_id: currentUser.customer_id });
+  const container = document.getElementById('msg-thread-container');
+  if (!res.ok || !res.messages || res.messages.length === 0) {
+    container.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,.25);font-size:.8rem;padding:1rem">No tienes mensajes aun.</p>';
+  } else {
+    container.innerHTML = res.messages.map(m => `
+      <div class="msg-bubble client">
+        <div class="msg-text">${m.message}</div>
+        <div class="msg-date">${m.date}</div>
+        ${m.reponse ? `<div class="msg-reponse"><strong style="color:var(--cyan)">EMINEO:</strong> ${m.reponse}</div>` : ''}
+      </div>`).join('');
+    container.scrollTop = container.scrollHeight;
+  }
+  // Marquer comme lu visuellement (le badge se recalculera au prochain login)
+  document.getElementById('msg-badge').style.display = 'none';
+}
+
+async function loadFactures() {
+  const res = await api({ action: 'getFactures', customer_id: currentUser.customer_id });
+  const container = document.getElementById('factures-content');
+  if (!res.ok || !res.factures || res.factures.length === 0) {
+    container.innerHTML = '<p class="no-data">No hay facturas registradas aun.</p>'; return;
+  }
+  container.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Descripcion</th><th>Monto</th><th>Estado</th></tr></thead><tbody>
+    ${res.factures.map(f => `<tr><td>${f.date}</td><td>${f.description}</td><td><strong>${f.montant}</strong></td><td><span class="badge ${f.statut==='pagado'?'paye':'impaye'}">${f.statut}</span></td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+
+async function loadAdmisionesPanel() {
+  const res = await api({ action: 'getAdmisiones', customer_id: currentUser.customer_id });
+  const container = document.getElementById('admisiones-list');
+  if (!res.ok || !res.admisiones || res.admisiones.length === 0) {
+    container.innerHTML = '<p class="no-data">No hay solicitudes todavia.</p>'; return;
+  }
+  container.innerHTML = `<div class="site-cards">${res.admisiones.map(a => `
+    <div class="client-row">
+      <div class="client-row-top">
+        <div class="client-name">${a.nombre} <span class="badge ${a.statut}">${a.statut==='nuevo'?'Nuevo':'Tratado'}</span></div>
+      </div>
+      <div class="client-details">${a.email} · ${a.whatsapp||'-'} · Programa: <strong>${a.programa||'-'}</strong></div>
+      <div class="client-details" style="margin-top:.3rem">${a.mensaje||''}</div>
+      <div class="client-details" style="margin-top:.2rem">${_fmtDate(a.fecha)}</div>
+      ${a.statut==='nuevo' ? `<button class="btn-sm activate" style="margin-top:.6rem" onclick="markAdmisionTratada(${a.row})">Marcar tratada</button>` : ''}
+    </div>`).join('')}</div>`;
+  document.getElementById('admisiones-badge').style.display = 'none';
+}
+
+async function loadAffiliePanel() {
+  const res = await api({ action: 'getAffilie', customer_id: currentUser.customer_id });
+  const pendingZone = document.getElementById('aff-pending-zone');
+
+  if (!res.ok) {
+    pendingZone.innerHTML = `<div class="alert-banner info"><i class="fas fa-info-circle"></i><div>No tienes una cuenta de afiliado todavia. Vuelve al Dashboard para postular.</div></div>`;
+    document.getElementById('aff-stats').innerHTML = '';
+    document.getElementById('aff-clients-list').innerHTML = '';
+    document.getElementById('aff-commission-list').innerHTML = '';
+    return;
+  }
+
+  if (res.pending) {
+    pendingZone.innerHTML = `<div class="alert-banner warning"><i class="fas fa-clock"></i><div>Tu solicitud de afiliacion esta en revision. Te notificaremos pronto.</div></div>`;
+    document.getElementById('aff-stats').innerHTML = '';
+    document.getElementById('aff-clients-list').innerHTML = '<p class="no-data">Disponible una vez aprobada tu solicitud.</p>';
+    document.getElementById('aff-commission-list').innerHTML = '';
+    return;
+  }
+
+  pendingZone.innerHTML = '';
+  affilieData = res.affilie;
+  const code = affilieData.code || '-';
+  const affLink = SITE_URL + '?ref=' + code;
+
+  document.getElementById('aff-stats').innerHTML = `
+    <div class="stat-card"><span class="stat-icon">🔗</span><div class="stat-val" style="font-size:1.3rem">${code}</div><div class="stat-label">Mi codigo</div></div>
+    <div class="stat-card"><span class="stat-icon">👥</span><div class="stat-val">${affilieData.nb_clients||0}</div><div class="stat-label">Clientes activos</div></div>
+    <div class="stat-card"><span class="stat-icon">💰</span><div class="stat-val">${affilieData.commission_due||0}$</div><div class="stat-label">Comision pendiente</div></div>
+  `;
+  document.getElementById('aff-code-inline').textContent = code;
+  document.getElementById('aff-link-zone').innerHTML = `
+    <div style="padding:1rem;background:rgba(94,204,74,.06);border:1px solid rgba(94,204,74,.15);border-radius:10px">
+      <p style="font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:.6rem">Link directo para compartir:</p>
+      <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+        <code id="aff-link-text" style="font-size:.75rem;color:var(--cyan);background:rgba(41,196,224,.08);padding:.4rem .7rem;border-radius:6px;flex:1">${affLink}</code>
+        <button onclick="copyAffLink()" style="background:var(--gradient);color:var(--black);border:none;padding:.4rem .9rem;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer">Copiar</button>
+      </div>
+    </div>`;
+
+  if (!res.clients || res.clients.length === 0) {
+    document.getElementById('aff-clients-list').innerHTML = '<p class="no-data">Aun no has traido clientes. ¡Comparte tu codigo!</p>';
+  } else {
+    document.getElementById('aff-clients-list').innerHTML = `<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Pack</th><th>Estado</th><th>Fecha</th></tr></thead><tbody>
+      ${res.clients.map(c => `<tr><td>${c.nom}</td><td>${c.pack}</td><td><span class="badge ${c.statut}">${_statutLabel(c.statut)}</span></td><td>${_fmtDate(c.date_inscription)}</td></tr>`).join('')}
+    </tbody></table></div>`;
+  }
+
+  const commDue = parseFloat(affilieData.commission_due || 0);
+  const commPaid = parseFloat(affilieData.commission_payee || 0);
+  document.getElementById('aff-commission-list').innerHTML = `<div class="table-wrap"><table><thead><tr><th>Tipo</th><th>Monto</th></tr></thead><tbody>
+    <tr><td>Comision acumulada</td><td><strong>${commDue}$</strong></td></tr>
+    <tr><td>Total comisiones pagadas</td><td><strong>${commPaid}$</strong></td></tr>
+  </tbody></table></div>`;
+
+  const withdrawZone = document.getElementById('withdrawal-zone');
+  if (commDue >= 100) {
+    withdrawZone.innerHTML = `<div style="padding:1.2rem;background:rgba(94,204,74,.08);border:1px solid rgba(94,204,74,.25);border-radius:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <div><p style="font-family:var(--ff-d);font-weight:700;color:var(--green)">🎉 Puedes solicitar un retiro</p><p style="font-size:.78rem;color:rgba(255,255,255,.45)">${commDue}$ disponibles. Minimo: 100$.</p></div>
+      <a href="https://wa.me/56994161742?text=Hola%20EMINEO%2C%20quiero%20retirar%20mi%20comision%20(${commDue}%24).%20Codigo%3A%20${code}" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;background:#25D366;color:#000;padding:.7rem 1.4rem;border-radius:8px;font-weight:700;font-size:.8rem;text-decoration:none"><i class="fab fa-whatsapp"></i> Solicitar retiro</a>
+    </div>`;
+  } else {
+    const remaining = 100 - commDue;
+    const progress = Math.min((commDue / 100) * 100, 100);
+    withdrawZone.innerHTML = `<div style="padding:1.2rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px">
+      <p style="font-size:.82rem;color:rgba(255,255,255,.5);margin-bottom:.6rem">Progreso hacia el retiro minimo (100$):</p>
+      <div style="background:rgba(255,255,255,.08);border-radius:99px;height:8px;overflow:hidden;margin-bottom:.5rem"><div style="height:100%;width:${progress}%;background:var(--gradient);border-radius:99px"></div></div>
+      <p style="font-size:.75rem;color:rgba(255,255,255,.35)"><strong style="color:var(--green)">${commDue}$</strong> acumulados — faltan <strong style="color:var(--cyan)">${remaining}$</strong></p>
+    </div>`;
+  }
+}
+
+function loadAndShowDashboard() {
+  showPanel('dashboard');
+}
+
 function loadConfigPanel() {
   // Juste vider les champs au chargement pour securite
   ['cfg-pass-old','cfg-pass-new','cfg-pass-confirm','cfg-email-new','cfg-email-pass'].forEach(function(id) {
@@ -1525,6 +1690,8 @@ function proceedDomainOrder() {
   var ext = document.getElementById('dm-ext').value;
   var msg = document.getElementById('dm-msg');
   if (!domain) { showMsg(msg, 'Por favor ingresa el nombre de dominio.', 'err'); return; }
+  var btn = document.getElementById('dm-proceed-btn');
+  if (btn) btn.style.display = 'none';
   prepareDomainPayment(domain + ext);
 }
 
@@ -1551,8 +1718,90 @@ async function saveEditor() {
   }
 }
 
+function goPanel(name) { showPanel(name); }
+function goDashboard() { showPanel('dashboard'); loadHomePanel(); }
+
+function buildHomeCards(hasSites, hasAffilie) {
+  var prenom = (currentUser.nom || 'Cliente').split(' ')[0];
+  var nameEl = document.getElementById('home-user-name');
+  if (nameEl) nameEl.textContent = prenom;
+
+  var anuncioEl = document.getElementById('home-anuncio');
+  if (anuncioEl) {
+    var aHtml = '';
+    if (hasSites && !hasAffilie) {
+      aHtml = '<div class="home-anuncio">';
+      aHtml += '<div class="anuncio-icon">&#x1F4B0;</div>';
+      aHtml += '<div><h4>Gana dinero con EMINEO</h4>';
+      aHtml += '<p>Recomienda EMINEO y gana <strong>$3/mes</strong> por cada cliente activo &mdash; y <strong>$5/mes</strong> si superas 50 clientes.</p>';
+      aHtml += '<button class="btn-anuncio" data-go="affilie">Ver programa de afiliacion</button>';
+      aHtml += '</div></div>';
+    } else if (hasAffilie && !hasSites) {
+      aHtml = '<div class="home-anuncio">';
+      aHtml += '<div class="anuncio-icon">&#x1F310;</div>';
+      aHtml += '<div><h4>Crea tu propio sitio web EMINEO</h4>';
+      aHtml += '<p>Como afiliado, usa tu codigo para el <strong>1er mes gratis</strong> y <strong>$15/mes</strong> en lugar de $20/mes.</p>';
+      aHtml += '<p style="margin-top:.4rem">Ademas, acceso automatico al <strong>Marketplace Diaforama</strong> con precios de proveedor.</p>';
+      aHtml += '<button class="btn-anuncio" data-go="messages">Solicitar mi sitio</button>';
+      aHtml += '</div></div>';
+    }
+    anuncioEl.innerHTML = aHtml;
+  }
+
+  var cardsEl = document.getElementById('home-cards');
+  if (!cardsEl) return;
+
+  var cards = [
+    {panel: 'dashboard', icon: 'fa-chart-pie', title: 'Dashboard', desc: 'Ver estadisticas y resumen', show: true},
+    {panel: 'sites', icon: 'fa-globe', title: 'Mis Sitios Web', desc: 'Gestiona y edita tus sitios', show: hasSites},
+    {panel: 'affilie', icon: 'fa-handshake', title: 'Mi Afiliacion', desc: 'Comisiones y clientes referidos', show: hasAffilie},
+    {panel: 'messages', icon: 'fa-comments', title: 'Mensajes', desc: 'Soporte y comunicacion', show: true},
+    {panel: 'factures', icon: 'fa-file-invoice-dollar', title: 'Facturas', desc: 'Estado de cuenta y pagos', show: true}
+  ];
+
+  var html = '';
+  cards.forEach(function(card) {
+    if (card.show) {
+      html += '<div class="quick-card" data-go="' + card.panel + '">';
+      html += '<i class="fas ' + card.icon + '"></i>';
+      html += '<h4>' + card.title + '</h4>';
+      html += '<p>' + card.desc + '</p>';
+      html += '</div>';
+    }
+  });
+  cardsEl.innerHTML = html;
+
+  // Attach click handlers
+  cardsEl.querySelectorAll('[data-go]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var panel = this.getAttribute('data-go');
+      if (panel === 'dashboard') { showPanel('dashboard'); loadHomePanel(); }
+      else { showPanel(panel); }
+    });
+  });
+
+  // Anuncio buttons
+  var anuncioEl2 = document.getElementById('home-anuncio');
+  if (anuncioEl2) {
+    anuncioEl2.querySelectorAll('[data-go]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        showPanel(this.getAttribute('data-go'));
+      });
+    });
+  }
+}
+
+
+function goPanel(name) { showPanel(name); }
+function goDashboard() { showPanel('dashboard'); loadHomePanel(); }
+
+
+
+
 function doLogout() {
   currentUser = null; isAdmin = false; adminData = null; affilieData = null; userSites = [];
+  var lmsg = document.getElementById('l-msg');
+  if (lmsg) lmsg.className = 'msg-box';
   localStorage.removeItem('emineo_session');
   // Vider tous les champs de connexion
   ['l-email','l-pass','a-email','a-pass','s-email','s-pass'].forEach(function(id) {
