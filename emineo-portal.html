@@ -833,13 +833,14 @@ async function loadDashboard() {
     buildAdminNav();
     showPanel('admin-home');
   } else {
-    // 1. Show Inicio IMMEDIATELY - no waiting
+    // 1. Show Inicio immediately - only welcome text, no cards yet
     document.getElementById('sb-role').textContent = 'Cuenta EMINEO';
     buildClientNav(false, false);
-    buildHomeCards(false, false);
+    var cardsEl = document.getElementById('home-cards');
+    if (cardsEl) cardsEl.innerHTML = '<div style="text-align:center;padding:1rem;color:rgba(255,255,255,.3);font-size:.85rem"><i class="fas fa-spinner fa-spin"></i> Cargando...</div>';
     showPanel('home');
 
-    // 2. Load data in background
+    // 2. Load data
     const [sitesRes, affRes] = await Promise.all([
       api({ action: 'getSites', customer_id: currentUser.customer_id }),
       api({ action: 'getAffilie', customer_id: currentUser.customer_id })
@@ -855,13 +856,11 @@ async function loadDashboard() {
     if (hasAffilie) badges.push('<span class="sb-badge afiliado">AFILIADO</span>');
     document.getElementById('sb-badges').innerHTML = badges.join(' ');
 
-    // 3. Rebuild nav with real data (sites, affilie)
+    // 3. Update nav and cards with real data
     buildClientNav(userSites.length > 0, hasAffilie);
+    buildHomeCards(userSites.length > 0, hasAffilie);
     loadMessagesBadge();
     checkAdmisionesBadge();
-
-    // 4. Update home cards with real data
-    buildHomeCards(userSites.length > 0, hasAffilie);
   }
 }
 
@@ -1058,7 +1057,7 @@ async function loadSitesPanel() {
             </div>
           </div>
           <div class="site-card-actions">
-            <button class="btn-sm activate" onclick="openSiteEditor('${s.site_id}')" ${s.statut==='suspendu'?'disabled':''} ><i class="fas fa-edit"></i> Editar</button>
+            ${s.type_site === 'Google Sites' ? `<a href="${s.url_edit || s.url_site || 'https://sites.google.com'}" target="_blank" class="btn-sm activate" style="text-decoration:none"><i class="fas fa-edit"></i> Editar</a>` : `<button class="btn-sm activate" onclick="openSiteEditor('${s.site_id}')" ${s.statut==='suspendu'?'disabled':''} ><i class="fas fa-edit"></i> Editar</button>`}
             <button class="btn-sm" onclick="openDomainModal('${s.site_id}','${s.nom_site}')" style="background:rgba(94,204,74,.08);color:var(--green);border:1px solid rgba(94,204,74,.2)"><i class="fas fa-globe"></i> Obtener dominio</button>
             ${s.url_site ? `<a href="${s.url_site}" target="_blank" class="btn-sm" style="background:rgba(41,196,224,.08);color:var(--cyan);border:1px solid rgba(41,196,224,.2)"><i class="fas fa-external-link-alt"></i> Ver sitio</a>` : ''}
           </div>
@@ -1718,85 +1717,62 @@ async function saveEditor() {
   }
 }
 
-function goPanel(name) { showPanel(name); }
-function goDashboard() { showPanel('dashboard'); loadHomePanel(); }
+
+
+
+
+
 
 function buildHomeCards(hasSites, hasAffilie) {
+  // Update name
   var prenom = (currentUser.nom || 'Cliente').split(' ')[0];
   var nameEl = document.getElementById('home-user-name');
   if (nameEl) nameEl.textContent = prenom;
 
-  var anuncioEl = document.getElementById('home-anuncio');
-  if (anuncioEl) {
-    var aHtml = '';
-    if (hasSites && !hasAffilie) {
-      aHtml = '<div class="home-anuncio">';
-      aHtml += '<div class="anuncio-icon">&#x1F4B0;</div>';
-      aHtml += '<div><h4>Gana dinero con EMINEO</h4>';
-      aHtml += '<p>Recomienda EMINEO y gana <strong>$3/mes</strong> por cada cliente activo &mdash; y <strong>$5/mes</strong> si superas 50 clientes.</p>';
-      aHtml += '<button class="btn-anuncio" data-go="affilie">Ver programa de afiliacion</button>';
-      aHtml += '</div></div>';
-    } else if (hasAffilie && !hasSites) {
-      aHtml = '<div class="home-anuncio">';
-      aHtml += '<div class="anuncio-icon">&#x1F310;</div>';
-      aHtml += '<div><h4>Crea tu propio sitio web EMINEO</h4>';
-      aHtml += '<p>Como afiliado, usa tu codigo para el <strong>1er mes gratis</strong> y <strong>$15/mes</strong> en lugar de $20/mes.</p>';
-      aHtml += '<p style="margin-top:.4rem">Ademas, acceso automatico al <strong>Marketplace Diaforama</strong> con precios de proveedor.</p>';
-      aHtml += '<button class="btn-anuncio" data-go="messages">Solicitar mi sitio</button>';
-      aHtml += '</div></div>';
+  // Generate cards
+  var cardsEl = document.getElementById('home-cards');
+  if (cardsEl) {
+    var c = '';
+    c += '<div class="quick-card" data-panel="dashboard"><i class="fas fa-chart-pie"></i><h4>Dashboard</h4><p>Ver estadisticas y resumen</p></div>';
+    if (hasSites) {
+      c += '<div class="quick-card" data-panel="sites"><i class="fas fa-globe"></i><h4>Mis Sitios Web</h4><p>Gestiona y edita tus sitios</p></div>';
     }
-    anuncioEl.innerHTML = aHtml;
+    if (hasAffilie) {
+      c += '<div class="quick-card" data-panel="affilie"><i class="fas fa-handshake"></i><h4>Mi Afiliacion</h4><p>Comisiones y clientes referidos</p></div>';
+    }
+    c += '<div class="quick-card" data-panel="messages"><i class="fas fa-comments"></i><h4>Mensajes</h4><p>Soporte y comunicacion</p></div>';
+    c += '<div class="quick-card" data-panel="factures"><i class="fas fa-file-invoice-dollar"></i><h4>Facturas</h4><p>Estado de cuenta y pagos</p></div>';
+    cardsEl.innerHTML = c;
+
+    // Attach click events
+    cardsEl.querySelectorAll('.quick-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        var panel = this.getAttribute('data-panel');
+        if (panel === 'dashboard') { showPanel('dashboard'); loadHomePanel(); }
+        else { showPanel(panel); }
+      });
+    });
   }
 
-  var cardsEl = document.getElementById('home-cards');
-  if (!cardsEl) return;
-
-  var cards = [
-    {panel: 'dashboard', icon: 'fa-chart-pie', title: 'Dashboard', desc: 'Ver estadisticas y resumen', show: true},
-    {panel: 'sites', icon: 'fa-globe', title: 'Mis Sitios Web', desc: 'Gestiona y edita tus sitios', show: hasSites},
-    {panel: 'affilie', icon: 'fa-handshake', title: 'Mi Afiliacion', desc: 'Comisiones y clientes referidos', show: hasAffilie},
-    {panel: 'messages', icon: 'fa-comments', title: 'Mensajes', desc: 'Soporte y comunicacion', show: true},
-    {panel: 'factures', icon: 'fa-file-invoice-dollar', title: 'Facturas', desc: 'Estado de cuenta y pagos', show: true}
-  ];
-
-  var html = '';
-  cards.forEach(function(card) {
-    if (card.show) {
-      html += '<div class="quick-card" data-go="' + card.panel + '">';
-      html += '<i class="fas ' + card.icon + '"></i>';
-      html += '<h4>' + card.title + '</h4>';
-      html += '<p>' + card.desc + '</p>';
-      html += '</div>';
+  // Generate promo banner
+  var promoEl = document.getElementById('home-anuncio');
+  if (promoEl) {
+    if (hasSites && !hasAffilie) {
+      promoEl.innerHTML = '<div class="home-anuncio"><div class="anuncio-icon">&#x1F4B0;</div><div><h4>Gana de $3 a $5/mes con EMINEO</h4><p>Recomienda EMINEO y gana <strong>$3/mes</strong> por cada cliente activo. Si superas los 50 clientes activos, tu comision sube a <strong>$5/mes</strong> por cliente. Sin limite.</p><button class="btn-anuncio" data-panel="affilie">Quiero ser Afiliado</button></div></div>';
+    } else if (hasAffilie && !hasSites) {
+      promoEl.innerHTML = '<div class="home-anuncio"><div class="anuncio-icon">&#x1F310;</div><div><h4>Crea tu propio sitio web EMINEO</h4><p>Como afiliado, usa tu codigo para el <strong>1er mes gratis</strong> y <strong>$15/mes</strong> en lugar de $20/mes. Ademas, acceso automatico al <strong>Marketplace Diaforama</strong> con precios de proveedor.</p><button class="btn-anuncio" data-panel="messages">Solicitar mi sitio</button></div></div>';
+    } else {
+      promoEl.innerHTML = '';
     }
-  });
-  cardsEl.innerHTML = html;
 
-  // Attach click handlers
-  cardsEl.querySelectorAll('[data-go]').forEach(function(el) {
-    el.addEventListener('click', function() {
-      var panel = this.getAttribute('data-go');
-      if (panel === 'dashboard') { showPanel('dashboard'); loadHomePanel(); }
-      else { showPanel(panel); }
-    });
-  });
-
-  // Anuncio buttons
-  var anuncioEl2 = document.getElementById('home-anuncio');
-  if (anuncioEl2) {
-    anuncioEl2.querySelectorAll('[data-go]').forEach(function(el) {
-      el.addEventListener('click', function() {
-        showPanel(this.getAttribute('data-go'));
+    // Attach click events to promo buttons
+    promoEl.querySelectorAll('[data-panel]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        showPanel(this.getAttribute('data-panel'));
       });
     });
   }
 }
-
-
-function goPanel(name) { showPanel(name); }
-function goDashboard() { showPanel('dashboard'); loadHomePanel(); }
-
-
-
 
 function doLogout() {
   currentUser = null; isAdmin = false; adminData = null; affilieData = null; userSites = [];
