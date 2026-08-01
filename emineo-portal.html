@@ -81,7 +81,8 @@ input,select,textarea{font-family:var(--ff-b)}
 .sb-badge.afiliado{background:rgba(94,204,74,.12);color:var(--green);border:1px solid rgba(94,204,74,.25)}
 .sb-badge.admin{background:rgba(224,194,82,.12);color:var(--yellow);border:1px solid rgba(224,194,82,.25)}
 .sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto}
-.nav-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.2rem;font-size:.82rem;color:rgba(255,255,255,.45);cursor:pointer;transition:all .2s;border-left:2px solid transparent;}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.2rem;font-size:.82rem;color:rgba(255,255,255,.45);cursor:pointer;transition:all .2s;border-left:2px solid transparent;animation:navItemFadeIn .35s ease;}
+@keyframes navItemFadeIn{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:translateX(0)}}
 .nav-item:hover{color:var(--white);background:rgba(255,255,255,.04)}
 .nav-item.active{color:var(--green);border-left-color:var(--green);background:rgba(94,204,74,.06)}
 .nav-item .ni{width:16px;text-align:center;font-size:.85rem}
