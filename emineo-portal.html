@@ -292,17 +292,9 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
         <div class="fgrp"><label>Pais *</label><input type="text" id="s-pays" placeholder="Chile, Haiti..."/></div>
       </div>
       <div class="fgrp"><label>Email *</label><input type="email" id="s-email" placeholder="tucorreo@gmail.com"/></div>
-      <div class="fgrp"><label>WhatsApp</label><input type="tel" id="s-wa" placeholder="+1 234 567 890"/></div>
-      <div class="frow">
-        <div class="fgrp"><label>Pack *</label>
-          <select id="s-pack"><option value="">- Seleccionar -</option><option>Starter</option><option>Business</option><option>Premium</option><option>Sur Medida</option></select>
-        </div>
-        <div class="fgrp"><label>Abonnement *</label>
-          <select id="s-abo"><option value="">- Seleccionar -</option><option>Autonomo</option><option>Mantenimiento</option><option>Gerencia</option></select>
-        </div>
-      </div>
-      <div class="fgrp"><label>Tipo de sitio</label>
-        <select id="s-tipo"><option value="">- Seleccionar -</option><option>Vitrina</option><option>Portfolio</option><option>E-commerce</option><option>Universidad</option><option>Escuela</option></select>
+      <div class="fgrp"><label>WhatsApp *</label><input type="tel" id="s-wa" placeholder="+1 234 567 890"/></div>
+      <div class="fgrp"><label>Tipo de sitio *</label>
+        <select id="s-tipo"><option value="">- Seleccionar -</option><option>Sitio simple (vitrina/portfolio)</option><option>Tienda online</option><option>Institucion (universidad/escuela)</option><option>Personalizado (a medida)</option></select>
       </div>
       <div class="fgrp"><label>Contrasena *</label>
         <div class="pwd-wrap"><input type="password" id="s-pass" placeholder="Minimo 6 caracteres"/>
@@ -771,14 +763,13 @@ async function doSignup() {
   const email= document.getElementById('s-email').value.trim();
   const wa   = document.getElementById('s-wa').value.trim();
   const pays = document.getElementById('s-pays').value.trim();
-  const pack = document.getElementById('s-pack').value;
-  const abo  = document.getElementById('s-abo').value;
   const tipo = document.getElementById('s-tipo').value;
   const pass = document.getElementById('s-pass').value.trim();
   const code = document.getElementById('s-code').value.trim();
   const msg  = document.getElementById('s-msg');
+  const btn  = document.querySelector('#signup-form .btn-submit');
 
-  if (!nom || !email || !pass || !pack || !abo) {
+  if (!nom || !email || !pass || !pays || !tipo || !wa) {
     showMsg(msg, 'Los campos obligatorios (*) son requeridos.', 'err'); return;
   }
   
@@ -789,12 +780,10 @@ async function doSignup() {
     const msgEl = document.getElementById('s-msg');
     msgEl.innerHTML = 'Tu email no está registrado en nuestro sistema. Completa primero el formulario de pedido <a href="' + SITE_URL + '/#contact" target="_blank" style="color:var(--cyan);font-weight:600;text-decoration:underline">aquí</a> para comenzar.';
     msgEl.className = 'msg-box err show';
-    btn.disabled = false; btn.textContent = 'Crear cuenta';
     return;
   }
-  const btn = document.querySelector('#signup-form .btn-submit');
   btn.disabled = true; btn.textContent = 'Creando cuenta...';
-  const res = await api({ action: 'signup', nom, email, whatsapp: wa, pays, pack, abonnement: abo, type_site: tipo, password: pass, code_affilie: code });
+  const res = await api({ action: 'signup', nom, email, whatsapp: wa, pays, type_site: tipo, password: pass, code_affilie: code });
   btn.disabled = false; btn.textContent = 'Crear cuenta';
 
   if (res.ok) {
@@ -1057,7 +1046,7 @@ async function loadSitesPanel() {
           <div class="site-card-top">
             <div>
               <div class="site-card-name">${_siteIcon(s.type_site)} ${s.nom_site} <span class="badge ${s.statut}">${_statutLabel(s.statut)}</span></div>
-              <div class="site-card-meta">${s.type_site||'-'} · Pack ${s.pack||'-'} · ${s.abonnement||'Sin abonnement'}</div>
+              <div class="site-card-meta">${s.type_site||'-'}</div>
               ${!s.url_site ? '<div class="site-card-meta" style="color:rgba(255,255,255,.3);margin-top:.4rem">En preparacion...</div>' : ''}
             </div>
           </div>
@@ -1825,7 +1814,11 @@ function toggleSidebar() { document.getElementById('sidebar').classList.toggle('
 // Restore session on page load/refresh
 (function restoreSession() {
   var saved = localStorage.getItem('emineo_session');
-  if (!saved) return;
+  if (!saved) {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'signup') showLoginTab('signup');
+    return;
+  }
   try {
     var data = JSON.parse(saved);
     if (data && data.user) {
