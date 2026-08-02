@@ -255,6 +255,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 .home-anuncio p{font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.5}
 .home-anuncio .btn-anuncio{margin-top:.6rem;display:inline-flex;align-items:center;gap:.4rem;background:var(--gradient);color:var(--black);padding:.45rem 1rem;border-radius:7px;font-size:.78rem;font-weight:700;cursor:pointer;border:none}
 </style>
+<script src="https://www.paypal.com/sdk/js?client-id=AePduQTynsMmbyf-hSh__cGtVYr1zA2Sl-JqxL9q-qkJJdghMjwRPXXhnP7B1IC0EUMVTqOneibVCWmJ&vault=true&intent=subscription"></script>
 </head>
 <body>
 
@@ -287,19 +288,31 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
     <div id="signup-form" style="display:none">
       <p class="form-title">Crear cuenta</p>
       <p class="form-sub">Accede despues de confirmar tu pedido con EMINEO.</p>
-      <div class="frow">
-        <div class="fgrp"><label>Nombre *</label><input type="text" id="s-nom" placeholder="Tu nombre"/></div>
-        <div class="fgrp"><label>Pais *</label><input type="text" id="s-pays" placeholder="Chile, Haiti..."/></div>
+      <div id="signup-step1">
+        <div class="frow">
+          <div class="fgrp"><label>Nombre *</label><input type="text" id="s-nom" placeholder="Tu nombre"/></div>
+          <div class="fgrp"><label>Pais *</label><input type="text" id="s-pays" placeholder="Chile, Haiti..."/></div>
+        </div>
+        <div class="fgrp"><label>Email *</label><input type="email" id="s-email" placeholder="tucorreo@gmail.com"/></div>
+        <div class="fgrp"><label>WhatsApp</label><input type="tel" id="s-wa" placeholder="+1 234 567 890"/></div>
+        <div class="fgrp"><label>Contrasena *</label>
+          <div class="pwd-wrap"><input type="password" id="s-pass" placeholder="Minimo 6 caracteres"/>
+          <button type="button" class="pwd-toggle" onclick="togglePwd('s-pass',this)"><i class="fas fa-eye"></i></button></div>
+        </div>
+        <div class="fgrp"><label>Codigo afiliado (opcional)</label><input type="text" id="s-code" placeholder="CODIGO123" oninput="updateSignupPrice()"/></div>
+        <button class="btn-submit" onclick="goToSignupPayment()">Continuar al pago →</button>
+        <div class="msg-box" id="s-msg"></div>
       </div>
-      <div class="fgrp"><label>Email *</label><input type="email" id="s-email" placeholder="tucorreo@gmail.com"/></div>
-      <div class="fgrp"><label>WhatsApp</label><input type="tel" id="s-wa" placeholder="+1 234 567 890"/></div>
-      <div class="fgrp"><label>Contrasena *</label>
-        <div class="pwd-wrap"><input type="password" id="s-pass" placeholder="Minimo 6 caracteres"/>
-        <button type="button" class="pwd-toggle" onclick="togglePwd('s-pass',this)"><i class="fas fa-eye"></i></button></div>
+      <div id="signup-step2" style="display:none">
+        <div style="background:rgba(94,204,74,.06);border:1px solid rgba(94,204,74,.2);border-radius:10px;padding:1rem;margin-bottom:1.2rem;text-align:center">
+          <p style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.3rem">Plan mensual</p>
+          <p id="signup-price-label" style="font-family:var(--ff-d);font-size:1.8rem;font-weight:700;color:var(--green)">20$/mes</p>
+        </div>
+        <div id="signup-paypal-btn"></div>
+        <p style="font-size:.7rem;color:rgba(255,255,255,.3);text-align:center;margin-top:.8rem">Pago seguro via PayPal. Puedes cancelar en cualquier momento.</p>
+        <button type="button" onclick="backToSignupStep1()" style="width:100%;background:none;border:none;color:rgba(255,255,255,.4);font-size:.75rem;margin-top:1rem;cursor:pointer">← Volver</button>
+        <div class="msg-box" id="s-msg2"></div>
       </div>
-      <div class="fgrp"><label>Codigo afiliado (opcional)</label><input type="text" id="s-code" placeholder="CODIGO123"/></div>
-      <button class="btn-submit" onclick="doSignup()">Crear cuenta</button>
-      <div class="msg-box" id="s-msg"></div>
     </div>
 
     <div id="admin-login-form" style="display:none">
@@ -761,28 +774,96 @@ async function doLogin() {
   else showMsg(msg, res.error || 'Error de conexion.', 'err');
 }
 
-async function doSignup() {
+const SIGNUP_PLANS = {
+  normal:  'P-9PK70578M66394516NI4VJJQ', // 20$/mes
+  affilie: 'P-3X5884305Y135272JNJA6B3Y'  // 15$/mes avec code affilié
+};
+let signupPaypalRendered = false;
+
+function updateSignupPrice() {
+  const hasCode = document.getElementById('s-code').value.trim().length >= 4;
+  const label = document.getElementById('signup-price-label');
+  if (label) label.textContent = hasCode ? '15$/mes' : '20$/mes';
+}
+
+function goToSignupPayment() {
+  const nom  = document.getElementById('s-nom').value.trim();
+  const email= document.getElementById('s-email').value.trim();
+  const pays = document.getElementById('s-pays').value.trim();
+  const pass = document.getElementById('s-pass').value.trim();
+  const msg  = document.getElementById('s-msg');
+
+  if (!nom || !email || !pass || !pays) {
+    showMsg(msg, 'Los campos obligatorios (*) son requeridos.', 'err'); return;
+  }
+  if (pass.length < 6) {
+    showMsg(msg, 'La contrasena debe tener minimo 6 caracteres.', 'err'); return;
+  }
+
+  document.getElementById('signup-step1').style.display = 'none';
+  document.getElementById('signup-step2').style.display = 'block';
+  updateSignupPrice();
+  renderSignupPayPal();
+}
+
+function backToSignupStep1() {
+  document.getElementById('signup-step2').style.display = 'none';
+  document.getElementById('signup-step1').style.display = 'block';
+  signupPaypalRendered = false;
+  document.getElementById('signup-paypal-btn').innerHTML = '';
+  document.getElementById('signup-paypal-btn').style.display = 'block';
+}
+
+function renderSignupPayPal() {
+  if (signupPaypalRendered) return;
+  signupPaypalRendered = true;
+
+  const code = document.getElementById('s-code').value.trim();
+  const planId = code.length >= 4 ? SIGNUP_PLANS.affilie : SIGNUP_PLANS.normal;
+
+  if (typeof paypal === 'undefined') {
+    document.getElementById('signup-paypal-btn').innerHTML = '<p style="color:#e05252;font-size:.8rem;text-align:center">Error cargando PayPal. Recarga la pagina.</p>';
+    return;
+  }
+
+  paypal.Buttons({
+    style: { shape: 'rect', color: 'gold', layout: 'vertical', label: 'subscribe' },
+    createSubscription: function(data, actions) {
+      return actions.subscription.create({ plan_id: planId });
+    },
+    onApprove: function(data, actions) {
+      finishSignup(data.subscriptionID);
+    }
+  }).render('#signup-paypal-btn');
+}
+
+async function finishSignup(subscriptionId) {
   const nom  = document.getElementById('s-nom').value.trim();
   const email= document.getElementById('s-email').value.trim();
   const wa   = document.getElementById('s-wa').value.trim();
   const pays = document.getElementById('s-pays').value.trim();
   const pass = document.getElementById('s-pass').value.trim();
   const code = document.getElementById('s-code').value.trim();
-  const msg  = document.getElementById('s-msg');
-  const btn  = document.querySelector('#signup-form .btn-submit');
+  const msg2 = document.getElementById('s-msg2');
 
-  if (!nom || !email || !pass || !pays) {
-    showMsg(msg, 'Los campos obligatorios (*) son requeridos.', 'err'); return;
-  }
+  document.getElementById('signup-paypal-btn').style.display = 'none';
+  showMsg(msg2, 'Pago recibido. Creando tu cuenta...', 'ok');
 
-  btn.disabled = true; btn.textContent = 'Creando cuenta...';
-  const res = await api({ action: 'signup', nom, email, whatsapp: wa, pays, password: pass, code_affilie: code });
-  btn.disabled = false; btn.textContent = 'Crear cuenta';
+  const res = await api({ action: 'signup', nom, email, whatsapp: wa, pays, password: pass, code_affilie: code, subscription_id: subscriptionId });
 
   if (res.ok) {
-    showMsg(msg, '¡Cuenta creada! Revisa tu email.', 'ok');
-    setTimeout(() => showLoginTab('login'), 2500);
-  } else showMsg(msg, res.error || 'Error al crear cuenta.', 'err');
+    showMsg(msg2, '¡Cuenta creada! Redirigiendo a tu Dashboard...', 'ok');
+    const loginRes = await api({ action: 'login', email, password: pass });
+    if (loginRes.ok) {
+      currentUser = loginRes; isAdmin = false;
+      localStorage.setItem('emineo_session', JSON.stringify({ user: loginRes, isAdmin: false }));
+      setTimeout(() => loadDashboard(), 1200);
+    } else {
+      setTimeout(() => showLoginTab('login'), 1800);
+    }
+  } else {
+    showMsg(msg2, res.error || 'Error al crear cuenta. Tu pago fue procesado, contacta soporte por WhatsApp.', 'err');
+  }
 }
 
 async function doAdminLogin() {
