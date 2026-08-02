@@ -292,10 +292,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
         <div class="fgrp"><label>Pais *</label><input type="text" id="s-pays" placeholder="Chile, Haiti..."/></div>
       </div>
       <div class="fgrp"><label>Email *</label><input type="email" id="s-email" placeholder="tucorreo@gmail.com"/></div>
-      <div class="fgrp"><label>WhatsApp *</label><input type="tel" id="s-wa" placeholder="+1 234 567 890"/></div>
-      <div class="fgrp"><label>Tipo de sitio *</label>
-        <select id="s-tipo"><option value="">- Seleccionar -</option><option>Sitio simple (vitrina/portfolio)</option><option>Tienda online</option><option>Institucion (universidad/escuela)</option><option>Personalizado (a medida)</option></select>
-      </div>
+      <div class="fgrp"><label>WhatsApp</label><input type="tel" id="s-wa" placeholder="+1 234 567 890"/></div>
       <div class="fgrp"><label>Contrasena *</label>
         <div class="pwd-wrap"><input type="password" id="s-pass" placeholder="Minimo 6 caracteres"/>
         <button type="button" class="pwd-toggle" onclick="togglePwd('s-pass',this)"><i class="fas fa-eye"></i></button></div>
@@ -673,10 +670,16 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 <div class="modal-ov" id="new-site-modal">
   <div class="modal-box">
     <p class="modal-title">Solicitar un nuevo sitio</p>
-    <p style="font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:1rem">Seras redirigido al sitio EMINEO para elegir tu pack y completar el pago.</p>
+    <p style="font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:1rem">Cuentanos que necesitas. Te contactaremos por WhatsApp en menos de 24h para definir los detalles.</p>
+    <div class="fgrp"><label>Tipo de sitio *</label>
+      <select id="nsr-tipo"><option value="">- Seleccionar -</option><option>Sitio simple (vitrina/portfolio)</option><option>Tienda online</option><option>Institucion (universidad/escuela)</option><option>Personalizado (a medida)</option></select>
+    </div>
+    <div class="fgrp"><label>WhatsApp *</label><input type="tel" id="nsr-wa" placeholder="+1 234 567 890"/></div>
+    <div class="fgrp"><label>Descripcion de tu proyecto *</label><textarea id="nsr-desc" placeholder="Cuentanos tu proyecto..." style="min-height:80px"></textarea></div>
+    <div class="msg-box" id="nsr-msg"></div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal('new-site-modal')">Cancelar</button>
-      <button class="btn-save" onclick="goToNewSiteForm()">Continuar -></button>
+      <button class="btn-save" id="nsr-submit-btn" onclick="submitNewSiteRequest()">Enviar solicitud</button>
     </div>
   </div>
 </div>
@@ -763,27 +766,17 @@ async function doSignup() {
   const email= document.getElementById('s-email').value.trim();
   const wa   = document.getElementById('s-wa').value.trim();
   const pays = document.getElementById('s-pays').value.trim();
-  const tipo = document.getElementById('s-tipo').value;
   const pass = document.getElementById('s-pass').value.trim();
   const code = document.getElementById('s-code').value.trim();
   const msg  = document.getElementById('s-msg');
   const btn  = document.querySelector('#signup-form .btn-submit');
 
-  if (!nom || !email || !pass || !pays || !tipo || !wa) {
+  if (!nom || !email || !pass || !pays) {
     showMsg(msg, 'Los campos obligatorios (*) son requeridos.', 'err'); return;
   }
-  
-  // Vérifier si l'email est enregistré dans le système (a soumis une commande)
-  const checkRes = await api({ action: 'checkEmailAuthorized', email: email });
-  if (!checkRes.ok) {
-    // Email pas trouvé dans le système
-    const msgEl = document.getElementById('s-msg');
-    msgEl.innerHTML = 'Tu email no está registrado en nuestro sistema. Completa primero el formulario de pedido <a href="' + SITE_URL + '/#contact" target="_blank" style="color:var(--cyan);font-weight:600;text-decoration:underline">aquí</a> para comenzar.';
-    msgEl.className = 'msg-box err show';
-    return;
-  }
+
   btn.disabled = true; btn.textContent = 'Creando cuenta...';
-  const res = await api({ action: 'signup', nom, email, whatsapp: wa, pays, type_site: tipo, password: pass, code_affilie: code });
+  const res = await api({ action: 'signup', nom, email, whatsapp: wa, pays, password: pass, code_affilie: code });
   btn.disabled = false; btn.textContent = 'Crear cuenta';
 
   if (res.ok) {
@@ -1077,9 +1070,25 @@ function _statutLabel(s) {
   return s || '-';
 }
 
-function goToNewSiteForm() {
-  closeModal('new-site-modal');
-  window.open(SITE_URL + '/#contact?email=' + encodeURIComponent(currentUser.email), '_blank');
+async function submitNewSiteRequest() {
+  var tipo = document.getElementById('nsr-tipo').value;
+  var wa   = document.getElementById('nsr-wa').value.trim();
+  var desc = document.getElementById('nsr-desc').value.trim();
+  var msg  = document.getElementById('nsr-msg');
+  var btn  = document.getElementById('nsr-submit-btn');
+
+  if (!tipo || !wa || !desc) {
+    showMsg(msg, 'Todos los campos son requeridos.', 'err'); return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Enviando...';
+  const res = await api({ action: 'newSiteRequest', customer_id: currentUser.customer_id, type_site: tipo, whatsapp: wa, description: desc });
+  btn.disabled = false; btn.textContent = 'Enviar solicitud';
+
+  if (res.ok) {
+    showMsg(msg, '¡Solicitud enviada! Te contactaremos pronto.', 'ok');
+    setTimeout(() => { closeModal('new-site-modal'); loadSitesPanel(); }, 2000);
+  } else showMsg(msg, res.error || 'Error al enviar la solicitud.', 'err');
 }
 
 /* ===== CLIENT: SITE EDITOR (un site précis) ===== */
