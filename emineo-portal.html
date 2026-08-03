@@ -450,7 +450,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
           </div>
           <div style="display:flex;gap:.7rem;align-items:flex-start;font-size:.83rem;color:rgba(255,255,255,.55)">
             <span style="width:26px;height:26px;border-radius:50%;background:var(--gradient);color:var(--black);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.72rem;flex-shrink:0">2</span>
-            <span>Tus contactos obtienen <strong style="color:var(--green)">1er mes gratis</strong></span>
+            <span>Tus contactos obtienen <strong style="color:var(--green)">15$/mes en lugar de 20$/mes</strong></span>
           </div>
           <div style="display:flex;gap:.7rem;align-items:flex-start;font-size:.83rem;color:rgba(255,255,255,.55)">
             <span style="width:26px;height:26px;border-radius:50%;background:var(--gradient);color:var(--black);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.72rem;flex-shrink:0">3</span>
@@ -1216,13 +1216,32 @@ function revealVipPayment(containerId) {
 
 const SITE_ADICIONAL_PLAN_ID = 'P-9BW278831P823252WNJX4KVI';
 let nsrPaypalRendered = false;
+let nsrPaymentMode = 'free'; // 'free' | 'extra' | 'base'
 
 function openNewSiteModal() {
   nsrPaypalRendered = false;
   document.getElementById('nsr-step1').style.display = 'block';
   document.getElementById('nsr-step2').style.display = 'none';
   document.getElementById('nsr-paypal-btn').innerHTML = '';
-  document.getElementById('nsr-extra-notice').style.display = (userSites && userSites.length > 0) ? 'block' : 'none';
+
+  const hasSites = userSites && userSites.length > 0;
+  const neverPaid = !currentUser.subscription_id;
+  const notice = document.getElementById('nsr-extra-notice');
+
+  if (hasSites) {
+    nsrPaymentMode = 'extra';
+    notice.style.display = 'block';
+    notice.innerHTML = 'Ya tienes un sitio activo. Un 2do sitio (o mas) tiene un costo adicional de <strong style="color:var(--cyan)">10$/mes</strong>, sumado a tu plan actual.';
+  } else if (neverPaid) {
+    nsrPaymentMode = 'base';
+    const price = (typeof affilieData !== 'undefined' && affilieData) ? '15$/mes' : '20$/mes';
+    notice.style.display = 'block';
+    notice.innerHTML = 'Tu cuenta aun no tiene una suscripcion activa. Para solicitar tu primer sitio, activa tu plan mensual de <strong style="color:var(--cyan)">' + price + '</strong>.';
+  } else {
+    nsrPaymentMode = 'free';
+    notice.style.display = 'none';
+  }
+
   openModal('new-site-modal');
 }
 
@@ -1236,8 +1255,7 @@ function handleNewSiteSubmit() {
     showMsg(msg, 'Todos los campos son requeridos.', 'err'); return;
   }
 
-  var isExtraSite = userSites && userSites.length > 0;
-  if (!isExtraSite) {
+  if (nsrPaymentMode === 'free') {
     submitNewSiteRequest();
     return;
   }
@@ -1256,13 +1274,30 @@ function renderNsrPayPal() {
     return;
   }
 
+  var planId, isBase = (nsrPaymentMode === 'base');
+  if (isBase) {
+    var isAffilie = (typeof affilieData !== 'undefined' && affilieData);
+    planId = isAffilie ? SIGNUP_PLANS.affilie : SIGNUP_PLANS.normal;
+  } else {
+    planId = SITE_ADICIONAL_PLAN_ID;
+  }
+
   paypal.Buttons({
     style: { shape: 'rect', color: 'gold', layout: 'vertical', label: 'subscribe' },
     createSubscription: function(data, actions) {
-      return actions.subscription.create({ plan_id: SITE_ADICIONAL_PLAN_ID });
+      return actions.subscription.create({ plan_id: planId });
     },
-    onApprove: function(data, actions) {
-      submitNewSiteRequest(data.subscriptionID);
+    onApprove: async function(data, actions) {
+      if (isBase) {
+        var isAffilie2 = (typeof affilieData !== 'undefined' && affilieData);
+        await api({ action: 'activateBaseSubscription', customer_id: currentUser.customer_id, subscription_id: data.subscriptionID, plan: isAffilie2 ? '15' : '20' });
+        currentUser.subscription_id = data.subscriptionID;
+        var session = JSON.parse(localStorage.getItem('emineo_session') || '{}');
+        if (session.user) { session.user.subscription_id = data.subscriptionID; localStorage.setItem('emineo_session', JSON.stringify(session)); }
+        submitNewSiteRequest();
+      } else {
+        submitNewSiteRequest(data.subscriptionID);
+      }
     }
   }).render('#nsr-paypal-btn');
 }
@@ -1271,7 +1306,7 @@ async function submitNewSiteRequest(subscriptionId) {
   var tipo = document.getElementById('nsr-tipo').value;
   var wa   = document.getElementById('nsr-wa').value.trim();
   var desc = document.getElementById('nsr-desc').value.trim();
-  var msg  = document.getElementById(subscriptionId ? 'nsr-msg2' : 'nsr-msg');
+  var msg  = document.getElementById(subscriptionId || nsrPaymentMode === 'base' ? 'nsr-msg2' : 'nsr-msg');
   var btn  = document.getElementById('nsr-submit-btn');
 
   if (!tipo || !wa || !desc) {
@@ -1280,7 +1315,7 @@ async function submitNewSiteRequest(subscriptionId) {
 
   if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
   const payload = { action: 'newSiteRequest', customer_id: currentUser.customer_id, type_site: tipo, whatsapp: wa, description: desc };
-  if (subscriptionId) payload.subscription_id = subscriptionId;
+  if (subscriptionId) payload.subscription_id = subscriptionId; // seulement pour le cas "2e site" (10$)
   const res = await api(payload);
   if (btn) { btn.disabled = false; btn.textContent = 'Enviar solicitud'; }
 
@@ -1975,7 +2010,7 @@ function buildHomeCards(hasSites, hasAffilie) {
   var promoEl = document.getElementById('home-anuncio');
   if (promoEl) {
     if (hasAffilie && !hasSites) {
-      promoEl.innerHTML = '<div class="home-anuncio"><div class="anuncio-icon">&#x1F310;</div><div><h4>Crea tu propio sitio web EMINEO</h4><p>Como afiliado, usa tu codigo para el <strong>1er mes gratis</strong> y <strong>$15/mes</strong> en lugar de $20/mes. Ademas, acceso automatico al <strong>Marketplace Diaforama</strong> con precios de proveedor.</p><button class="btn-anuncio" data-panel="sites">Solicitar mi sitio</button></div></div>';
+      promoEl.innerHTML = '<div class="home-anuncio"><div class="anuncio-icon">&#x1F310;</div><div><h4>Crea tu propio sitio web EMINEO</h4><p>Como afiliado, usa tu codigo para pagar <strong>$15/mes</strong> en lugar de $20/mes. Ademas, acceso automatico al <strong>Marketplace Diaforama</strong> con precios de proveedor.</p><button class="btn-anuncio" data-panel="sites">Solicitar mi sitio</button></div></div>';
     } else if (!hasAffilie) {
       promoEl.innerHTML = '<div class="home-anuncio"><div class="anuncio-icon">&#x1F4B0;</div><div><h4>Gana de $3 a $5/mes con EMINEO</h4><p>Recomienda EMINEO y gana <strong>$3/mes</strong> por cada cliente activo. Si superas los 50 clientes activos, tu comision sube a <strong>$5/mes</strong> por cliente. Sin limite.</p><button class="btn-anuncio" data-panel="affilie">Quiero ser Afiliado</button></div></div>';
     } else {
