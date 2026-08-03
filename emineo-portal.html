@@ -951,12 +951,10 @@ async function loadDashboard() {
 function buildClientNav(hasSites, hasAffilie) {
   let html = '<p class="nav-section">MI CUENTA</p>';
   html += navItem('home', 'fa-home', 'Inicio', true);
-  if (hasSites) html += navItem('dashboard', 'fa-chart-bar', 'Dashboard');
-  if (hasSites) {
-    html += navItem('sites', 'fa-globe', 'Mis Sitios Web');
-  }
+  html += navItem('dashboard', 'fa-chart-bar', 'Dashboard');
+  html += navItem('sites', 'fa-globe', 'Mis Sitios Web');
   html += navItem('messages', 'fa-comments', 'Mensajes', false, 'msg-badge');
-  if (hasSites) html += navItem('factures', 'fa-file-invoice', 'Facturas');
+  html += navItem('factures', 'fa-file-invoice', 'Facturas');
 
   if (hasAffilie) {
     html += '<p class="nav-section">AFILIACION</p>';
@@ -1085,9 +1083,9 @@ function loadHomePanel() {
       <div class="promo-card">
         <div class="promo-card-text">
           <h4>💰 Programa de Afiliacion</h4>
-          <p>¿Conoces emprendedores que necesitan un sitio web? Gana 3$/mes por cada cliente activo que recomiendes — sin limite.</p>
+          <p>¿Conoces emprendedores que necesitan un sitio web? Gana 3$/mes por cada cliente activo que recomiendes. Si superas los 50 clientes activos, tu comision sube a 5$/mes por cliente — sin limite.</p>
         </div>
-        <a href="#" class="btn-promo" onclick="requestAffiliation(event)"><i class="fab fa-whatsapp"></i> Postular para ser afiliado</a>
+        <a href="#" class="btn-promo" onclick="requestAffiliation(event)"><i class="fas fa-paper-plane"></i> Postular para ser afiliado</a>
       </div>`;
   } else {
     promoZone.innerHTML = '';
@@ -1955,9 +1953,7 @@ function buildHomeCards(hasSites, hasAffilie) {
   if (cardsEl) {
     var c = '';
     c += '<div class="quick-card" data-panel="dashboard"><i class="fas fa-chart-pie"></i><h4>Dashboard</h4><p>Ver estadisticas y resumen</p></div>';
-    if (hasSites) {
-      c += '<div class="quick-card" data-panel="sites"><i class="fas fa-globe"></i><h4>Mis Sitios Web</h4><p>Gestiona y edita tus sitios</p></div>';
-    }
+    c += '<div class="quick-card" data-panel="sites"><i class="fas fa-globe"></i><h4>Mis Sitios Web</h4><p>Gestiona y edita tus sitios</p></div>';
     if (hasAffilie) {
       c += '<div class="quick-card" data-panel="affilie"><i class="fas fa-handshake"></i><h4>Mi Afiliacion</h4><p>Comisiones y clientes referidos</p></div>';
     }
@@ -1978,10 +1974,10 @@ function buildHomeCards(hasSites, hasAffilie) {
   // Generate promo banner
   var promoEl = document.getElementById('home-anuncio');
   if (promoEl) {
-    if (hasSites && !hasAffilie) {
+    if (hasAffilie && !hasSites) {
+      promoEl.innerHTML = '<div class="home-anuncio"><div class="anuncio-icon">&#x1F310;</div><div><h4>Crea tu propio sitio web EMINEO</h4><p>Como afiliado, usa tu codigo para el <strong>1er mes gratis</strong> y <strong>$15/mes</strong> en lugar de $20/mes. Ademas, acceso automatico al <strong>Marketplace Diaforama</strong> con precios de proveedor.</p><button class="btn-anuncio" data-panel="sites">Solicitar mi sitio</button></div></div>';
+    } else if (!hasAffilie) {
       promoEl.innerHTML = '<div class="home-anuncio"><div class="anuncio-icon">&#x1F4B0;</div><div><h4>Gana de $3 a $5/mes con EMINEO</h4><p>Recomienda EMINEO y gana <strong>$3/mes</strong> por cada cliente activo. Si superas los 50 clientes activos, tu comision sube a <strong>$5/mes</strong> por cliente. Sin limite.</p><button class="btn-anuncio" data-panel="affilie">Quiero ser Afiliado</button></div></div>';
-    } else if (hasAffilie && !hasSites) {
-      promoEl.innerHTML = '<div class="home-anuncio"><div class="anuncio-icon">&#x1F310;</div><div><h4>Crea tu propio sitio web EMINEO</h4><p>Como afiliado, usa tu codigo para el <strong>1er mes gratis</strong> y <strong>$15/mes</strong> en lugar de $20/mes. Ademas, acceso automatico al <strong>Marketplace Diaforama</strong> con precios de proveedor.</p><button class="btn-anuncio" data-panel="messages">Solicitar mi sitio</button></div></div>';
     } else {
       promoEl.innerHTML = '';
     }
