@@ -418,6 +418,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
           <button class="btn-send" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
         </div>
         <div class="msg-box" id="msg-send-result" style="margin-top:.5rem"></div>
+        <div id="vip-block-messages"></div>
       </div>
     </div>
 
@@ -598,6 +599,7 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
             <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
           </a>
         </div>
+        <div id="vip-block-editor"></div>
       </div>
     </div>
 
@@ -683,16 +685,27 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 <div class="modal-ov" id="new-site-modal">
   <div class="modal-box">
     <p class="modal-title">Solicitar un nuevo sitio</p>
-    <p style="font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:1rem">Cuentanos que necesitas. Te contactaremos por WhatsApp en menos de 24h para definir los detalles.</p>
-    <div class="fgrp"><label>Tipo de sitio *</label>
-      <select id="nsr-tipo"><option value="">- Seleccionar -</option><option>Sitio simple (vitrina/portfolio)</option><option>Tienda online</option><option>Institucion (universidad/escuela)</option><option>Personalizado (a medida)</option></select>
+    <div id="nsr-step1">
+      <p style="font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:1rem">Cuentanos que necesitas. Te contactaremos por WhatsApp en menos de 24h para definir los detalles.</p>
+      <div id="nsr-extra-notice" style="display:none;margin-bottom:1rem;padding:.8rem 1rem;background:rgba(41,196,224,.06);border:1px solid rgba(41,196,224,.15);border-radius:10px;font-size:.78rem;color:rgba(255,255,255,.55)">
+        Ya tienes un sitio activo. Un 2do sitio (o mas) tiene un costo adicional de <strong style="color:var(--cyan)">10$/mes</strong>, sumado a tu plan actual.
+      </div>
+      <div class="fgrp"><label>Tipo de sitio *</label>
+        <select id="nsr-tipo"><option value="">- Seleccionar -</option><option>Sitio simple (vitrina/portfolio)</option><option>Tienda online</option><option>Institucion (universidad/escuela)</option><option>Personalizado (a medida)</option></select>
+      </div>
+      <div class="fgrp"><label>WhatsApp *</label><input type="tel" id="nsr-wa" placeholder="+1 234 567 890"/></div>
+      <div class="fgrp"><label>Descripcion de tu proyecto *</label><textarea id="nsr-desc" placeholder="Cuentanos tu proyecto..." style="min-height:80px"></textarea></div>
+      <div class="msg-box" id="nsr-msg"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('new-site-modal')">Cancelar</button>
+        <button class="btn-save" id="nsr-submit-btn" onclick="handleNewSiteSubmit()">Enviar solicitud</button>
+      </div>
     </div>
-    <div class="fgrp"><label>WhatsApp *</label><input type="tel" id="nsr-wa" placeholder="+1 234 567 890"/></div>
-    <div class="fgrp"><label>Descripcion de tu proyecto *</label><textarea id="nsr-desc" placeholder="Cuentanos tu proyecto..." style="min-height:80px"></textarea></div>
-    <div class="msg-box" id="nsr-msg"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('new-site-modal')">Cancelar</button>
-      <button class="btn-save" id="nsr-submit-btn" onclick="submitNewSiteRequest()">Enviar solicitud</button>
+    <div id="nsr-step2" style="display:none">
+      <p style="font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:1rem">Paga el sitio adicional (10$/mes) para completar tu solicitud.</p>
+      <div id="nsr-paypal-btn"></div>
+      <div class="msg-box" id="nsr-msg2" style="margin-top:.8rem"></div>
+      <button type="button" onclick="document.getElementById('nsr-step2').style.display='none';document.getElementById('nsr-step1').style.display='block'" style="width:100%;background:none;border:none;color:rgba(255,255,255,.4);font-size:.75rem;margin-top:1rem;cursor:pointer">← Volver</button>
     </div>
   </div>
 </div>
@@ -1132,7 +1145,7 @@ async function loadSitesPanel() {
         </div>`;
     });
   }
-  html += `<div class="add-site-card" onclick="openModal('new-site-modal')"><i class="fas fa-plus-circle" style="font-size:1.3rem;margin-bottom:.4rem;display:block"></i>Solicitar un nuevo sitio</div>`;
+  html += `<div class="add-site-card" onclick="openNewSiteModal()"><i class="fas fa-plus-circle" style="font-size:1.3rem;margin-bottom:.4rem;display:block"></i>Solicitar un nuevo sitio</div>`;
   html += '</div>';
   container.innerHTML = html;
 }
@@ -1151,20 +1164,127 @@ function _statutLabel(s) {
   return s || '-';
 }
 
-async function submitNewSiteRequest() {
+const VIP_PLAN_ID = 'P-31B17317M6020345JNJX4N6A';
+
+function renderVipBlock(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+
+  if (currentUser && currentUser.vip) {
+    el.innerHTML = '<div style="margin-top:1rem;padding:.8rem 1rem;background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.25);border-radius:10px;font-size:.8rem;color:#ffc800;font-weight:600">⭐ Ya eres cliente VIP — tus solicitudes tienen prioridad.</div>';
+    return;
+  }
+
+  el.innerHTML = `
+    <div style="margin-top:1rem;padding:1rem;background:rgba(255,200,0,.06);border:1px solid rgba(255,200,0,.2);border-radius:10px">
+      <p style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:.7rem">A veces podemos tardar un poco en responder a cada cliente individualmente. Si quieres ser respondido con prioridad y que tu solicitud se ejecute primero, hazte cliente VIP.</p>
+      <button class="btn-sm reply" id="${containerId}-btn" onclick="revealVipPayment('${containerId}')">⭐ Obtener cuenta VIP — 16$/mes</button>
+      <div id="${containerId}-pay" style="margin-top:.8rem;display:none"></div>
+      <div class="msg-box" id="${containerId}-msg" style="margin-top:.5rem"></div>
+    </div>`;
+}
+
+function revealVipPayment(containerId) {
+  document.getElementById(containerId + '-btn').style.display = 'none';
+  const payEl = document.getElementById(containerId + '-pay');
+  payEl.style.display = 'block';
+
+  if (typeof paypal === 'undefined') {
+    payEl.innerHTML = '<p style="color:#e05252;font-size:.8rem">Error cargando PayPal. Recarga la pagina.</p>';
+    return;
+  }
+
+  paypal.Buttons({
+    style: { shape: 'rect', color: 'gold', layout: 'vertical', label: 'subscribe' },
+    createSubscription: function(data, actions) {
+      return actions.subscription.create({ plan_id: VIP_PLAN_ID });
+    },
+    onApprove: async function(data, actions) {
+      const msgEl = document.getElementById(containerId + '-msg');
+      showMsg(msgEl, 'Pago recibido. Activando VIP...', 'ok');
+      const res = await api({ action: 'activateVip', customer_id: currentUser.customer_id, subscription_id: data.subscriptionID });
+      if (res.ok) {
+        currentUser.vip = true;
+        const session = JSON.parse(localStorage.getItem('emineo_session') || '{}');
+        if (session.user) { session.user.vip = true; localStorage.setItem('emineo_session', JSON.stringify(session)); }
+        showMsg(msgEl, '¡Ya eres VIP!', 'ok');
+        setTimeout(() => renderVipBlock(containerId), 1500);
+      } else {
+        showMsg(msgEl, res.error || 'Error activando VIP. Contacta soporte.', 'err');
+      }
+    }
+  }).render('#' + containerId + '-pay');
+}
+
+const SITE_ADICIONAL_PLAN_ID = 'P-9BW278831P823252WNJX4KVI';
+let nsrPaypalRendered = false;
+
+function openNewSiteModal() {
+  nsrPaypalRendered = false;
+  document.getElementById('nsr-step1').style.display = 'block';
+  document.getElementById('nsr-step2').style.display = 'none';
+  document.getElementById('nsr-paypal-btn').innerHTML = '';
+  document.getElementById('nsr-extra-notice').style.display = (userSites && userSites.length > 0) ? 'block' : 'none';
+  openModal('new-site-modal');
+}
+
+function handleNewSiteSubmit() {
   var tipo = document.getElementById('nsr-tipo').value;
   var wa   = document.getElementById('nsr-wa').value.trim();
   var desc = document.getElementById('nsr-desc').value.trim();
   var msg  = document.getElementById('nsr-msg');
+
+  if (!tipo || !wa || !desc) {
+    showMsg(msg, 'Todos los campos son requeridos.', 'err'); return;
+  }
+
+  var isExtraSite = userSites && userSites.length > 0;
+  if (!isExtraSite) {
+    submitNewSiteRequest();
+    return;
+  }
+
+  document.getElementById('nsr-step1').style.display = 'none';
+  document.getElementById('nsr-step2').style.display = 'block';
+  renderNsrPayPal();
+}
+
+function renderNsrPayPal() {
+  if (nsrPaypalRendered) return;
+  nsrPaypalRendered = true;
+
+  if (typeof paypal === 'undefined') {
+    document.getElementById('nsr-paypal-btn').innerHTML = '<p style="color:#e05252;font-size:.8rem">Error cargando PayPal. Recarga la pagina.</p>';
+    return;
+  }
+
+  paypal.Buttons({
+    style: { shape: 'rect', color: 'gold', layout: 'vertical', label: 'subscribe' },
+    createSubscription: function(data, actions) {
+      return actions.subscription.create({ plan_id: SITE_ADICIONAL_PLAN_ID });
+    },
+    onApprove: function(data, actions) {
+      submitNewSiteRequest(data.subscriptionID);
+    }
+  }).render('#nsr-paypal-btn');
+}
+
+async function submitNewSiteRequest(subscriptionId) {
+  var tipo = document.getElementById('nsr-tipo').value;
+  var wa   = document.getElementById('nsr-wa').value.trim();
+  var desc = document.getElementById('nsr-desc').value.trim();
+  var msg  = document.getElementById(subscriptionId ? 'nsr-msg2' : 'nsr-msg');
   var btn  = document.getElementById('nsr-submit-btn');
 
   if (!tipo || !wa || !desc) {
     showMsg(msg, 'Todos los campos son requeridos.', 'err'); return;
   }
 
-  btn.disabled = true; btn.textContent = 'Enviando...';
-  const res = await api({ action: 'newSiteRequest', customer_id: currentUser.customer_id, type_site: tipo, whatsapp: wa, description: desc });
-  btn.disabled = false; btn.textContent = 'Enviar solicitud';
+  if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+  const payload = { action: 'newSiteRequest', customer_id: currentUser.customer_id, type_site: tipo, whatsapp: wa, description: desc };
+  if (subscriptionId) payload.subscription_id = subscriptionId;
+  const res = await api(payload);
+  if (btn) { btn.disabled = false; btn.textContent = 'Enviar solicitud'; }
 
   if (res.ok) {
     showMsg(msg, '¡Solicitud enviada! Te contactaremos pronto.', 'ok');
@@ -1200,6 +1320,7 @@ async function openSiteEditor(siteId) {
   var msg = document.getElementById('editor-msg');
   if (msg) msg.className = 'msg-box';
 
+  renderVipBlock('vip-block-editor');
   showPanel('editor');
 }
 
@@ -1229,6 +1350,7 @@ async function loadMessages() {
   }
   // Marquer comme lu visuellement (le badge se recalculera au prochain login)
   document.getElementById('msg-badge').style.display = 'none';
+  renderVipBlock('vip-block-messages');
 }
 
 async function loadFactures() {
@@ -1520,7 +1642,7 @@ async function loadAdminMensajes() {
     <div class="client-row">
       <div class="client-row-top">
         <div>
-          <div class="client-name">${m.nom_client} <span class="badge ${m.statut==='non_lu'?'en_attente':'actif'}">${m.statut==='non_lu'?'No leido':'Leido'}</span></div>
+          <div class="client-name">${m.nom_client} ${m.vip ? '<span class="badge actif" style="background:rgba(255,200,0,.15);color:#ffc800">⭐ VIP</span>' : ''} <span class="badge ${m.statut==='non_lu'?'en_attente':'actif'}">${m.statut==='non_lu'?'No leido':'Leido'}</span></div>
           <div class="client-details" style="margin-top:.3rem">${m.message}</div>
           ${m.reponse ? `<div class="client-details" style="color:var(--cyan);margin-top:.2rem">-> ${m.reponse}</div>` : ''}
           <div class="client-details" style="margin-top:.2rem">${m.date}</div>
