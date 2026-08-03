@@ -243,7 +243,14 @@ tbody td{padding:.7rem .8rem;font-size:.82rem;color:rgba(255,255,255,.7)}
 
 /* === QUICK CARDS (Gemini design) === */
 .grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-top:1.2rem}
-.quick-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:1.5rem;cursor:pointer;transition:all .25s;text-align:center}
+.quick-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:1.5rem;cursor:pointer;transition:all .25s;text-align:center;animation:cardFadeIn .4s ease both}
+.quick-card:nth-child(1){animation-delay:.03s}
+.quick-card:nth-child(2){animation-delay:.08s}
+.quick-card:nth-child(3){animation-delay:.13s}
+.quick-card:nth-child(4){animation-delay:.18s}
+.quick-card:nth-child(5){animation-delay:.23s}
+.home-anuncio{animation:cardFadeIn .4s ease both}
+@keyframes cardFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .quick-card:hover{transform:translateY(-3px);border-color:var(--green)}
 .quick-card i{font-size:1.8rem;color:var(--cyan);margin-bottom:.8rem;display:block}
 .quick-card h4{font-family:var(--ff-d);font-size:1.1rem;margin-bottom:.3rem;color:#fff}
@@ -1137,7 +1144,7 @@ async function loadSitesPanel() {
           </div>
           <div class="site-card-actions">
             ${s.plateforme === 'Google Sites' ? `<a href="${s.url_edit || s.url_site || 'https://sites.google.com'}" target="_blank" class="btn-sm activate" style="text-decoration:none"><i class="fas fa-edit"></i> Editar</a>` : `<button class="btn-sm activate" onclick="openSiteEditor('${s.site_id}')" ${s.statut==='suspendu'?'disabled':''} ><i class="fas fa-edit"></i> Editar</button>`}
-            <button class="btn-sm" onclick="openDomainModal('${s.site_id}','${s.nom_site}')" style="background:rgba(94,204,74,.08);color:var(--green);border:1px solid rgba(94,204,74,.2)"><i class="fas fa-globe"></i> Obtener dominio</button>
+            ${(!s.url_site || s.url_site.includes('github.io') || s.url_site.includes('sites.google.com')) ? `<button class="btn-sm" onclick="openDomainModal('${s.site_id}','${s.nom_site}')" style="background:rgba(94,204,74,.08);color:var(--green);border:1px solid rgba(94,204,74,.2)"><i class="fas fa-globe"></i> Obtener dominio</button>` : ''}
             ${s.url_site ? `<a href="${s.url_site}" target="_blank" class="btn-sm" style="background:rgba(41,196,224,.08);color:var(--cyan);border:1px solid rgba(41,196,224,.2)"><i class="fas fa-external-link-alt"></i> Ver sitio</a>` : ''}
           </div>
         </div>`;
